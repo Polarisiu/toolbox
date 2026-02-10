@@ -8,9 +8,9 @@
 https://raw.githubusercontent.com/sistarry/toolbox/refs/heads/main/Sub-store/Surge.conf
 
 ### 简洁配置
-
+```bash
 https://raw.githubusercontent.com/sistarry/toolbox/refs/heads/main/Sub-store/Surge-terse.conf
-
+```
 
 ### Surge监控模块脚本（配合模块使用）
 
