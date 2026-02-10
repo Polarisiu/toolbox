@@ -48,12 +48,12 @@ menu() {
             ;;
         6)
             echo -e "${GREEN}正在开设 KVM 小鸡...${RESET}"
-            bash <(curl -sL https://raw.githubusercontent.com/Polarisiu/toy/main/pvekvm.sh)
+            bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/toy/pvekvm.sh)
             pause
             ;;
         7)
             echo -e "${GREEN}正在开设 LXC 小鸡...${RESET}"
-            bash <(curl -sL https://raw.githubusercontent.com/Polarisiu/toy/main/pvelxc.sh)
+            bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/toy/pvelxc.sh)
             pause
             ;;
         0)
