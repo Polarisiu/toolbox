@@ -19,37 +19,37 @@ menu() {
     case $choice in
         1)
             echo -e "${GREEN}正在查看端口...${RESET}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/tool/main/port.sh)
+            bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/VPS/port.sh)
             pause
             ;;
         2)
             echo -e "${GREEN}正在释放端口...${RESET}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/tool/main/killport.sh)
+            bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/VPS/killport.sh)
             pause
             ;;
         3)
             echo -e "${GREEN}正在查看进程...${RESET}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/tool/main/psaux.sh)
+            bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/VPS/psaux.sh)
             pause
             ;;
         4)
             echo -e "${GREEN}正在删除进程...${RESET}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/tool/main/killprocess.sh)
+            bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/VPS/killprocess.sh)
             pause
             ;;
         5)
             echo -e "${GREEN}正在查看自启动服务...${RESET}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/tool/main/service.sh)
+            bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/VPS/service.sh)
             pause
             ;;
         6)
             echo -e "${GREEN}正在管理自启动服务...${RESET}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/tool/main/killservice.sh)
+            bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/VPS/killservice.sh)
             pause
             ;;
         7)
             echo -e "${GREEN}正在删除文件...${RESET}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/tool/main/rmdocument.sh)
+            bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/VPS/rmdocument.sh)
             pause
             ;;
         0)
