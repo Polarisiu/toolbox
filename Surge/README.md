@@ -4,9 +4,9 @@
 ## 🚀 使用方法
 
 ### 常用配置
-
+```bash
 https://raw.githubusercontent.com/sistarry/toolbox/refs/heads/main/Sub-store/Surge.conf
-
+```
 ### 简洁配置
 ```bash
 https://raw.githubusercontent.com/sistarry/toolbox/refs/heads/main/Sub-store/Surge-terse.conf
