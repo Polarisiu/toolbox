@@ -45,7 +45,7 @@ read_choice() {
             ;;
         5)
             echo -e "${GREEN}正在卸载哪吒 Agent...${RESET}"
-            bash <(curl -sL https://raw.githubusercontent.com/Polarisiu/app-store/main/nzagent.sh)
+            bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Docker/nzagent.sh)
             pause
             ;;
         0)
