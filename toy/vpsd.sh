@@ -136,12 +136,12 @@ setup_cron_job(){
   echo -e "${green}3) 每月发送一次 (1号 0点)${re}"
   echo -e "${green}4) 每5分钟一次${re}"
   echo -e "${green}5) 每10分钟一次${re}"
-  echo -e "${green}6) 自定义时间 (Cron表达式) ⭐${re}"
+  echo -e "${green}6) 自定义时间 (Cron表达式)${re}"
   echo -e "${green}7) 删除当前任务${re}"
   echo -e "${green}8) 查看当前任务${re}"
   echo -e "${green}0) 返回菜单${re}"
 
-  read -rp "请选择: " cron_choice
+  read -rp "$(echo -e ${green}请选择: ${re})" cron_choice
 
   CRON_CMD="bash $SCRIPT_PATH send"
 
