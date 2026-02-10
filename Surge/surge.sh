@@ -14,12 +14,12 @@ menu() {
     case $choice in
         1)
             echo -e "${GREEN}正在运行系统监控脚本...${RESET}"
-            bash <(curl -sL https://raw.githubusercontent.com/Polarisiu/toy/main/surgeserver.sh)
+            bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Surge/surgeserver.sh)
             pause
             ;;
         2)
             echo -e "${GREEN}正在运行 Docker 监控脚本...${RESET}"
-            bash <(curl -sL https://raw.githubusercontent.com/Polarisiu/toy/main/surgedocker.sh)
+            bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Surge/surgedocker.sh)
             pause
             ;;
         0)
