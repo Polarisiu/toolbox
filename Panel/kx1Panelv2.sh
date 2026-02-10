@@ -19,7 +19,7 @@ menu() {
             pause
             ;;
         2)
-            echo -e "${GREEN}正在更新到最新...${RESET}"
+            echo -e "${GREEN}正在更新...${RESET}"
             curl https://resource.1panel.sb/1panel/package/v2/update.sh | bash
             pause
             ;;
