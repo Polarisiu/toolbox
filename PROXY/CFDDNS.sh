@@ -55,7 +55,7 @@ get_public_ip() {
 install_ddns() {
     mkdir -p /etc/DDNS
     if [ ! -f "$DDNS_SCRIPT" ]; then
-        curl -o "$DDNS_SCRIPT" https://raw.githubusercontent.com/Polarisiu//proxy/main/CFDDNS.sh
+        curl -o "$DDNS_SCRIPT" https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/CFDDNS.sh
         chmod +x "$DDNS_SCRIPT"
     fi
 
