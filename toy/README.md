@@ -1,10 +1,11 @@
 # 玩具熊
 
-## 快速安装
+##  🚀 使用方法
 
 
+### Github脚本
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/vps-toolbox/main/uu.sh)
+bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/toy/Github.sh)
 ```
 
 
