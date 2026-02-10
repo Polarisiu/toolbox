@@ -15,17 +15,17 @@ menu() {
     case $choice in
         1)
             echo -e "${GREEN}正在为国外机 1Panel 添加应用...${RESET}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/panel/main/1papps.sh)
+            bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/Panel/1papps.sh)
             pause
             ;;
         2)
             echo -e "${GREEN}正在为国内机 1Panel 添加应用...${RESET}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/panel/main/cn1papps.sh)
+            bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/Panel/cn1papps.sh)
             pause
             ;;
         3)
             echo -e "${GREEN}正在运行萌森软件拓展...${RESET}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/panel/main/ms1papps.sh)
+            bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/Panel/ms1papps.sh)
             pause
             ;;
         0)
