@@ -20,7 +20,7 @@ setup_environment() {
     echo "创建了 $APP_DIR 文件夹。"
 
     if [ ! -f "$CONFIG_FILE" ]; then
-        wget -O "$CONFIG_FILE" https://raw.githubusercontent.com/Polarisiu/app-store/refs/heads/main/config.example.yaml
+        wget -O "$CONFIG_FILE" https://raw.githubusercontent.com/sistarry/toolbox/refs/heads/main/Docker/config.example.yaml
         echo "下载 config.yaml 文件。"
     fi
 }
