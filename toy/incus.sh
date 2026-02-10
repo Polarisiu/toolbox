@@ -207,7 +207,7 @@ main_menu(){
         echo -e "${GREEN}2. 安装incus${RESET}"
         echo -e "${GREEN}3. 管理 incus 小鸡${RESET}"
         echo -e "${GREEN}0. 退出${RESET}"
-        read -p "请输入你的选择: " choice
+        read -p "$(echo -e ${GREEN}请选择: ${RESET})" choice
         case $choice in
             1) curl -L https://raw.githubusercontent.com/oneclickvirt/incus/main/scripts/swap.sh -o swap.sh && chmod +x swap.sh && bash swap.sh ;;
             2) install_incus ;;
