@@ -1,160 +1,123 @@
 #!/bin/bash
-# SaveAny-Bot Docker 管理脚本（自定义挂载路径版）
-
-CONTAINER_NAME="saveany-bot"
-IMAGE_NAME="ghcr.io/krau/saveany-bot:latest"
-CONFIG_FILE_NAME="config.toml"
-CONFIG_PATH_FILE="$HOME/.saveany_path"
+# ========================================
+# SaveAny-Bot 一键管理脚本 (Docker Compose)
+# ========================================
 
 GREEN="\033[32m"
+YELLOW="\033[33m"
 RED="\033[31m"
 RESET="\033[0m"
 
-# ======== 公共路径变量 ========
-BASE_DIR=""
-DATA_DIR=""
-DOWNLOADS_DIR=""
-CACHE_DIR=""
-CONFIG_FILE=""
+APP_NAME="SaveAny-Bot"
+APP_DIR="/opt/saveany-bot"
+COMPOSE_FILE="$APP_DIR/docker-compose.yml"
 
-# ======== 初始化挂载路径 ========
-init_paths() {
-    if [ -f "$CONFIG_PATH_FILE" ]; then
-        BASE_DIR=$(cat "$CONFIG_PATH_FILE")
-    else
-        echo -e "${GREEN}请输入挂载路径 (默认: /opt/saveany):${RESET}"
-        read -p ">>> " USER_PATH
-        BASE_DIR=${USER_PATH:-/opt/saveany}
-        echo "$BASE_DIR" > "$CONFIG_PATH_FILE"
-    fi
-    DATA_DIR="$BASE_DIR/data"
-    DOWNLOADS_DIR="$BASE_DIR/downloads"
-    CACHE_DIR="$BASE_DIR/cache"
-    CONFIG_FILE="$BASE_DIR/$CONFIG_FILE_NAME"
-    mkdir -p "$DATA_DIR" "$DOWNLOADS_DIR" "$CACHE_DIR"
+menu() {
+    while true; do
+        clear
+        echo -e "${GREEN}== SaveAny-Bot 管理菜单 ====${RESET}"
+        echo -e "${GREEN}1) 安装启动${RESET}"
+        echo -e "${GREEN}2) 更新${RESET}"
+        echo -e "${GREEN}3) 卸载(含数据)${RESET}"
+        echo -e "${GREEN}4) 查看日志${RESET}"
+        echo -e "${GREEN}5) 重启${RESET}"
+        echo -e "${GREEN}0) 退出${RESET}"
+        read -p "$(echo -e ${GREEN}请选择:${RESET}) " choice
+        case $choice in
+            1) install_app ;;
+            2) update_app ;;
+            3) uninstall_app ;;
+            4) view_logs ;;
+            5) restart_app ;;
+            0) exit 0 ;;
+            *) echo -e "${RED}无效选择${RESET}"; sleep 1 ;;
+        esac
+    done
 }
 
-# ======== 检查容器是否存在 ========
-check_container() {
-    docker ps -a --format '{{.Names}}' | grep -w "$CONTAINER_NAME" >/dev/null 2>&1
-}
+install_app() {
+    # 自定义下载目录
+    read -rp "请输入宿主机下载目录路径 [默认:$APP_DIR/downloads]: " input_downloads
+    DOWNLOADS_DIR=${input_downloads:-$APP_DIR/downloads}
+    mkdir -p "$APP_DIR/data" "$APP_DIR/cache" "$DOWNLOADS_DIR"
 
-# ======== 启动容器 ========
-start_bot() {
-    init_paths
+    # 自定义 Telegram token
+    read -rp "请输入 Telegram Bot Token: " tg_token
+    TG_TOKEN=${tg_token:-1234567890:ABCDEFGHIJKLMNOPQRSTUVWXYZ}
 
-    if [ ! -f "$CONFIG_FILE" ]; then
-        echo -e "${GREEN}首次启动，请输入配置：${RESET}"
-        read -p "Telegram Bot Token: " BOT_TOKEN
-        read -p "Telegram 用户 ID: " TELEGRAM_ID
+    # 自定义 Telegram 用户 ID
+    read -rp "请输入 Telegram 用户 ID : " tg_id
+    TG_ID=${tg_id:-777000}
 
-        cat > "$CONFIG_FILE" <<EOF
-# SaveAny-Bot 最简配置
-workers = 4
-retry = 3
-threads = 4
-stream = false
-
+    # 生成 config.toml
+    cat > "$APP_DIR/config.toml" <<EOF
 [telegram]
-token = "$BOT_TOKEN"
+token = "$TG_TOKEN"
+
+[[users]]
+# telegram user id
+id = $TG_ID
+blacklist = true
 
 [[storages]]
 name = "本机存储"
 type = "local"
 enable = true
-base_path = "./downloads"
-
-[[users]]
-id = $TELEGRAM_ID
-storages = []
-blacklist = true
+base_path = "/app/downloads"
 EOF
 
-        echo -e "${GREEN}已生成配置文件: $CONFIG_FILE${RESET}"
-    fi
+    # 生成 docker-compose.yml
+    cat > "$COMPOSE_FILE" <<EOF
+services:
+  saveany-bot:
+    image: ghcr.io/krau/saveany-bot:latest
+    container_name: saveany-bot
+    restart: unless-stopped
+    volumes:
+      - $APP_DIR/data:/app/data
+      - $APP_DIR/config.toml:/app/config.toml
+      - $DOWNLOADS_DIR:/app/downloads
+      - $APP_DIR/cache:/app/cache
+    network_mode: host
+EOF
 
-    if check_container; then
-        echo -e "${GREEN}>>> 启动 $CONTAINER_NAME ...${RESET}"
-        docker start "$CONTAINER_NAME"
-    else
-        echo -e "${GREEN}>>> 创建并启动容器 ...${RESET}"
-        docker run -d \
-            --name $CONTAINER_NAME \
-            --restart unless-stopped \
-            --network host \
-            -v "$DATA_DIR:/app/data" \
-            -v "$CONFIG_FILE:/app/config.toml" \
-            -v "$DOWNLOADS_DIR:/app/downloads" \
-            -v "$CACHE_DIR:/app/cache" \
-            $IMAGE_NAME
-    fi
+    cd "$APP_DIR" || exit
+    docker compose up -d
+
+    echo -e "${GREEN}✅ $APP_NAME 已启动${RESET}"
+    echo -e "${GREEN}📂 数据目录: $APP_DIR${RESET}"
+    echo -e "${GREEN}📂 下载目录 (宿主机): $DOWNLOADS_DIR${RESET}"
+    echo -e "${GREEN}📂 下载目录 (容器内): /app/downloads${RESET}"
+    echo -e "${GREEN}📄 config.toml 已生成并写入 token 和用户 ID${RESET}"
+    read -rp "按回车返回菜单..."
 }
 
-stop_bot() { docker stop $CONTAINER_NAME; }
-restart_bot() { docker restart $CONTAINER_NAME; }
-logs_bot() { docker logs -f $CONTAINER_NAME; }
-remove_bot() { docker rm -f $CONTAINER_NAME; }
-edit_config() { nano "$CONFIG_FILE"; }
 
-# ======== 卸载 ========
-uninstall_bot() {
-    init_paths
-    echo -e "${RED}警告: 该操作会删除容器和所有数据，无法恢复！${RESET}"
-    read -p "确定要继续吗？(y/N): " confirm
-    if [[ "$confirm" =~ ^[Yy]$ ]]; then
-        docker rm -f $CONTAINER_NAME >/dev/null 2>&1
-        rm -rf "$BASE_DIR"
-        rm -f "$CONFIG_PATH_FILE"
-        echo -e "${GREEN}卸载完成，所有数据已清理。${RESET}"
-        exit 0
-    else
-        echo "已取消卸载。"
-    fi
+update_app() {
+    cd "$APP_DIR" || { echo -e "${RED}未检测到安装目录，请先安装${RESET}"; sleep 1; return; }
+    docker compose pull
+    docker compose up -d
+    echo -e "${GREEN}✅ $APP_NAME 已更新并重启完成${RESET}"
+    read -rp "按回车返回菜单..."
 }
 
-# ======== 更新容器 ========
-update_bot() {
-    init_paths
-    echo -e "${GREEN}>>> 拉取最新镜像...${RESET}"
-    docker pull $IMAGE_NAME
-    docker rm -f $CONTAINER_NAME >/dev/null 2>&1 || true
-    echo -e "${GREEN}>>> 使用最新镜像重新创建并启动容器...${RESET}"
-    docker run -d \
-        --name $CONTAINER_NAME \
-        --restart unless-stopped \
-        --network host \
-        -v "$DATA_DIR:/app/data" \
-        -v "$CONFIG_FILE:/app/config.toml" \
-        -v "$DOWNLOADS_DIR:/app/downloads" \
-        -v "$CACHE_DIR:/app/cache" \
-        $IMAGE_NAME
-    echo -e "${GREEN}更新完成，容器已使用最新镜像运行！${RESET}"
+uninstall_app() {
+    cd "$APP_DIR" || { echo -e "${RED}未检测到安装目录${RESET}"; sleep 1; return; }
+    docker compose down
+    rm -rf "$APP_DIR"
+    echo -e "${RED}✅ $APP_NAME 已卸载${RESET}"
+    read -rp "按回车返回菜单..."
 }
 
-# ======== 菜单 ========
-while true; do
-    clear
-    echo -e "${GREEN}====== SaveAny-Bot 管理菜单 ======${RESET}"
-    echo -e "${GREEN}1. 启动容器${RESET}"
-    echo -e "${GREEN}2. 停止容器${RESET}"
-    echo -e "${GREEN}3. 重启容器${RESET}"
-    echo -e "${GREEN}4. 查看日志${RESET}"
-    echo -e "${GREEN}5. 编辑配置文件${RESET}"
-    echo -e "${GREEN}6. 更新容器${RESET}"
-    echo -e "${GREEN}7. 卸载${RESET}"
-    echo -e "${GREEN}0. 退出${RESET}"
-    read -p "$(echo -e ${GREEN}请选择: ${RESET})" choice
-    case $choice in
-        1) start_bot ;;
-        2) stop_bot ;;
-        3) restart_bot ;;
-        4) logs_bot ;;
-        5) edit_config ;;
-        6) update_bot ;;
-        7) uninstall_bot ;;
-        0) exit 0 ;;
-        *) echo -e "${RED}无效选项${RESET}" ;;
-    esac
-    echo -e "${GREEN}按回车返回菜单...${RESET}"
-    read -r
-done
+view_logs() {
+    docker logs -f saveany-bot
+    read -rp "按回车返回菜单..."
+}
+# 新增重启函数
+restart_app() {
+    cd "$APP_DIR" || { echo -e "${RED}未检测到安装目录，请先安装${RESET}"; sleep 1; return; }
+    docker compose restart
+    echo -e "${GREEN}✅ $APP_NAME 已重启完成${RESET}"
+    read -rp "按回车返回菜单..."
+}
+menu
