@@ -39,7 +39,7 @@ menu() {
             ;;
         5)
             echo -e "${GREEN}正在Zelay Realm转发面板...${RESET}"
-            bash <(curl -sL https://raw.githubusercontent.com/Polarisiu/proxy/main/ZelayRealm.sh)
+            bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/ZelayRealm.sh)
             ;;
         6)
             echo -e "${GREEN}正在Realm转发(Web面板)...${RESET}"
@@ -48,7 +48,7 @@ menu() {
             ;;
         7)
             echo -e "${GREEN}正在EZRealm转发...${RESET}"
-            bash <(curl -sL https://raw.githubusercontent.com/Polarisiu/proxy/main/Realm.sh)
+            bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/Realm.sh)
             pause
             ;;
         0)
