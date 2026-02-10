@@ -188,7 +188,7 @@ menu() {
         echo -e "${GREEN}4) 定时任务管理${RESET}"
         echo -e "${GREEN}5) 卸载${RESET}"
         echo -e "${GREEN}0) 退出${RESET}"
-        read -rp "请选择: " choice
+        read -p "$(echo -e ${GREEN}请选择: ${RESET})" choice
         case $choice in
             1) setup_telegram; collect_network_info; send_to_telegram ;;
             2) modify_config ;;
@@ -196,7 +196,7 @@ menu() {
             4) setup_cron_job ;;
             5) uninstall_script ;;
             0) exit 0 ;;
-            *) echo -e "${RED}无效选择${RESET}"; read -p "按回车返回菜单..." ;;
+            *) echo -e "${RED}无效选择${RESET}"; read -p "$(echo -e ${GREEN}按回车返回菜单...${RESET})" ;;
         esac
     done
 }
