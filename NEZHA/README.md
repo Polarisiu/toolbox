@@ -3,12 +3,12 @@
 
 ## 🚀 使用方法
 
-### 哪吒详情页直接展示网络波动卡片 (网络卡片在上)(/* 源自https://www.nodeseek.com/post-607309-1 */)
+### 哪吒详情页直接展示网络波动卡片 (网络卡片在上)(源自https://www.nodeseek.com/post-607309-1)
 ```bash
 <script src="https://cdn.jsdelivr.net/gh/duya07/nezha-ui@main/netstatus-autoshow-2.js"></script>
 ```
 
-### 隐藏概览条(/* 源自https://www.nodeseek.com/post-607309-1 */)
+### 隐藏概览条(源自https://www.nodeseek.com/post-607309-1)
 ```bash
 /* 隐藏迷你概览条 */
 <script>
@@ -20,13 +20,13 @@
 <script src="https://cdn.jsdelivr.net/gh/duya07/nezha-ui@main/nezha-mini-stats-hide.js"></script>
 ```
 
-### 概览条增加半透明背景(/* 源自https://www.nodeseek.com/post-607309-1 */)
+### 概览条增加半透明背景(源自https://www.nodeseek.com/post-607309-1)
 ```bash
 /* 迷你概览条半透明背景 */
 <script src="https://cdn.jsdelivr.net/gh/duya07/nezha-ui@main/nezha-mini-stats-style.js"></script>
 ```
 
-### 周期性流量进度条(/* 源自https://www.nodeseek.com/post-357843-1 */)
+### 周期性流量进度条(源自https://www.nodeseek.com/post-357843-1)
 ```bash
 /* 周期性流量进度条 */
 <script>
