@@ -19,7 +19,7 @@ menu() {
             ;;
         2)
             echo -e "${GREEN}正在运行 speedtest 测速...${RESET}"
-            bash <(curl -sL https://raw.githubusercontent.com/Polarisiu/toy/main/Speedtest.sh)
+            bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/VPS/Speedtest.sh)
             pause
             ;;
         0)
