@@ -15,7 +15,7 @@ ORANGE='\033[38;5;208m'
 # 脚本路径
 # =============================
 SCRIPT_PATH="/root/oracle.sh"
-SCRIPT_URL="https://raw.githubusercontent.com/Polarisiu/oracle/main/oracle.sh"
+SCRIPT_URL="https://raw.githubusercontent.com/sistarry/toolbox/main/Oracle/oracle.sh"
 BIN_LINK_DIR="/usr/local/bin"
 
 # =============================
@@ -45,14 +45,14 @@ menu() {
     echo -ne "${RED}请选择: ${RESET}"
     read choice
     case $choice in
-        1)  bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/oracle/main/ocibrick.sh) && pause ;;
-        2)  bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/tool/main/xgroot.sh) && pause ;;
-        3)  bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/oracle/main/DDoracle.sh) && pause ;;
-        4)  bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/oracle/main/ipv6.sh) && pause ;;
+        1)  bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/Oracle/ocibrick.sh) && pause ;;
+        2)  bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/Oracle/xgroot.sh) && pause ;;
+        3)  bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/Oracle/DDoracle.sh) && pause ;;
+        4)  bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/Oracle/ipv6.sh) && pause ;;
         5)  bash <(wget -qO- --no-check-certificate https://gitlab.com/spiritysdx/Oracle-server-keep-alive-script/-/raw/main/oalive.sh) && pause ;;
-        6)  bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/oracle/main/lookbusy.sh) && pause ;;
+        6)  bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/Oracle/lookbusy.sh) && pause ;;
         7)  bash <(wget -qO- https://github.com/Yohann0617/oci-helper/releases/latest/download/sh_oci-helper_install.sh) && pause ;;
-        8)  bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/oracle/main/oci-start.sh) && pause ;;
+        8)  bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/Oracle/oci-start.sh) && pause ;;
         88)
             echo -e "${YELLOW}🔄 正在更新脚本...${RESET}"
             curl -fsSL -o "$SCRIPT_PATH" "$SCRIPT_URL"
