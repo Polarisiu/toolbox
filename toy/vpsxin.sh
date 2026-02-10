@@ -10,7 +10,7 @@ re="\033[0m"
 # ================== 基础配置 ==================
 SCRIPT_PATH="/opt/vpsx/vpsxin.sh"
 TG_CONFIG_FILE="/opt/vpsx/.vps_tg_config"
-SCRIPT_URL="https://raw.githubusercontent.com/Polarisiu/tool/main/vpsxin.sh"
+SCRIPT_URL="https://raw.githubusercontent.com/sistarry/toolbox/main/toy/vpsxin.sh"
 
 # ================== 下载或更新脚本 ==================
 download_script(){
