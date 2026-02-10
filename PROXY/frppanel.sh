@@ -21,13 +21,13 @@ while true; do
 
     case $choice in
         1|01)
-            bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/proxy/main/Master.sh)
+            bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/Master.sh)
             ;;
         2|02)
-            bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/proxy/main/server.sh)
+            bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/server.sh)
             ;;
         3|03)
-            bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/proxy/main/Client.sh)
+            bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/Client.sh)
             ;;
         0|00)
             exit 0
