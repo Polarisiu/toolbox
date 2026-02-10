@@ -138,33 +138,66 @@ delete_file() {
 
 # ================== 定时任务管理 ==================
 setup_cron_job() {
+    enable_cron_service
+
     echo -e "${GREEN}===== 定时任务管理 =====${RESET}"
-    echo -e "${GREEN}1) 每天 0点发送 VPS 信息${RESET}"
-    echo -e "${GREEN}2) 每周一 0点发送 VPS 信息${RESET}"
-    echo -e "${GREEN}3) 每月 1号 0点发送 VPS 信息${RESET}"
-    echo -e "${GREEN}4) 删除本脚本相关定时任务${RESET}"
-    echo -e "${GREEN}5) 查看当前任务${RESET}"
-    echo -e "${GREEN}6) 返回菜单${RESET}"
+    echo -e "${GREEN}1) 每天 0点${RESET}"
+    echo -e "${GREEN}2) 每周一 0点${RESET}"
+    echo -e "${GREEN}3) 每月 1号 0点${RESET}"
+    echo -e "${GREEN}4) 每5分钟一次${RESET}"
+    echo -e "${GREEN}5) 每10分钟一次${RESET}"
+    echo -e "${GREEN}6) 自定义时间 (Cron表达式) ⭐${RESET}"
+    echo -e "${GREEN}7) 删除任务${RESET}"
+    echo -e "${GREEN}8) 查看当前任务${RESET}"
+    echo -e "${GREEN}0) 返回菜单${RESET}"
+
     read -p "$(echo -e ${GREEN}请选择: ${RESET}) " cron_choice
 
     CRON_CMD="bash $SCRIPT_PATH --cron"
 
     case $cron_choice in
-        1) (crontab -l 2>/dev/null | grep -v "$CRON_CMD"; echo "0 0 * * * $CRON_CMD") | crontab -
-           echo -e "${GREEN}✅ 已设置每天 0 点发送 VPS 信息${RESET}" ;;
-        2) (crontab -l 2>/dev/null | grep -v "$CRON_CMD"; echo "0 0 * * 1 $CRON_CMD") | crontab -
-           echo -e "${GREEN}✅ 已设置每周一 0 点发送 VPS 信息${RESET}" ;;
-        3) (crontab -l 2>/dev/null | grep -v "$CRON_CMD"; echo "0 0 1 * * $CRON_CMD") | crontab -
-           echo -e "${GREEN}✅ 已设置每月 1 号 0 点发送 VPS 信息${RESET}" ;;
-        4) crontab -l 2>/dev/null | grep -v "$CRON_CMD" | crontab -
-           echo -e "${RED}❌ 已删除本脚本相关定时任务${RESET}" ;;
-        5) echo -e "${YELLOW}当前定时任务:${RESET}"
-           crontab -l 2>/dev/null | grep "$CRON_CMD" || echo "没有找到本脚本相关定时任务" ;;
-        6) return ;;
-        *) echo -e "${RED}无效选择${RESET}" ;;
+        1) CRON_TIME="0 0 * * *" ;;
+        2) CRON_TIME="0 0 * * 1" ;;
+        3) CRON_TIME="0 0 1 * *" ;;
+        4) CRON_TIME="*/5 * * * *" ;;
+        5) CRON_TIME="*/10 * * * *" ;;
+
+        6)
+            echo -e "${YELLOW}请输入 Cron 表达式 (分 时 日 月 周)${RESET}"
+            echo -e "${YELLOW}示例: 30 3 * * *  → 每天03:30${RESET}"
+            read -rp "Cron: " CRON_TIME
+            count=$(echo "$CRON_TIME" | awk '{print NF}')
+            if [ "$count" -ne 5 ]; then
+                echo -e "${RED}❌ 格式错误，必须5段${RESET}"
+                read -p "回车继续..."
+                return
+            fi
+            ;;
+
+        7)
+            crontab -l 2>/dev/null | grep -v "$CRON_CMD" | crontab -
+            echo -e "${RED}❌ 已删除任务${RESET}"
+            read -p "回车继续..."
+            return
+            ;;
+
+        8)
+            echo -e "${YELLOW}当前任务:${RESET}"
+            crontab -l 2>/dev/null | grep "$CRON_CMD" || echo "暂无任务"
+            read -p "回车继续..."
+            return
+            ;;
+
+        0) return ;;
+        *) echo -e "${RED}无效选择${RESET}"; return ;;
     esac
-    read -p "$(echo -e ${GREEN}按回车返回菜单...${RESET})"
+
+    (crontab -l 2>/dev/null | grep -v "$CRON_CMD"; echo "$CRON_TIME $CRON_CMD") | crontab -
+
+    echo -e "${GREEN}✅ 定时任务设置成功: $CRON_TIME${RESET}"
+    read -p "$(echo -e ${GREEN}按回车返回菜单${RESET})"
 }
+
 
 # ================== 卸载脚本 ==================
 uninstall_script() {
@@ -172,9 +205,18 @@ uninstall_script() {
     [[ "$confirm" =~ ^[Yy]$ ]] || return
     crontab -l 2>/dev/null | grep -v "bash $SCRIPT_PATH" | crontab -
     rm -f "$SCRIPT_PATH" "$CONFIG_FILE" "$OUTPUT_FILE"
-    rm -rf /opt/vpsw
+    rm -rf /opt/vpsnetwork
     echo -e "${GREEN}✅ 脚本已卸载${RESET}"
     exit 0
+}
+
+# ================== 确保 cron 服务 ==================
+enable_cron_service(){
+  if command -v systemctl >/dev/null 2>&1; then
+    systemctl enable --now cron 2>/dev/null || systemctl enable --now crond 2>/dev/null
+  elif command -v service >/dev/null 2>&1; then
+    service cron start 2>/dev/null || service crond start 2>/dev/null
+  fi
 }
 
 # ================== 菜单 ==================
