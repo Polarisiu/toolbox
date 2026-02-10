@@ -8,7 +8,7 @@ menu() {
     clear
     echo -e "${GREEN}=== 1Panel v2开心版管理菜单 ===${RESET}"
     echo -e "${GREEN}1) 安装部署v2${RESET}"
-    echo -e "${GREEN}2) 更新到最新${RESET}"
+    echo -e "${GREEN}2) 更新${RESET}"
     echo -e "${GREEN}3) 卸载 1Panelv2开心版${RESET}"
     echo -e "${GREEN}0) 退出${RESET}"
     read -p $'\033[32m请选择操作: \033[0m' choice
