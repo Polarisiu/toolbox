@@ -5,7 +5,7 @@
 
 ### clash配置
 
-https://raw.githubusercontent.com/Polarisiu/iu/refs/heads/main/sub-store-clash.yaml
+[https://raw.githubusercontent.com/Polarisiu/iu/refs/heads/main/sub-store-clash.yaml](https://raw.githubusercontent.com/sistarry/toolbox/refs/heads/main/Sub-store/clash.yaml)
 
 ### Mihomo配置
 
