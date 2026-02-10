@@ -12,3 +12,14 @@
 ###  一键脚本
 ```bash
 bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Panel/panel.sh)
+```
+
+
+## 使用说明
+
+### 快捷命令
+
+  - `p`
+  - `P`
+
+安装完成后，只需在终端输入 `p` 或 `P` 即可快速启动主菜单。
