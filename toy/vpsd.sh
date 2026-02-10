@@ -194,19 +194,22 @@ pause_return(){
 
 # ================== 卸载脚本 ==================
 uninstall_script(){
-    echo -e "${yellow}正在卸载...${re}"
+    echo -e "${yellow}正在卸载脚本、配置及定时任务...${re}"
 
     CRON_CMD="bash $SCRIPT_PATH send"
 
+    # 清理定时任务（存在才删除）
     if crontab -l >/dev/null 2>&1; then
         crontab -l | grep -v "$CRON_CMD" | crontab -
     fi
 
+    # 删除文件和目录
     rm -rf "$SCRIPT_PATH" "$TG_CONFIG_FILE" /opt/vpsdocker
 
-    echo -e "${green}✅ 卸载完成${re}"
+    echo -e "${green}✅ 卸载完成，相关数据和定时任务已删除${re}"
     exit 0
 }
+
 
 # ================== 菜单 ==================
 menu(){
