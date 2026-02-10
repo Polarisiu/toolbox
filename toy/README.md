@@ -9,6 +9,10 @@ bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/toy/Gith
 ```
 
 
+### PVE开小鸡脚本
+```bash
+bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/toy/Github.sh)
+```
 
 
 
