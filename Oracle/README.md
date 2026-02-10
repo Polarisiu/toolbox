@@ -11,3 +11,14 @@
 ### 一键脚本
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/Oracle/oracle.sh)
+```
+
+
+## 使用说明
+
+### 快捷命令
+
+  - `o`
+  - `O`
+
+安装完成后，只需在终端输入 `o` 或 `O` 即可快速启动主菜单。
