@@ -15,17 +15,17 @@ menu() {
     case $choice in
         1)
             echo -e "${GREEN}正在安装 Komari...${RESET}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/app-store/main/komari.sh)
+            bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/Docker/komari.sh)
             pause
             ;;
         2)
             echo -e "${GREEN}正在安装 Komari(CF) ...${RESET}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/app-store/main/komaricf.sh)
+            bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/Docker/komaricf.sh)
             pause
             ;;
         3)
             echo -e "${GREEN}管理 Komari Agent...${RESET}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/app-store/main/KomariAgent.sh)
+            bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/Docker/KomariAgent.sh)
             pause
             ;;
         0)
