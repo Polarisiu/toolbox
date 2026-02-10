@@ -189,7 +189,7 @@ setup_cron_job(){
 
 
 pause_return(){
-  read -p "$(echo -e ${green}请选择:${re}) " temp
+  read -p "$(echo -e ${green}按回车返回菜单${re}) " temp
 }
 
 # ================== 卸载脚本 ==================
