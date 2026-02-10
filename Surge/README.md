@@ -14,4 +14,4 @@ https://raw.githubusercontent.com/sistarry/toolbox/refs/heads/main/Sub-store/Sur
 
 ### Surge监控管理
 
-bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Surge/surge.sh)
+bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Surge/surge.sh)  #配合模块使用
