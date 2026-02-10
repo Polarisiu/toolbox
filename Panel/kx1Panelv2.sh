@@ -15,12 +15,12 @@ menu() {
     case $choice in
         1)
             echo -e "${GREEN}正在安装部署 1Panel v2 开心版...${RESET}"
-            bash -c "$(curl -sSL https://resource.1panel.jp/1panel/package/v2/quick_start.sh)"
+            bash -c "$(curl -sSL https://resource.1panel.sb/1panel/package/v2/quick_start.sh)"
             pause
             ;;
         2)
             echo -e "${GREEN}正在更新到最新...${RESET}"
-            curl https://resource.1panel.jp/1panel/package/v2/update.sh | bash
+            curl https://resource.1panel.sb/1panel/package/v2/update.sh | bash
             pause
             ;;
         3)
