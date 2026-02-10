@@ -6,10 +6,10 @@ RESET="\033[0m"
 
 menu() {
     clear
-    echo -e "${GREEN}=== 1Panel v1 开心版 管理菜单 ===${RESET}"
-    echo -e "${GREEN}1) 安装部署 v1${RESET}"
+    echo -e "${GREEN}=== 1Panel v1开心版管理菜单 ===${RESET}"
+    echo -e "${GREEN}1) 安装部署v1${RESET}"
     echo -e "${GREEN}2) 更新${RESET}"
-    echo -e "${GREEN}3) 卸载 1Panel v1${RESET}"
+    echo -e "${GREEN}3) 卸载1Panelv1${RESET}"
     echo -e "${GREEN}0) 退出${RESET}"
     read -p $'\033[32m请选择操作: \033[0m' choice
     case $choice in
