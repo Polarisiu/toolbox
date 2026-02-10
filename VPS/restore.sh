@@ -24,32 +24,32 @@ while true; do
     case $choice in
         1)
             echo -e "${GREEN}执行 SSH密钥自动配置...${NC}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/tool/main/ssh.sh)
+            bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/VPS/ssh.sh)
             read -p "$(echo -e ${GREEN}按回车继续...${NC})"
             ;;
         2)
             echo -e "${GREEN}执行 Rclone备份...${NC}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/tool/main/rclone.sh)
+            bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/VPS.sh)
             read -p "$(echo -e ${GREEN}按回车继续...${NC})"
             ;;
         3)
             echo -e "${GREEN}安装快照备份...${NC}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/tool/main/system_snapshot.sh)
+            bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/VPS/system_snapshot.sh)
             read -p "$(echo -e ${GREEN}按回车继续...${NC})"
             ;;
         4)
             echo -e "${GREEN}本地系统快照恢复...${NC}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/tool/main/local_restore.sh)
+            bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/VPS/local_restore.sh)
             read -p "$(echo -e ${GREEN}按回车继续...${NC})"
             ;;
         5)
             echo -e "${GREEN}远程系统快照恢复...${NC}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/tool/main/remote.sh)
+            bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/VPS/remote.sh)
             read -p "$(echo -e ${GREEN}按回车继续...${NC})"
             ;;
         6)
             echo -e "${GREEN}卸载快照备份...${NC}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/tool/main/uninstall_snapshot.sh)
+            bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/VPS/uninstall_snapshot.sh)
             read -p "$(echo -e ${GREEN}按回车继续...${NC})"
             ;;
         0)
