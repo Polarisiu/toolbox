@@ -8,8 +8,8 @@ white="\033[37m"
 re="\033[0m"
 
 # ================== 基础配置 ==================
-SCRIPT_PATH="/opt/vpsd/docker_info.sh"
-TG_CONFIG_FILE="/opt/vpsd/.vps_tgd_config"
+SCRIPT_PATH="/opt/vpsdocker/docker_info.sh"
+TG_CONFIG_FILE="/opt/vpsdocker/.vps_tgd_config"
 SCRIPT_URL="https://raw.githubusercontent.com/sistarry/toolbox/main/toy/vpsd.sh"
 
 # ================== 下载或更新脚本 ==================
