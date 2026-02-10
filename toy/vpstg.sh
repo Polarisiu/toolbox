@@ -6,7 +6,7 @@ RESET="\033[0m"
 
 menu() {
     clear
-    echo -e "${GREEN}=== VPSTG通知管理 ===${RESET}"
+    echo -e "${GREEN}=== VPSTG监控通知管理 ===${RESET}"
     echo -e "${GREEN}1) 系统信息${RESET}"
     echo -e "${GREEN}2) 网卡信息${RESET}"
     echo -e "${GREEN}3) Docker信息${RESET}"
