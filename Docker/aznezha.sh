@@ -15,17 +15,17 @@ menu() {
     case $choice in
         1)
             echo -e "${GREEN}正在安装 哪吒 v1...${RESET}"
-            bash <(curl -sL https://raw.githubusercontent.com/Polarisiu/app-store/main/nezhadashboard.sh)
+            bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Docker/nezhadashboard.sh)
             pause
             ;;
         2)
             echo -e "${GREEN}正在安装 哪吒 v1(Argo)...${RESET}"
-            bash <(curl -sL https://raw.githubusercontent.com/Polarisiu/app-store/main/nezhav1Argo.sh)
+            bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Docker/nezhav1Argo.sh)
             pause
             ;;
         3)
             echo -e "${GREEN}管理 Agent...${RESET}"
-            bash <(curl -sL https://raw.githubusercontent.com/Polarisiu/app-store/main/NezhaAgent.sh)
+            bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Docker/NezhaAgent.sh)
             pause
             ;;
         0)
