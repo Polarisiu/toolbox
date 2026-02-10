@@ -87,3 +87,12 @@
 ```bash
 <script src="https://cdn.jsdelivr.net/gh/leuxinovo/nezha-ui@main/nezha-pingx.js"></script>
 ```
+
+### 全国各省份三网 TCP-Ping IPv4 地址
+
+https://www.nodeseek.com/post-68572-1
+
+### 全国各省份三网 TCP-Ping IPv6 地址
+
+https://www.nodeseek.com/post-129987-1
+
