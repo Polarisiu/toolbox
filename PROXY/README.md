@@ -20,3 +20,14 @@
 ###  一键脚本
 ```bash
 bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/proxy.sh)
+```
+
+
+## 使用说明
+
+### 快捷命令
+
+  - `f`
+  - `F`
+
+安装完成后，只需在终端输入 `f` 或 `F` 即可快速启动主菜单。
