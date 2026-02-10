@@ -46,7 +46,7 @@ menu() {
     read choice
     case $choice in
         1)  bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/Oracle/ocibrick.sh) && pause ;;
-        2)  bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/Oracle/xgroot.sh) && pause ;;
+        2)  bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/VPS/xgroot.sh) && pause ;;
         3)  bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/Oracle/DDoracle.sh) && pause ;;
         4)  bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/Oracle/ipv6.sh) && pause ;;
         5)  bash <(wget -qO- --no-check-certificate https://gitlab.com/spiritysdx/Oracle-server-keep-alive-script/-/raw/main/oalive.sh) && pause ;;
