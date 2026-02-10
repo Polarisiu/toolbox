@@ -17,4 +17,14 @@
 
 ```bash
 bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Docker/Store.sh) 
+```
 
+
+## 使用说明
+
+### 快捷命令
+
+  - `d`
+  - `D`
+
+安装完成后，只需在终端输入 `d` 或 `D` 即可快速启动主菜单。
