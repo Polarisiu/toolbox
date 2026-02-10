@@ -395,7 +395,7 @@ execute_choice() {
         85) bash <(curl -fsSL "https://raw.githubusercontent.com/Eric86777/vps-tcp-tune/main/install-alias.sh?$(date +%s)") ;;
         86) bash <(curl -sL https://cdn.kxy.ovh/kxy.sh) ;;
         87) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Alpine/Alpine.sh) ;;
-        89) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/Oracle/oracle.sh) ;;
+        89) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Oracle/oracle.sh) ;;
         90) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/toy/Github.sh) ;;
         91) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/toy/nat.sh) ;;
         92) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/toy/vpstg.sh) ;;
