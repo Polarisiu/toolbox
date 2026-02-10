@@ -1,0 +1,28 @@
+哪吒通知
+
+https://api.telegram.org/bot"TGBot token"/sendMessage
+
+POST
+JSON
+
+{
+  "chat_id": "TGID",
+  "text": "🚨 *哪吒探针警报* 🚨\n\n🕒 时间：`#DATETIME#`\n🖥️ 来自服务器：*#SERVER.NAME#*\n\n📡 状态：*#NEZHA#*",
+  "parse_mode": "Markdown",
+  "reply_markup": {
+    "inline_keyboard": [
+      [
+        {
+          "text": "📍 服务器：#SERVER.NAME#",
+          "callback_data": "#"
+        }
+      ],
+      [
+        {
+          "text": "📊 打开探针仪表盘",
+          "url": "https://域名"
+        }
+      ]
+    ]
+  }
+}
