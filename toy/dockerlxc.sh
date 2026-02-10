@@ -88,7 +88,7 @@ while true; do
     echo -e "${GREEN}6. 启动所有容器${RESET}"
     echo -e "${GREEN}7. 启动容器SSH服务${RESET}"
     echo -e "${GREEN}0. 退出${RESET}"
-    read -p "请输入你的选择: " choice
+    read -p "$(echo -e ${GREEN}请选择: ${RESET})" choice
 
     case "$choice" in
         1) swap_manage ;;
