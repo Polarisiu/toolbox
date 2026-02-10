@@ -9,7 +9,7 @@ RESET="\033[0m"
 # 脚本路径
 # =============================
 SCRIPT_PATH="/root/panel.sh"
-SCRIPT_URL="https://raw.githubusercontent.com/Polarisiu/panel/main/panel.sh"
+SCRIPT_URL="https://raw.githubusercontent.com/sistarry/toolbox/main/Panel/panel.sh"
 BIN_LINK_DIR="/usr/local/bin"
 
 # =============================
@@ -25,14 +25,14 @@ pause() {
 menu() {
     clear
 
-    echo -e "${GREEN}====== 面板管理总菜单 ======${RESET}"
+    echo -e "${GREEN}====== 面板管理菜单 ======${RESET}"
     echo -e "${GREEN}[01] 宝塔面板${RESET}"
     echo -e "${GREEN}[02] 国际版宝塔${RESET}"
     echo -e "${GREEN}[03] 开心版宝塔${RESET}"
     echo -e "${GREEN}[04] 1Panel 面板${RESET}"
     echo -e "${GREEN}[05] 1Panel 面板拓展应用${RESET}"
-    echo -e "${GREEN}[06] 1Panel v1 开心版${RESET}"
-    echo -e "${GREEN}[07] 1Panel v2 开心版${RESET}"
+    echo -e "${GREEN}[06] 1Panel v1开心版${RESET}"
+    echo -e "${GREEN}[07] 1Panel v2开心版${RESET}"
     echo -e "${GREEN}[08] 耗子面板${RESET}"
     echo -e "${GREEN}[09] PandaWiki文档${RESET}"
     echo -e "${GREEN}[10] 雷池WAF${RESET}"
@@ -44,35 +44,35 @@ menu() {
     
     case $choice in
         1|01)
-            bash <(curl -sL https://raw.githubusercontent.com/Polarisiu/panel/main/baota.sh)
+            bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Panel/baota.sh)
             pause
             ;;
         2|02)
-            bash <(curl -sL https://raw.githubusercontent.com/Polarisiu/panel/main/gjbaota.sh)
+            bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Panel/gjbaota.sh)
             pause
             ;;
         3|03)
-            bash <(curl -sL https://raw.githubusercontent.com/Polarisiu/panel/main/kxbaota.sh)
+            bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Panel/kxbaota.sh)
             pause
             ;;
         4|04)
-            bash <(curl -sL https://raw.githubusercontent.com/Polarisiu/panel/main/1Panel.sh)
+            bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Panel/1Panel.sh)
             pause
             ;;
         5|05)
-            bash <(curl -sL https://raw.githubusercontent.com/Polarisiu/panel/main/tz1panel.sh)
+            bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Panel/tz1panel.sh)
             pause
             ;;
         6|06)
-            bash <(curl -sL https://raw.githubusercontent.com/Polarisiu/panel/main/kx1Panelv1.sh)
+            bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Panel/kx1Panelv1.sh)
             pause
             ;;
         7|07)
-            bash <(curl -sL https://raw.githubusercontent.com/Polarisiu/panel/main/kx1Panelv2.sh)
+            bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Panel/kx1Panelv2.sh)
             pause
             ;;
         8|08)
-            bash <(curl -sL https://raw.githubusercontent.com/Polarisiu/panel/main/haozi.sh)
+            bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Panel/haozi.sh)
             pause
             ;;
         9|09)
