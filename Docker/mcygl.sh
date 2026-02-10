@@ -14,12 +14,12 @@ menu() {
     case $choice in
         1)
             echo -e "${GREEN}正在安装萌次元商城...${RESET}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/app-store/main/mcy.sh)
+            bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/Docker/mcy.sh)
             pause
             ;;
         2)
             echo -e "${GREEN}正在运行商城管理脚本...${RESET}"
-            bash <(curl -fsSL https://raw.githubusercontent.com/Polarisiu/app-store/main/mcyml.sh)
+            bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/Docker/mcyml.sh)
             pause
             ;;
         0)
