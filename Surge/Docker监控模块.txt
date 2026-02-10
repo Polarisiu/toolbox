@@ -1,0 +1,9 @@
+#!name=VPSDocker
+#!desc=监控VPSDocker
+#!howto=将模块内容复制到本地后根据自己VPS IP地址及端口修改 http://127.0.0.1:7122 
+
+[Panel]
+Serverinfo = script-name= Serverinfo,update-interval=3600
+
+[Script]
+Serverinfo = type=generic,script-path=https://raw.githubusercontent.com/sistarry/toolbox/refs/heads/main/Surge/docker.js, argument = url=http://127.0.0.1:7122&name=Server Info&icon=party.popper
