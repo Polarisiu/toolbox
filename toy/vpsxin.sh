@@ -333,20 +333,20 @@ pause_return(){
 
 # ================== 卸载脚本 ==================
 uninstall_script(){
-    echo -e "${yellow}即将卸载脚本及配置和定时任务${re}"
-    read -rp "确认卸载吗？(y/N): " confirm
-    if [[ "$confirm" =~ ^[Yy]$ ]]; then
-        CRON_CMD="bash $SCRIPT_PATH send"
-        crontab -l 2>/dev/null | grep -v "$CRON_CMD" | crontab -
-        rm -f "$SCRIPT_PATH"
-        rm -f "$TG_CONFIG_FILE"
-        rm -rf /opt/vpsxinsi
-        echo -e "${green}✅ 卸载完成,相关数据和定时任务已删除${re}"
-        exit 0
-    else
-        echo "取消卸载"
+    echo -e "${yellow}正在卸载...${re}"
+
+    CRON_CMD="bash $SCRIPT_PATH send"
+
+    if crontab -l >/dev/null 2>&1; then
+        crontab -l | grep -v "$CRON_CMD" | crontab -
     fi
+
+    rm -rf "$SCRIPT_PATH" "$TG_CONFIG_FILE" /opt/vpsxinsi
+
+    echo -e "${green}✅ 卸载完成${re}"
+    exit 0
 }
+
 
 # ================== 菜单 ==================
 menu(){
