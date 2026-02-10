@@ -6,11 +6,10 @@
 ### 一键脚本
 ```bash
 bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Alpine/Alpine.sh)
+```
 
----
-### 快捷命令
 
-脚本会自动安装两个快捷命令：
+###  脚本会自动安装两个快捷命令：
 
   - `a`
   - `A`
