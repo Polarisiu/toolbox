@@ -67,7 +67,7 @@ services:
     image: vue-color-avatar:latest
     container_name: vue-color-avatar
     ports:
-      - "\${PORT}:80"
+      - "127.0.0.1:${PORT}:80"
     restart: always
 EOF
 
