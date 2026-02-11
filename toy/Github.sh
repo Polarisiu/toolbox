@@ -8,7 +8,7 @@ BASE_DIR="$HOME/Github"
 CONFIG_FILE="$BASE_DIR/.ghupload_config"
 LOG_FILE="$BASE_DIR/github_upload.log"
 TMP_BASE="$BASE_DIR/github/tmp"
-UPLOAD_DIR="$BASE_DIR/github/upload"
+UPLOAD_DIR="$BASE_DIR/github/upload"     # 默认值
 DOWNLOAD_DIR="$BASE_DIR/github/download"
 SCRIPT_PATH="$BASE_DIR/gh_tool.sh"
 SCRIPT_URL="https://raw.githubusercontent.com/sistarry/toolbox/main/toy/Github.sh"
@@ -48,6 +48,8 @@ BRANCH="$BRANCH"
 COMMIT_PREFIX="$COMMIT_PREFIX"
 TG_BOT_TOKEN="$TG_BOT_TOKEN"
 TG_CHAT_ID="$TG_CHAT_ID"
+UPLOAD_DIR="$UPLOAD_DIR"
+DOWNLOAD_DIR="$DOWNLOAD_DIR"
 EOC
 }
 
@@ -109,6 +111,14 @@ init_config() {
     read -p "请输入提交前缀 (默认 VPS-Upload): " COMMIT_PREFIX
     COMMIT_PREFIX=${COMMIT_PREFIX:-VPS-Upload}
 
+    read -p "上传目录 (默认 $UPLOAD_DIR): " input_up
+    UPLOAD_DIR=${input_up:-$UPLOAD_DIR}
+
+    read -p "下载目录 (默认 $DOWNLOAD_DIR): " input_down
+    DOWNLOAD_DIR=${input_down:-$DOWNLOAD_DIR}
+
+    mkdir -p "$UPLOAD_DIR" "$DOWNLOAD_DIR"
+
     read -p "是否配置 Telegram Bot 通知？(y/n): " TG_CHOICE
     if [[ "$TG_CHOICE" == "y" ]]; then
         read -p "请输入 TG Bot Token: " TG_BOT_TOKEN
@@ -138,6 +148,21 @@ change_repo() {
     REPO_URL="$NEW_REPO"
     save_config
     echo -e "${GREEN}✅ 仓库地址已更新为: $REPO_URL${RESET}"
+    read -p "按回车返回菜单..."
+}
+change_dirs() {
+    load_config
+
+    read -p "新的上传目录 ($UPLOAD_DIR): " up
+    read -p "新的下载目录 ($DOWNLOAD_DIR): " down
+
+    UPLOAD_DIR=${up:-$UPLOAD_DIR}
+    DOWNLOAD_DIR=${down:-$DOWNLOAD_DIR}
+
+    mkdir -p "$UPLOAD_DIR" "$DOWNLOAD_DIR"
+
+    save_config
+    echo -e "${GREEN}✅ 目录已更新${RESET}"
     read -p "按回车返回菜单..."
 }
 
@@ -215,7 +240,7 @@ download_from_github() {
 # 清理临时目录
 # =============================
 clean_tmp() {
-    echo -e "${GREEN}ℹ️ 临时目录位置: $TMP_BASE${RESET}"
+    echo -e "${GREEN}临时目录位置: $TMP_BASE${RESET}"
     read -p "确认清理临时目录及所有子文件吗？(y/n): " confirm
     if [[ "$confirm" =~ ^[Yy]$ ]]; then
         rm -rf "$TMP_BASE"/*
@@ -307,9 +332,10 @@ menu() {
     echo -e "${GREEN} 5) 删除定时任务${RESET}"
     echo -e "${GREEN} 6) 查看最近日志${RESET}"
     echo -e "${GREEN} 7) 修改仓库地址${RESET}"
-    echo -e "${GREEN} 8) 清理临时目录${RESET}"
-    echo -e "${GREEN} 9) 更新${RESET}"
-    echo -e "${GREEN}10) 卸载${RESET}"
+    echo -e "${GREEN} 8) 修改同步目录${RESET}"
+    echo -e "${GREEN} 9) 清理临时目录${RESET}"
+    echo -e "${GREEN}10) 更新${RESET}"
+    echo -e "${GREEN}11) 卸载${RESET}"
     echo -e "${GREEN} 0) 退出${RESET}"
     read -p "$(echo -e ${GREEN}请输入选项: ${RESET})" opt
     case $opt in
@@ -320,9 +346,10 @@ menu() {
         5) remove_cron ;;
         6) show_log ;;
         7) change_repo ;;
-        8) clean_tmp ;;
-        9) update_tool ;;
-        10) uninstall_tool ;;
+        8) change_dirs ;;
+        9) clean_tmp ;;
+        10) update_tool ;;
+        11) uninstall_tool ;;
         0) exit 0 ;;
         *) echo -e "${RED}无效选项${RESET}"; read -p "$(echo -e ${GREEN}按回车返回菜单...${RESET})" ;;
     esac
