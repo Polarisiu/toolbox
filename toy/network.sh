@@ -201,7 +201,7 @@ setup_cron_job() {
 
 # ================== 卸载脚本 ==================
 uninstall_script() {
-    echo -e "${YELLOW}正在卸载脚本并清理定时任务...${RESET}"
+    echo -e "${YELLOW}正在卸载脚本及配置和定时任务...${RESET}"
 
     # 清理定时任务（存在才处理）
     if crontab -l >/dev/null 2>&1; then
@@ -211,7 +211,7 @@ uninstall_script() {
     # 删除文件和目录
     rm -rf "$SCRIPT_PATH" "$CONFIG_FILE" "$OUTPUT_FILE" /opt/vpsnetwork
 
-    echo -e "${GREEN}✅ 脚本已卸载完成${RESET}"
+    echo -e "${GREEN}✅ 卸载完成，相关数据和定时任务已全部删除${RESET}"
     exit 0
 }
 
