@@ -29,7 +29,7 @@ menu() {
     echo -e "${GREEN} 1) 本地备份（打包到本机）${RESET}"
     echo -e "${GREEN} 2) 远程备份（rsync同步）${RESET}"
     echo -e "${GREEN} 0) 退出${RESET}"
-    read -p $'\033[32m请选择: \033[0m' choice
+    read -p $'\033[32m 请选择: \033[0m' choice
 
     case $choice in
         1) run_script "$LOCAL_URL" "本地备份" ;;
