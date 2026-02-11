@@ -250,9 +250,17 @@ set_cron() {
         7) read -p "请输入自定义 cron 表达式: " cron_expr ;;
         *) echo "无效选项"; read -p "按回车返回菜单..."; return ;;
     esac
-    CRON_CMD="bash $SCRIPT_PATH upload >> $LOG_FILE 2>&1 #GHUPLOAD"
+    CRON_CMD="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin bash $SCRIPT_PATH upload >> $LOG_FILE 2>&1 #GHUPLOAD"
     (crontab -l 2>/dev/null | grep -v "#GHUPLOAD"; echo "$cron_expr $CRON_CMD") | crontab -
     echo -e "${GREEN}✅ 定时任务已添加: $cron_expr${RESET}"
+    read -p "按回车返回菜单..."
+}
+# =============================
+# 删除定时任务（新增）
+# =============================
+remove_cron() {
+    crontab -l 2>/dev/null | grep -v "#GHUPLOAD" | crontab -
+    echo -e "${GREEN}✅ 定时任务已删除${RESET}"
     read -p "按回车返回菜单..."
 }
 
@@ -292,27 +300,29 @@ menu() {
     echo -e "${GREEN}==============================${RESET}"
     echo -e "${GREEN}    VPS <-> GitHub 工具       ${RESET}"
     echo -e "${GREEN}==============================${RESET}"
-    echo -e "${GREEN}1) 初始化配置${RESET}"
-    echo -e "${GREEN}2) 上传文件到GitHub${RESET}"
-    echo -e "${GREEN}3) 下载文件到VPS${RESET}"
-    echo -e "${GREEN}4) 设置定时任务${RESET}"
-    echo -e "${GREEN}5) 查看最近日志${RESET}"
-    echo -e "${GREEN}6) 修改仓库地址${RESET}"
-    echo -e "${GREEN}7) 清理临时目录${RESET}"
-    echo -e "${GREEN}8) 更新${RESET}"
-    echo -e "${GREEN}9) 卸载${RESET}"
-    echo -e "${GREEN}0) 退出${RESET}"
+    echo -e "${GREEN} 1) 初始化配置${RESET}"
+    echo -e "${GREEN} 2) 上传文件到GitHub${RESET}"
+    echo -e "${GREEN} 3) 下载文件到VPS${RESET}"
+    echo -e "${GREEN} 4) 设置定时任务${RESET}"
+    echo -e "${GREEN} 5) 删除定时任务${RESET}"
+    echo -e "${GREEN} 6) 查看最近日志${RESET}"
+    echo -e "${GREEN} 7) 修改仓库地址${RESET}"
+    echo -e "${GREEN} 8) 清理临时目录${RESET}"
+    echo -e "${GREEN} 9) 更新${RESET}"
+    echo -e "${GREEN}10) 卸载${RESET}"
+    echo -e "${GREEN} 0) 退出${RESET}"
     read -p "$(echo -e ${GREEN}请输入选项: ${RESET})" opt
     case $opt in
         1) init_config ;;
         2) upload_files ;;
         3) download_from_github ;;
         4) set_cron ;;
-        5) show_log ;;
-        6) change_repo ;;
-        7) clean_tmp ;;
-        8) update_tool ;;
-        9) uninstall_tool ;;
+        5) remove_cron ;;
+        6) show_log ;;
+        7) change_repo ;;
+        8) clean_tmp ;;
+        9) update_tool ;;
+        10) uninstall_tool ;;
         0) exit 0 ;;
         *) echo -e "${RED}无效选项${RESET}"; read -p "$(echo -e ${GREEN}按回车返回菜单...${RESET})" ;;
     esac
@@ -330,6 +340,20 @@ if [ ! -f "$SCRIPT_PATH" ]; then
     echo -e "${GREEN}✅ 安装完成${RESET}"
     echo -e "${GREEN}✅ 快捷键已添加：s 或 S 可快速启动${RESET}"
 fi
+
+# =============================
+# 命令行模式（给 cron 用 ⭐关键修复）
+# =============================
+case "$1" in
+    upload)
+        upload_files
+        exit 0
+        ;;
+    download)
+        download_from_github
+        exit 0
+        ;;
+esac
 
 # =============================
 # 运行主菜单
