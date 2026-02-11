@@ -188,11 +188,11 @@ upload_files() {
     fi
 
     if git push origin "$BRANCH" >>"$LOG_FILE" 2>&1; then
-        echo -e "${GREEN}✅ 上传成功: $COMMIT_MSG${RESET}" | tee -a "$LOG_FILE"
-        send_tg "✅ $SERVICE_NAME [$HOST_NAME] 上传成功：$COMMIT_MSG，文件数：$TOTAL_FILES"
+        echo -e "${GREEN}✅ 上传成功${RESET}" | tee -a "$LOG_FILE"
+        send_tg "✅ $SERVICE_NAME上传成功 文件数：$TOTAL_FILES"
     else
         echo -e "${RED}❌ 上传失败${RESET}" | tee -a "$LOG_FILE"
-        send_tg "❌ $SERVICE_NAME [$HOST_NAME] 上传失败：git push 出错"
+        send_tg "❌ $SERVICE_NAME 上传失败：git push 出错"
     fi
     read -p "按回车返回菜单..."
 }
