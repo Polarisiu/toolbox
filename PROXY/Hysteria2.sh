@@ -93,6 +93,7 @@ show_client_config() {
 # ================== 主菜单 ==================
 while true; do
     clear
+    echo -e "${green}==== Hysteria2 管理菜单 ====${re}"
     echo -e "${green}1. 安装 Hysteria2${re}"
     echo -e "${green}2. 查看 Hysteria2状态${re}"
     echo -e "${green}3. 更换 Hysteria2端口${re}"
