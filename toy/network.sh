@@ -1,11 +1,11 @@
 #!/bin/bash
 # =========================================
-# VPS 网络信息管理脚本（自动初始化 + Telegram + 定时任务 + 卸载）
+# VPS 网络信息管理脚本（自动更新 + Telegram + 定时任务 + 卸载）
 # =========================================
 
 # ================== 配置 ==================
-SCRIPT_URL="https://raw.githubusercontent.com/sistarry/toolbox/main/toy/network.sh"  # 脚本下载地址
-SCRIPT_PATH="/opt/vpsnetwork/vps_network.sh"  # 脚本存放路径
+SCRIPT_URL="https://raw.githubusercontent.com/sistarry/toolbox/main/toy/network.sh"
+SCRIPT_PATH="/opt/vpsnetwork/vps_network.sh"
 CONFIG_FILE="/opt/vpsnetwork/.vps_tgg_config"
 OUTPUT_FILE="/tmp/vps_network_info.txt"
 
@@ -14,56 +14,62 @@ RED='\033[0;31m'
 YELLOW='\033[1;33m'
 RESET='\033[0m'
 
-# ================== 自动下载与初始化 ==================
-initialize_script() {
-    if [ ! -f "$SCRIPT_PATH" ]; then
-        echo -e "${GREEN}首次运行：安装设置权限...${RESET}"
-        mkdir -p "$(dirname "$SCRIPT_PATH")"
-        curl -sSL "$SCRIPT_URL" -o "$SCRIPT_PATH"
-        chmod +x "$SCRIPT_PATH"
-    fi
+# ================== 下载或更新脚本 ==================
+download_script(){
+    mkdir -p "$(dirname "$SCRIPT_PATH")"
+    curl -sSL "$SCRIPT_URL" -o "$SCRIPT_PATH"
+    chmod +x "$SCRIPT_PATH"
 }
 
 # ================== Telegram 配置 ==================
-setup_telegram() {
+setup_telegram(){
     if [ ! -f "$CONFIG_FILE" ]; then
         echo "第一次运行，需要配置 Telegram 参数"
         read -rp "Bot Token: " TG_BOT_TOKEN
         read -rp "Chat ID: " TG_CHAT_ID
-        echo "TG_BOT_TOKEN=\"$TG_BOT_TOKEN\"" > "$CONFIG_FILE"
-        echo "TG_CHAT_ID=\"$TG_CHAT_ID\"" >> "$CONFIG_FILE"
+        read -rp "服务器名称: " SERVER_NAME
+        cat > "$CONFIG_FILE" <<EOC
+TG_BOT_TOKEN="$TG_BOT_TOKEN"
+TG_CHAT_ID="$TG_CHAT_ID"
+SERVER_NAME="$SERVER_NAME"
+EOC
         chmod 600 "$CONFIG_FILE"
         echo -e "${GREEN}✅ 配置已保存到 $CONFIG_FILE${RESET}"
     fi
     source "$CONFIG_FILE"
 }
 
-modify_config() {
+modify_config(){
     echo "修改 Telegram 配置:"
     read -rp "新的 Bot Token: " TG_BOT_TOKEN
     read -rp "新的 Chat ID: " TG_CHAT_ID
-    echo "TG_BOT_TOKEN=\"$TG_BOT_TOKEN\"" > "$CONFIG_FILE"
-    echo "TG_CHAT_ID=\"$TG_CHAT_ID\"" >> "$CONFIG_FILE"
+    read -rp "服务器名称: " SERVER_NAME
+    cat > "$CONFIG_FILE" <<EOC
+TG_BOT_TOKEN="$TG_BOT_TOKEN"
+TG_CHAT_ID="$TG_CHAT_ID"
+SERVER_NAME="$SERVER_NAME"
+EOC
     chmod 600 "$CONFIG_FILE"
     echo -e "${GREEN}✅ 配置已更新${RESET}"
     read -p "$(echo -e ${GREEN}按回车返回菜单...${RESET})"
 }
 
 # ================== 收集网络信息 ==================
-collect_network_info() {
+collect_network_info(){
     echo "收集网络信息..."
     {
-    echo "================= VPS 网络信息 ================="
-    echo "日期: $(date)"
-    echo "主机名: $(hostname)"
-    echo ""
-    echo "=== 系统信息 ==="
-    if command -v hostnamectl >/dev/null 2>&1; then
-        hostnamectl
-    else
-        cat /etc/os-release
-    fi
-    echo ""
+        echo "================= VPS 网络信息 ================="
+        echo "服务器: $SERVER_NAME"
+        echo "日期: $(date)"
+        echo "主机名: $(hostname)"
+        echo ""
+        echo "=== 系统信息 ==="
+        if command -v hostnamectl >/dev/null 2>&1; then
+            hostnamectl
+        else
+            cat /etc/os-release
+        fi
+        echo ""
     } > "$OUTPUT_FILE"
 
     echo "=== 网络接口信息 ===" >> "$OUTPUT_FILE"
@@ -113,47 +119,34 @@ collect_network_info() {
 }
 
 # ================== 发送到 Telegram ==================
-send_to_telegram() {
-    if [ ! -f "$OUTPUT_FILE" ]; then
-        echo "⚠️ 文件 $OUTPUT_FILE 不存在，请先收集网络信息。"
-        read -p "$(echo -e ${GREEN}按回车返回菜单...${RESET})"
-        return
-    fi
+send_to_telegram(){
+    [ ! -f "$OUTPUT_FILE" ] && collect_network_info
     source "$CONFIG_FILE"
-    TG_MSG="📡 VPS 网络信息\`\`\`$(cat $OUTPUT_FILE)\`\`\`"
+    TG_MSG="📡 [$SERVER_NAME] VPS 网络信息\`\`\`$(cat $OUTPUT_FILE)\`\`\`"
     curl -s -X POST "https://api.telegram.org/bot$TG_BOT_TOKEN/sendMessage" \
         -d chat_id="$TG_CHAT_ID" \
         -d parse_mode="Markdown" \
-        -d text="$TG_MSG" >/dev/null
+        -d text="$TG_MSG" >/dev/null 2>&1
     echo -e "${GREEN}✅ 信息已发送到 Telegram${RESET}"
     rm -f "$OUTPUT_FILE"
-    read -p "$(echo -e ${GREEN}按回车返回菜单...${RESET})"
-}
-
-# ================== 删除临时文件 ==================
-delete_file() {
-    [ -f "$OUTPUT_FILE" ] && rm -f "$OUTPUT_FILE" && echo -e "${GREEN}✅ 删除临时文件${RESET}"
-    read -p "按回车返回菜单..."
 }
 
 # ================== 定时任务管理 ==================
-setup_cron_job() {
+setup_cron_job(){
     enable_cron_service
-
     echo -e "${GREEN}===== 定时任务管理 =====${RESET}"
     echo -e "${GREEN}1) 每天 0点${RESET}"
     echo -e "${GREEN}2) 每周一 0点${RESET}"
     echo -e "${GREEN}3) 每月 1号 0点${RESET}"
     echo -e "${GREEN}4) 每5分钟一次${RESET}"
     echo -e "${GREEN}5) 每10分钟一次${RESET}"
-    echo -e "${GREEN}6) 自定义时间 (Cron表达式) ⭐${RESET}"
+    echo -e "${GREEN}6) 自定义时间 (Cron表达式)${RESET}"
     echo -e "${GREEN}7) 删除任务${RESET}"
     echo -e "${GREEN}8) 查看当前任务${RESET}"
     echo -e "${GREEN}0) 返回菜单${RESET}"
 
-    read -p "$(echo -e ${GREEN}请选择: ${RESET}) " cron_choice
-
-    CRON_CMD="bash $SCRIPT_PATH --cron"
+    read -rp "$(echo -e ${GREEN}请选择: ${RESET})" cron_choice
+    CRON_CMD="bash $SCRIPT_PATH send"
 
     case $cron_choice in
         1) CRON_TIME="0 0 * * *" ;;
@@ -161,105 +154,79 @@ setup_cron_job() {
         3) CRON_TIME="0 0 1 * *" ;;
         4) CRON_TIME="*/5 * * * *" ;;
         5) CRON_TIME="*/10 * * * *" ;;
-
         6)
             echo -e "${YELLOW}请输入 Cron 表达式 (分 时 日 月 周)${RESET}"
-            echo -e "${YELLOW}示例: 30 3 * * *  → 每天03:30${RESET}"
             read -rp "Cron: " CRON_TIME
-            count=$(echo "$CRON_TIME" | awk '{print NF}')
-            if [ "$count" -ne 5 ]; then
-                echo -e "${RED}❌ 格式错误，必须5段${RESET}"
-                read -p "回车继续..."
-                return
-            fi
-            ;;
-
+            [ $(echo "$CRON_TIME" | awk '{print NF}') -ne 5 ] && echo -e "${RED}❌ 格式错误${RESET}" && return ;;
         7)
             crontab -l 2>/dev/null | grep -v "$CRON_CMD" | crontab -
-            echo -e "${RED}❌ 已删除任务${RESET}"
-            read -p "回车继续..."
-            return
-            ;;
-
+            echo -e "${RED}❌ 已删除任务${RESET}"; return ;;
         8)
-            echo -e "${YELLOW}当前任务:${RESET}"
-            crontab -l 2>/dev/null | grep "$CRON_CMD" || echo "暂无任务"
-            read -p "回车继续..."
-            return
-            ;;
-
+            crontab -l 2>/dev/null | grep "$CRON_CMD" || echo "暂无任务"; return ;;
         0) return ;;
         *) echo -e "${RED}无效选择${RESET}"; return ;;
     esac
 
     (crontab -l 2>/dev/null | grep -v "$CRON_CMD"; echo "$CRON_TIME $CRON_CMD") | crontab -
-
     echo -e "${GREEN}✅ 定时任务设置成功: $CRON_TIME${RESET}"
-    read -p "$(echo -e ${GREEN}按回车返回菜单${RESET})"
 }
-
 
 # ================== 卸载脚本 ==================
-uninstall_script() {
-    echo -e "${YELLOW}正在卸载脚本及配置和定时任务...${RESET}"
-
-    # 清理定时任务（存在才处理）
-    if crontab -l >/dev/null 2>&1; then
-        crontab -l | grep -v "bash $SCRIPT_PATH" | crontab -
-    fi
-
-    # 删除文件和目录
+uninstall_script(){
+    echo -e "${YELLOW}正在卸载脚本、配置及定时任务...${RESET}"
+    crontab -l 2>/dev/null | grep -v "bash $SCRIPT_PATH" | crontab -
     rm -rf "$SCRIPT_PATH" "$CONFIG_FILE" "$OUTPUT_FILE" /opt/vpsnetwork
-
-    echo -e "${GREEN}✅ 卸载完成，相关数据和定时任务已全部删除${RESET}"
-    exit 0
+    echo -e "${GREEN}✅ 卸载完成${RESET}"; exit 0
 }
 
-
-# ================== 确保 cron 服务 ==================
+# ================== cron 服务检查 ==================
 enable_cron_service(){
-  if command -v systemctl >/dev/null 2>&1; then
-    systemctl enable --now cron 2>/dev/null || systemctl enable --now crond 2>/dev/null
-  elif command -v service >/dev/null 2>&1; then
-    service cron start 2>/dev/null || service crond start 2>/dev/null
-  fi
+    command -v systemctl >/dev/null 2>&1 && (systemctl enable --now cron 2>/dev/null || systemctl enable --now crond 2>/dev/null)
+    command -v service >/dev/null 2>&1 && (service cron start 2>/dev/null || service crond start 2>/dev/null)
+}
+
+# ================== 只查看网络信息 ==================
+view_network_info(){
+    collect_network_info
+    cat "$OUTPUT_FILE"
+    read -p "$(echo -e ${GREEN}按回车返回菜单...${RESET})"
 }
 
 # ================== 菜单 ==================
-menu() {
+menu(){
     while true; do
         clear
         echo -e "${GREEN}===== VPS 网络管理菜单 =====${RESET}"
-        echo -e "${GREEN}1) 查看并发送网络信息到 Telegram${RESET}"
-        echo -e "${GREEN}2) 修改 Telegram 配置${RESET}"
-        echo -e "${GREEN}3) 删除临时文件${RESET}"
-        echo -e "${GREEN}4) 定时任务管理${RESET}"
-        echo -e "${GREEN}5) 卸载${RESET}"
+        echo -e "${GREEN}1) 只查看网络信息${RESET}"
+        echo -e "${GREEN}2) 查看并发送网络信息到 Telegram${RESET}"
+        echo -e "${GREEN}3) 修改 Telegram 配置${RESET}"
+        echo -e "${GREEN}4) 设置定时任务${RESET}"
+        echo -e "${GREEN}5) 卸载脚本${RESET}"
         echo -e "${GREEN}0) 退出${RESET}"
-        read -p "$(echo -e ${GREEN}请选择: ${RESET})" choice
+        read -rp "$(echo -e ${GREEN}请选择: ${RESET})" choice
         case $choice in
-            1) setup_telegram; collect_network_info; send_to_telegram ;;
-            2) modify_config ;;
-            3) delete_file ;;
+            1) view_network_info ;;
+            2) setup_telegram; collect_network_info; send_to_telegram ;;
+            3) modify_config ;;
             4) setup_cron_job ;;
             5) uninstall_script ;;
             0) exit 0 ;;
-            *) echo -e "${RED}无效选择${RESET}"; read -p "$(echo -e ${GREEN}按回车返回菜单...${RESET})" ;;
+            *) echo -e "${RED}无效选择${RESET}" ;;
         esac
+        read -p "$(echo -e ${GREEN}按回车返回菜单...${RESET})"
     done
 }
 
-# ================== 支持 --cron 参数 ==================
-if [ "$1" == "--cron" ]; then
+
+# ================== 命令行模式支持 send ==================
+if [ "$1" == "send" ]; then
     setup_telegram
     collect_network_info
     send_to_telegram
     exit 0
 fi
 
-# ================== 初始化脚本 ==================
-initialize_script
+# ================== 初始化 ==================
+download_script
 setup_telegram
-
-# ================== 启动菜单 ==================
 menu
