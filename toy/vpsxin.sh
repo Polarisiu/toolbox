@@ -333,7 +333,7 @@ pause_return(){
 
 # ================== 卸载脚本 ==================
 uninstall_script(){
-    echo -e "${yellow}正在卸载...${re}"
+    echo -e "${yellow}正在卸载脚本及配置和定时任务...${re}"
 
     CRON_CMD="bash $SCRIPT_PATH send"
 
@@ -343,7 +343,7 @@ uninstall_script(){
 
     rm -rf "$SCRIPT_PATH" "$TG_CONFIG_FILE" /opt/vpsxinsi
 
-    echo -e "${green}✅ 卸载完成${re}"
+    echo -e "${green}✅ 卸载完成，相关数据和定时任务已全部删除${re}"
     exit 0
 }
 
