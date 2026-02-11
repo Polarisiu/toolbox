@@ -205,7 +205,7 @@ main_menu(){
         echo -e "${GREEN}====Incus 管理脚本======${RESET}"
         echo -e "${GREEN}1. 开设SWAP${RESET}"
         echo -e "${GREEN}2. 安装incus${RESET}"
-        echo -e "${GREEN}3. 管理 incus 小鸡${RESET}"
+        echo -e "${GREEN}3. 管理incus小鸡${RESET}"
         echo -e "${GREEN}0. 退出${RESET}"
         read -p "$(echo -e ${GREEN}请选择: ${RESET})" choice
         case $choice in
