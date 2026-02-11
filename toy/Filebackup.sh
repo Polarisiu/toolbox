@@ -29,7 +29,7 @@ menu() {
     echo -e "${GREEN} 1) Telegram备份${RESET}"
     echo -e "${GREEN} 2) GitHub备份${RESET}"
     echo -e "${GREEN} 0) 退出${RESET}"
-    read -p $'\033[32m 请选择 (0-2): \033[0m' choice
+    read -p $'\033[32m 请选择: \033[0m' choice
 
     case $choice in
         1) run_script "$TG_URL" "Telegram 备份" ;;
