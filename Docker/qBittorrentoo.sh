@@ -11,9 +11,6 @@ APP_NAME="qbittorrent"
 COMPOSE_DIR="/opt/qbittorrent"
 COMPOSE_FILE="$COMPOSE_DIR/docker-compose.yml"
 
-function get_ip() {
-    curl -s ifconfig.me || curl -s ip.sb || echo "127.0.0.1"
-}
 
 function menu() {
     clear
@@ -67,7 +64,7 @@ EOF
     cd "$COMPOSE_DIR"
     docker compose up -d
     echo -e "${GREEN}✅ qBittorrent 已启动${RESET}"
-    echo -e "${YELLOW}🌐 本机访问地址: http://$(get_ip):$WEB_PORT${RESET}"
+    echo -e "${YELLOW}🌐 本机访问地址:  http://$(hostname -I | awk '{print $1}'):$WEB_PORT${RESET}"
     echo -e "${GREEN}🌐 账号/密码:查看日志${RESET}"
     echo -e "${GREEN}📂 配置目录: $COMPOSE_DIR/config${RESET}"
     echo -e "${GREEN}📂 下载目录: $COMPOSE_DIR/downloads${RESET}"
