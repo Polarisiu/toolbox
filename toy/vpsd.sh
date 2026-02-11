@@ -127,7 +127,7 @@ send_to_telegram(){
   fi
 
   # 在消息开头加服务器名称
-  MSG="🐳 [$SERVER_NAME]$SYS_INFO"
+  MSG="[$SERVER_NAME]$SYS_INFO"
 
   curl -s -X POST "https://api.telegram.org/bot$TG_BOT_TOKEN/sendMessage" \
     -d chat_id="$TG_CHAT_ID" \
