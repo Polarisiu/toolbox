@@ -37,9 +37,9 @@ fi
 show_menu() {
     clear
     echo -e "${ORANGE}======= 代理协议安装菜单 ========${RESET}"
-    echo -e "${YELLOW}[01] 老王 Sing-box 四合一${RESET}"
-    echo -e "${YELLOW}[02] 老王 Xray-2go 一键脚本${RESET}"
-    echo -e "${YELLOW}[03] mack-a 八合一脚本${RESET}"
+    echo -e "${YELLOW}[01] 老王Sing-box四合一${RESET}"
+    echo -e "${YELLOW}[02] 老王Xray-2go一键脚本${RESET}"
+    echo -e "${YELLOW}[03] mack-a八合一脚本${RESET}"
     echo -e "${YELLOW}[04] Sing-box-yg${RESET}"
     echo -e "${YELLOW}[05] Hysteria2${RESET}"
     echo -e "${YELLOW}[06] Tuic${RESET}"
