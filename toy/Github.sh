@@ -298,9 +298,9 @@ menu() {
     echo -e "${GREEN}4) 设置定时任务${RESET}"
     echo -e "${GREEN}5) 查看最近日志${RESET}"
     echo -e "${GREEN}6) 修改仓库地址${RESET}"
-    echo -e "${GREEN}7) 更新${RESET}"
-    echo -e "${GREEN}8) 卸载${RESET}"
-    echo -e "${GREEN}9) 清理临时目录${RESET}"
+    echo -e "${GREEN}7) 清理临时目录${RESET}"
+    echo -e "${GREEN}8) 更新${RESET}"
+    echo -e "${GREEN}9) 卸载${RESET}"
     echo -e "${GREEN}0) 退出${RESET}"
     read -p "$(echo -e ${GREEN}请输入选项: ${RESET})" opt
     case $opt in
@@ -310,9 +310,9 @@ menu() {
         4) set_cron ;;
         5) show_log ;;
         6) change_repo ;;
-        7) update_tool ;;
-        8) uninstall_tool ;;
-        9) clean_tmp ;;
+        7) clean_tmp ;;
+        8) update_tool ;;
+        9) uninstall_tool ;;
         0) exit 0 ;;
         *) echo -e "${RED}无效选项${RESET}"; read -p "$(echo -e ${GREEN}按回车返回菜单...${RESET})" ;;
     esac
