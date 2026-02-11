@@ -1,5 +1,5 @@
 #!/bin/bash
-# VPS <-> GitHub 工具 (支持多次上传/下载, SSH 自动生成 Key + 上传/下载 + 临时目录保留 + 自动返回菜单)
+# VPS <-> GitHub 工具 (支持多次上传/下载, SSH 自动生成 Key + 上传/下载 + 临时目录保留 + 自动返回菜单 + TG自定义服务名称 + 显示 VPS 主机名)
 
 # =============================
 # 基础设置
@@ -24,8 +24,10 @@ RESET="\033[0m"
 REPO_URL=""
 BRANCH="main"
 COMMIT_PREFIX="VPS-Upload"
+SERVICE_NAME="VPS"
 TG_BOT_TOKEN=""
 TG_CHAT_ID=""
+HOST_NAME=$(hostname)
 
 # =============================
 # Telegram 通知函数
@@ -46,6 +48,7 @@ save_config() {
 REPO_URL="$REPO_URL"
 BRANCH="$BRANCH"
 COMMIT_PREFIX="$COMMIT_PREFIX"
+SERVICE_NAME="$SERVICE_NAME"
 TG_BOT_TOKEN="$TG_BOT_TOKEN"
 TG_CHAT_ID="$TG_CHAT_ID"
 EOC
@@ -109,6 +112,9 @@ init_config() {
     read -p "请输入提交前缀 (默认 VPS-Upload): " COMMIT_PREFIX
     COMMIT_PREFIX=${COMMIT_PREFIX:-VPS-Upload}
 
+    read -p "请输入服务名称（用于 TG 消息和提交前缀，默认 VPS）: " SERVICE_NAME
+    SERVICE_NAME=${SERVICE_NAME:-VPS}
+
     read -p "是否配置 Telegram Bot 通知？(y/n): " TG_CHOICE
     if [[ "$TG_CHOICE" == "y" ]]; then
         read -p "请输入 TG Bot Token: " TG_BOT_TOKEN
@@ -161,7 +167,7 @@ upload_files() {
     echo -e "${GREEN}正在 clone 仓库...${RESET}"
     git clone -b "$BRANCH" "$REPO_URL" "$TMP_DIR/repo" >>"$LOG_FILE" 2>&1 || {
         echo -e "${RED}❌ Git clone 失败${RESET}" | tee -a "$LOG_FILE"
-        send_tg "❌ VPS 上传失败：无法 clone 仓库"
+        send_tg "❌ $SERVICE_NAME [$HOST_NAME] 上传失败：无法 clone 仓库"
         read -p "按回车返回菜单..."
         return
     }
@@ -174,19 +180,19 @@ upload_files() {
     git add -A
 
     if git diff-index --quiet HEAD --; then
-        COMMIT_MSG="$COMMIT_PREFIX keep-alive $(date '+%Y-%m-%d %H:%M:%S')"
+        COMMIT_MSG="$COMMIT_PREFIX $SERVICE_NAME keep-alive $(date '+%Y-%m-%d %H:%M:%S')"
         git commit --allow-empty -m "$COMMIT_MSG" >>"$LOG_FILE" 2>&1
     else
-        COMMIT_MSG="$COMMIT_PREFIX $(date '+%Y-%m-%d %H:%M:%S')"
+        COMMIT_MSG="$COMMIT_PREFIX $SERVICE_NAME $(date '+%Y-%m-%d %H:%M:%S')"
         git commit -m "$COMMIT_MSG" >>"$LOG_FILE" 2>&1
     fi
 
     if git push origin "$BRANCH" >>"$LOG_FILE" 2>&1; then
         echo -e "${GREEN}✅ 上传成功: $COMMIT_MSG${RESET}" | tee -a "$LOG_FILE"
-        send_tg "✅ VPS 上传成功：$COMMIT_MSG，文件数：$TOTAL_FILES"
+        send_tg "✅ $SERVICE_NAME [$HOST_NAME] 上传成功：$COMMIT_MSG，文件数：$TOTAL_FILES"
     else
         echo -e "${RED}❌ 上传失败${RESET}" | tee -a "$LOG_FILE"
-        send_tg "❌ VPS 上传失败：git push 出错"
+        send_tg "❌ $SERVICE_NAME [$HOST_NAME] 上传失败：git push 出错"
     fi
     read -p "按回车返回菜单..."
 }
@@ -255,8 +261,9 @@ set_cron() {
     echo -e "${GREEN}✅ 定时任务已添加: $cron_expr${RESET}"
     read -p "按回车返回菜单..."
 }
+
 # =============================
-# 删除定时任务（新增）
+# 删除定时任务
 # =============================
 remove_cron() {
     crontab -l 2>/dev/null | grep -v "#GHUPLOAD" | crontab -
@@ -342,7 +349,7 @@ if [ ! -f "$SCRIPT_PATH" ]; then
 fi
 
 # =============================
-# 命令行模式（给 cron 用 ⭐关键修复）
+# 命令行模式（给 cron 用）
 # =============================
 case "$1" in
     upload)
