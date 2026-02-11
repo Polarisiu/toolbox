@@ -31,13 +31,12 @@ SERVER_NAME=""
 # =====================
 download_script(){
     if [ ! -f "$SCRIPT_PATH" ]; then
-        echo -e "${YELLOW}⚠️ 主脚本不存在，自动下载...${RESET}"
         curl -fsSL "$SCRIPT_URL" -o "$SCRIPT_PATH" || {
             echo -e "${RED}❌ 下载失败${RESET}"
             exit 1
         }
         chmod +x "$SCRIPT_PATH"
-        echo -e "${GREEN}✅ 主脚本已下载: $SCRIPT_PATH${RESET}"
+        echo -e "${GREEN}✅ 脚本已下载: $SCRIPT_PATH${RESET}"
     fi
 }
 
