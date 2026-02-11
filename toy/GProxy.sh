@@ -102,12 +102,12 @@ menu(){
 while true
 do
 clear
-echo -e "${GREEN}GProxy SSH 隧道加速管理器${RESET}"
+echo -e "${GREEN}GProxySSH隧道加速管理器${RESET}"
 echo -e "${GREEN}1. SSH密钥自动配置${RESET}"
-echo -e "${GREEN}2. 安装 GProxy${RESET}"
-echo -e "${GREEN}3. 加速测试 (curlGoogle)${RESET}"
-echo -e "${GREEN}4. 更新 GProxy${RESET}"
-echo -e "${GREEN}5. 卸载 GProxy${RESET}"
+echo -e "${GREEN}2. 安装GProxy${RESET}"
+echo -e "${GREEN}3. 加速测试(curlGoogle)${RESET}"
+echo -e "${GREEN}4. 更新GProxy${RESET}"
+echo -e "${GREEN}5. 卸载GProxy${RESET}"
 echo -e "${GREEN}0. 退出${RESET}"
 read -p "$(echo -e ${GREEN}请选择操作: ${RESET})" num
 case "$num" in
