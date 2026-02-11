@@ -8,9 +8,9 @@ menu() {
     clear
     echo -e "${GREEN}=== 开小鸡管理菜单 ===${RESET}"
     echo -e "${GREEN}1) PVE管理${RESET}"
-    echo -e "${GREEN}2) LXC 小鸡${RESET}"
-    echo -e "${GREEN}3) Docker 小鸡${RESET}"
-    echo -e "${GREEN}4) Incus 小鸡${RESET}"
+    echo -e "${GREEN}2) LXC小鸡${RESET}"
+    echo -e "${GREEN}3) Docker小鸡${RESET}"
+    echo -e "${GREEN}4) Incus小鸡${RESET}"
     echo -e "${GREEN}0) 退出${RESET}"
     read -p $'\033[32m请选择操作: \033[0m' choice
     case $choice in
