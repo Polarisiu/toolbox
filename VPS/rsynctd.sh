@@ -1,185 +1,231 @@
 #!/bin/bash
 set -e
 
-# 颜色
+#################################
+# 基础配置
+#################################
+
 GREEN="\033[32m"
 RED="\033[31m"
-RESET="\033[0m"
 YELLOW="\033[33m"
+RESET="\033[0m"
 
-# 统一目录
+SCRIPT_URL="https://raw.githubusercontent.com/iu683/uu/main/aa.sh"
+
 BASE_DIR="/root/rsync_task"
+SCRIPT_PATH="$BASE_DIR/rsync_manager.sh"
+
 CONFIG_FILE="$BASE_DIR/rsync_tasks.conf"
 KEY_DIR="$BASE_DIR/keys"
 LOG_DIR="$BASE_DIR/logs"
+TG_CONFIG="$BASE_DIR/.tg.conf"
 
 mkdir -p "$KEY_DIR" "$LOG_DIR"
 touch "$CONFIG_FILE"
 
-send_stats() { :; }  # 占位函数
+#################################
+# ⭐ 首次运行自动安装到本地
+#################################
+if [[ "$0" != "$SCRIPT_PATH" ]]; then
+    echo -e "${GREEN}首次运行，自动安装到本地...${RESET}"
+    mkdir -p "$BASE_DIR"
+    curl -sL "$SCRIPT_URL" -o "$SCRIPT_PATH"
+    chmod +x "$SCRIPT_PATH"
+    exec "$SCRIPT_PATH"
+fi
 
-install() {
-    if ! command -v "$1" &>/dev/null; then
-        echo "安装依赖: $1"
-        if command -v apt &>/dev/null; then
-            apt update -qq && apt install -y "$1" >/dev/null
-        elif command -v yum &>/dev/null; then
-            yum install -y "$1" >/dev/null
+#################################
+# 依赖安装
+#################################
+install_dep() {
+    for p in rsync sshpass curl; do
+        if ! command -v $p &>/dev/null; then
+            echo -e "${YELLOW}安装依赖: $p${RESET}"
+            DEBIAN_FRONTEND=noninteractive apt-get update -qq
+            DEBIAN_FRONTEND=noninteractive apt-get install -y $p >/dev/null 2>&1
         fi
-    fi
-}
-
-list_tasks() {
-    echo -e "${GREEN}已保存的同步任务:${RESET}"
-    echo -e "${YELLOW}---------------------------------${RESET}"
-    [[ ! -s "$CONFIG_FILE" ]] && echo -e "${YELLOW}暂无任务${RESET}" && return
-    awk -F'|' '{printf "%d - %s: %s -> %s [%s]\n", NR, $1, $2, $4, $6}' "$CONFIG_FILE"
-    echo -e "${YELLOW}---------------------------------${RESET}"
-}
-
-add_task() {
-    send_stats "添加新同步任务"
-    read -e -p "任务名称: " name
-    read -e -p "本地目录: " local_path
-    read -e -p "远程目录: " remote_path
-    read -e -p "远程用户@IP: " remote
-    read -e -p "SSH端口 (默认22): " port
-    port=${port:-22}
-
-    echo "选择认证方式: 1)密码 2)密钥"
-    read -e -p "请选择: " auth_choice
-    case $auth_choice in
-        1)
-            read -s -p "输入密码: " password_or_key; echo
-            auth_method="password"
-            ;;
-        2)
-            read -e -p "输入或粘贴完整密钥文件路径: " key_input
-            if [[ ! -f "$key_input" ]]; then
-                echo "$key_input" > "$KEY_DIR/${name}_sync.key"
-                key_file="$KEY_DIR/${name}_sync.key"
-            else
-                key_file="$key_input"
-            fi
-            chmod 600 "$key_file"
-            password_or_key="$key_file"
-            auth_method="key"
-            ;;
-        *)
-            echo "无效选择"; return
-            ;;
-    esac
-
-    echo "请选择同步模式:"
-    echo "1) 标准模式 (-avz)"
-    echo "2) 删除目标模式 (-avz --delete)"
-    read -e -p "请选择 (1/2): " mode
-    case $mode in
-        1) options="-avz" ;;
-        2) options="-avz --delete" ;;
-        *) echo "无效选择，使用默认 -avz"; options="-avz" ;;
-    esac
-
-    echo "$name|$local_path|$remote|$remote_path|$port|$options|$auth_method|$password_or_key" >> "$CONFIG_FILE"
-    install rsync
-    echo -e "${GREEN}任务已保存!${RESET}"
-}
-
-delete_task() {
-    send_stats "删除同步任务"
-    read -e -p "请输入任务编号: " num
-    local task=$(sed -n "${num}p" "$CONFIG_FILE")
-    [[ -z "$task" ]] && echo "任务不存在" && return
-    IFS='|' read -r name local_path remote remote_path port options auth_method password_or_key <<< "$task"
-    [[ "$auth_method" == "key" && "$password_or_key" == "$KEY_DIR"* ]] && rm -f "$password_or_key"
-    sed -i "${num}d" "$CONFIG_FILE"
-    echo -e "${GREEN}任务已删除!${RESET}"
-}
-
-run_task() {
-    local direction="$1"  # push 或 pull
-    read -e -p "请输入任务编号: " num
-    local task=$(sed -n "${num}p" "$CONFIG_FILE")
-    [[ -z "$task" ]] && { echo "任务不存在"; return; }
-    IFS='|' read -r name local_path remote remote_path port options auth_method password_or_key <<< "$task"
-
-    local source destination
-    if [[ "$direction" == "pull" ]]; then
-        source="$remote:$remote_path"
-        destination="$local_path"
-    else
-        source="$local_path"
-        destination="$remote:$remote_path"
-    fi
-
-    local ssh_options="-p $port -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-    export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-
-    if [[ "$auth_method" == "password" ]]; then
-        install sshpass
-        sshpass -p "$password_or_key" rsync $options -e "ssh $ssh_options" "$source" "$destination"
-    else
-        [[ ! -f "$password_or_key" ]] && { echo -e "${RED}密钥不存在${RESET}"; return; }
-        [[ "$(stat -c %a "$password_or_key")" != "600" ]] && chmod 600 "$password_or_key"
-        rsync $options -e "ssh -i $password_or_key $ssh_options" "$source" "$destination"
-    fi
-
-    [[ $? -eq 0 ]] && echo -e "${GREEN}同步完成!${RESET}" || echo -e "${RED}同步失败!${RESET}"
-}
-
-schedule_task() {
-    read -e -p "请输入要定时同步的任务编号: " num
-    [[ ! "$num" =~ ^[0-9]+$ ]] && { echo "无效任务编号"; return; }
-
-    echo "请选择定时间隔: 1) 每小时 2) 每天 3) 每周"
-    read -e -p "请选择: " interval
-    local random_minute=$(shuf -i 0-59 -n1)
-    local cron_time
-    case "$interval" in
-        1) cron_time="$random_minute * * * *" ;;
-        2) cron_time="$random_minute 0 * * *" ;;
-        3) cron_time="$random_minute 0 * * 1" ;;
-        *) echo "无效选择"; return ;;
-    esac
-
-    local cron_job="$cron_time /usr/bin/bash $BASE_DIR/run_task.sh $num >> $LOG_DIR/cron_$num.log 2>&1 # rsync_task_$num"
-    crontab -l 2>/dev/null | grep -v "# rsync_task_$num" | { cat; echo "$cron_job"; } | crontab -
-    echo -e "${GREEN}定时任务已创建: $cron_job${RESET}"
-}
-
-delete_task_schedule() {
-    read -e -p "请输入要删除的任务编号: " num
-    [[ ! "$num" =~ ^[0-9]+$ ]] && { echo "无效任务编号"; return; }
-    crontab -l 2>/dev/null | grep -v "# rsync_task_$num" | crontab -
-    echo -e "${GREEN}已删除任务编号 $num 的定时任务${RESET}"
-}
-
-rsync_manager() {
-    while true; do
-        clear
-        echo -e "${GREEN}==== Rsync 菜单工具 ====${RESET}"
-        list_tasks
-        echo
-        echo -e "${GREEN}1) 创建任务${RESET}"
-        echo -e "${GREEN}2) 删除任务${RESET}"
-        echo -e "${GREEN}3) 推送同步${RESET}"
-        echo -e "${GREEN}4) 拉取同步${RESET}"
-        echo -e "${GREEN}5) 创建定时任务${RESET}"
-        echo -e "${GREEN}6) 删除定时任务${RESET}"
-        echo -e "${GREEN}0) 退出${RESET}"
-        read -p "$(echo -e "${GREEN}请输入选项: ${RESET}")" choice
-        case $choice in
-            1) add_task ;;
-            2) delete_task ;;
-            3) run_task push ;;
-            4) run_task pull ;;
-            5) schedule_task ;;
-            6) delete_task_schedule ;;
-            0) exit 0 ;;
-            *) echo -e "${GREEN}无效选择${RESET}" ;;
-        esac
-        read -e -p "按回车继续..."
     done
 }
+install_dep
 
-rsync_manager
+#################################
+# Telegram
+#################################
+send_tg() {
+    [[ ! -f "$TG_CONFIG" ]] && return
+    source "$TG_CONFIG"
+    curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
+        -d chat_id="$CHAT_ID" \
+        -d text="$1" >/dev/null 2>&1
+}
+
+setup_tg() {
+    read -p "VPS名称: " name
+    read -p "Bot Token: " token
+    read -p "Chat ID: " chatid
+
+    cat > "$TG_CONFIG" <<EOF
+BOT_TOKEN="$token"
+CHAT_ID="$chatid"
+VPS_NAME="$name"
+EOF
+
+    echo -e "${GREEN}TG配置已保存${RESET}"
+}
+
+#################################
+# 任务列表
+#################################
+list_tasks() {
+    [[ ! -s "$CONFIG_FILE" ]] && { echo "暂无任务"; return; }
+    awk -F'|' '{printf "%d) %s  %s -> %s [%s]\n",NR,$1,$2,$4,$6}' "$CONFIG_FILE"
+}
+
+#################################
+# 添加任务
+#################################
+add_task() {
+    read -p "任务名称: " name
+    read -p "本地目录: " local
+    read -p "远程目录: " remote_path
+    read -p "远程用户@IP: " remote
+    read -p "端口(默认22): " port
+    port=${port:-22}
+
+    echo "认证方式: 1密码 2密钥"
+    read -p "选择: " c
+
+    if [[ $c == 1 ]]; then
+        read -s -p "密码: " secret; echo
+        auth="password"
+    else
+        read -p "密钥路径: " secret
+        chmod 600 "$secret"
+        auth="key"
+    fi
+
+    read -p "rsync参数(-avz): " opt
+    opt=${opt:--avz}
+
+    echo "$name|$local|$remote|$remote_path|$port|$opt|$auth|$secret" >> "$CONFIG_FILE"
+}
+
+#################################
+# 删除任务
+#################################
+delete_task() {
+    read -p "编号: " n
+    sed -i "${n}d" "$CONFIG_FILE"
+}
+
+#################################
+# 同步执行（支持cron）
+#################################
+run_task() {
+    direction="$1"
+    num="$2"
+
+    [[ -z "$num" ]] && read -p "编号: " num
+
+    task=$(sed -n "${num}p" "$CONFIG_FILE")
+    [[ -z "$task" ]] && exit 1
+
+    IFS='|' read -r name local remote remote_path port opt auth secret <<< "$task"
+
+    src="$local"
+    dst="$remote:$remote_path"
+    [[ "$direction" == "pull" ]] && { src="$dst"; dst="$local"; }
+
+    ssh_opt="-p $port -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+
+    if [[ "$auth" == "password" ]]; then
+        sshpass -p "$secret" rsync $opt -e "ssh $ssh_opt" "$src" "$dst"
+    else
+        rsync $opt -e "ssh -i $secret $ssh_opt" "$src" "$dst"
+    fi
+
+    source "$TG_CONFIG" 2>/dev/null || true
+
+    if [[ $? -eq 0 ]]; then
+        send_tg "✅ [$VPS_NAME] 同步成功: $name ($direction)"
+    else
+        send_tg "❌ [$VPS_NAME] 同步失败: $name ($direction)"
+    fi
+}
+
+#################################
+# cron模式
+#################################
+if [[ "$1" == "auto" ]]; then
+    run_task push "$2"
+    exit
+fi
+
+#################################
+# 定时
+#################################
+schedule_task() {
+    read -p "任务编号: " n
+    read -p "cron表达式: " cron
+
+    job="$cron /usr/bin/bash $SCRIPT_PATH auto $n >> $LOG_DIR/cron_$n.log 2>&1 # rsync_$n"
+
+    crontab -l 2>/dev/null | grep -v "# rsync_$n" | { cat; echo "$job"; } | crontab -
+}
+
+delete_schedule() {
+    read -p "编号: " n
+    crontab -l 2>/dev/null | grep -v "# rsync_$n" | crontab -
+}
+
+#################################
+# 更新 & 卸载
+#################################
+update_self() {
+    curl -sL "$SCRIPT_URL" -o "$SCRIPT_PATH"
+    chmod +x "$SCRIPT_PATH"
+    echo "已更新"
+}
+
+uninstall_self() {
+    crontab -l 2>/dev/null | grep -v "rsync_" | crontab - || true
+    rm -rf "$BASE_DIR"
+    echo "已卸载"
+    exit
+}
+
+#################################
+# 菜单
+#################################
+while true; do
+    clear
+    echo -e "${GREEN}===== Rsync 同步管理器 =====${RESET}"
+    list_tasks
+    echo
+    echo -e "${GREEN} 1) 添加同步任务${RESET}"
+    echo -e "${GREEN} 2) 删除同步任务${RESET}"
+    echo -e "${GREEN} 3) 推送同步${RESET}"
+    echo -e "${GREEN} 4) 拉取同步${RESET}"
+    echo -e "${GREEN} 5) 添加定时任务${RESET}"
+    echo -e "${GREEN} 6) 删除定时任务${RESET}"
+    echo -e "${GREEN} 7) Telegram设置${RESET}"
+    echo -e "${GREEN} 8) 更新脚本${RESET}"
+    echo -e "${GREEN} 9) 卸载脚本${RESET}"
+    echo -e "${GREEN} 0) 退出${RESET}"
+    read -p "$(echo -e ${GREEN}请选择操作: ${RESET}) " c
+
+    case $c in
+        1) add_task ;;
+        2) delete_task ;;
+        3) run_task push ;;
+        4) run_task pull ;;
+        5) schedule_task ;;
+        6) delete_schedule ;;
+        7) setup_tg ;;
+        8) update_self ;;
+        9) uninstall_self ;;
+        0) exit ;;
+    esac
+
+    read -p "回车继续..."
+done
