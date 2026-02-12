@@ -5,7 +5,7 @@ RED="\033[31m"
 RESET="\033[0m"
 
 TG_URL="https://raw.githubusercontent.com/sistarry/toolbox/main/toy/vpstgbf.sh"
-GH_URL="https://raw.githubusercontent.com/sistarry/toolbox/main/toy/githubbackup.sh"
+GH_URL="https://raw.githubusercontent.com/sistarry/toolbox/main/toy/Githubbackup.sh"
 
 run_script() {
     url=$1
