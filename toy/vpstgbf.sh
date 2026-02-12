@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # =============================================
 # VPS 管理脚本 – 多目录备份 + TG通知 + 定时任务 + 自更新
+# 支持大文件切割上传
 # =============================================
 
 BASE_DIR="/opt/vps_manager"
@@ -66,13 +67,48 @@ send_tg_msg(){
          "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" > /dev/null
 }
 
+# 上传文件（支持大于50MB自动切割）
 send_tg_file(){
     local file="$1"
-    if [[ -f "$file" ]]; then
+    local MAX_SIZE=$((50*1024*1024))  # 50MB限制
+
+    if [[ ! -f "$file" ]]; then
+        echo -e "${RED}文件不存在，未上传: $file${RESET}"
+        return
+    fi
+
+    local FILE_SIZE
+    FILE_SIZE=$(stat -c%s "$file")
+
+    if (( FILE_SIZE <= MAX_SIZE )); then
         curl -s -F chat_id="$CHAT_ID" -F document=@"$file" \
              "https://api.telegram.org/bot$BOT_TOKEN/sendDocument" > /dev/null
+        echo -e "${GREEN}上传完成: $(basename "$file")${RESET}"
     else
-        echo -e "${RED}文件不存在，未上传: $file${RESET}"
+        local BASENAME=$(basename "$file")
+        local TMP_SPLIT_DIR="$TMP_DIR/${BASENAME}_parts"
+        mkdir -p "$TMP_SPLIT_DIR"
+        split -b $MAX_SIZE "$file" "$TMP_SPLIT_DIR/${BASENAME}_part_"
+
+        # 生成合并脚本
+        local MERGE_SCRIPT="$TMP_SPLIT_DIR/merge.sh"
+        echo "#!/bin/bash" > "$MERGE_SCRIPT"
+        echo "cat ${BASENAME}_part_* > $BASENAME" >> "$MERGE_SCRIPT"
+        chmod +x "$MERGE_SCRIPT"
+
+        echo -e "${YELLOW}文件超过50MB，已切割为 $(ls $TMP_SPLIT_DIR | wc -l) 个分片${RESET}"
+
+        # 上传分片
+        for part in "$TMP_SPLIT_DIR"/*; do
+            curl -s -F chat_id="$CHAT_ID" -F document=@"$part" \
+                 "https://api.telegram.org/bot$BOT_TOKEN/sendDocument" > /dev/null
+            echo -e "${GREEN}上传完成: $(basename "$part")${RESET}"
+        done
+
+        # 上传合并脚本
+        curl -s -F chat_id="$CHAT_ID" -F document=@"$MERGE_SCRIPT" \
+             "https://api.telegram.org/bot$BOT_TOKEN/sendDocument" > /dev/null
+        echo -e "${GREEN}已上传合并脚本: merge.sh${RESET}"
     fi
 }
 
@@ -116,18 +152,11 @@ set_archive_format(){
 # ================== 上传备份 ==================
 do_upload(){
     load_config
-
-    # Telegram 未配置则初始化
-    if [[ -z "$BOT_TOKEN" || -z "$CHAT_ID" ]]; then
-        echo -e "${YELLOW}Telegram 未配置，正在初始化配置...${RESET}"
-        init
-        echo -e "${GREEN}Telegram 配置完成，继续上传${RESET}"
-    fi
+    [[ -z "$BOT_TOKEN" || -z "$CHAT_ID" ]] && init
 
     while true; do
         echo "请输入要备份的目录，多个目录用空格分隔 (回车返回主菜单):"
         read -rp "" TARGETS
-
         [[ -z "$TARGETS" ]] && menu && return
 
         for TARGET in $TARGETS; do
@@ -140,7 +169,6 @@ do_upload(){
             TIMESTAMP=$(date +%F_%H%M%S)
             ZIPFILE="$TMP_DIR/${DIRNAME}_$TIMESTAMP"
 
-            # 压缩
             if [[ "$ARCHIVE_FORMAT" == "tar" ]]; then
                 ZIPFILE="$ZIPFILE.tar.gz"
                 tar -czf "$ZIPFILE" -C "$(dirname "$TARGET")" "$DIRNAME" >/dev/null
@@ -149,13 +177,8 @@ do_upload(){
                 zip -r "$ZIPFILE" "$TARGET" >/dev/null
             fi
 
-            if [[ -f "$ZIPFILE" ]]; then
-                send_tg_file "$ZIPFILE"
-                send_tg_msg "📌 [$VPS_NAME] 上传完成: $DIRNAME"
-                echo -e "${GREEN}上传完成: $DIRNAME${RESET}"
-            else
-                echo -e "${RED}打包失败: $DIRNAME${RESET}"
-            fi
+            send_tg_file "$ZIPFILE"
+            send_tg_msg "📌 [$VPS_NAME] 上传完成: $DIRNAME"
         done
     done
 }
@@ -181,16 +204,12 @@ auto_upload(){
             zip -r "$ZIPFILE" "$DIR" >/dev/null
         fi
 
-        if [[ -f "$ZIPFILE" ]]; then
-            send_tg_file "$ZIPFILE"
-            send_tg_msg "📌 [$VPS_NAME] 自动备份完成: $DIRNAME"
-            echo -e "${GREEN}自动备份完成: $DIRNAME${RESET}"
-        else
-            echo -e "${RED}打包失败: $DIRNAME${RESET}"
-        fi
+        send_tg_file "$ZIPFILE"
+        send_tg_msg "📌 [$VPS_NAME] 自动备份完成: $DIRNAME"
     done
 
-    find "$TMP_DIR" -type f -mtime +$KEEP_DAYS -name "*.tar.gz" -o -name "*.zip" -exec rm -f {} \;
+    # 清理旧备份
+    find "$TMP_DIR" -type f \( -name "*.tar.gz" -o -name "*.zip" \) -mtime +$KEEP_DAYS -exec rm -f {} \;
 }
 
 # ================== 定时任务管理 ==================
@@ -269,14 +288,14 @@ menu(){
             chmod +x "$SCRIPT_PATH"
             echo -e "${GREEN}脚本已更新${RESET}" ;;
         9)
-          read -rp "确认卸载脚本并删除所有定时任务? (y/N): " yn
-          if [[ "$yn" =~ ^[Yy]$ ]]; then
-              crontab -l 2>/dev/null | grep -v "$SCRIPT_PATH" | crontab -
-              rm -rf "$BASE_DIR"
-              echo -e "${RED}已卸载${RESET}"
-              exit 0
-          fi
-          ;;     
+            read -rp "确认卸载脚本并删除所有定时任务? (y/N): " yn
+            if [[ "$yn" =~ ^[Yy]$ ]]; then
+                crontab -l 2>/dev/null | grep -v "$SCRIPT_PATH" | crontab -
+                rm -rf "$BASE_DIR"
+                echo -e "${RED}已卸载${RESET}"
+                exit 0
+            fi
+            ;;
         0) exit 0 ;;
         *) echo -e "${RED}无效选项${RESET}" ;;
     esac
