@@ -209,7 +209,7 @@ show_dirs(){
 }
 
 # =====================
-# 执行压缩备份（保留原路径）
+# 执行压缩备份（保留原路径）并清理 GitHub 历史备份
 # =====================
 backup_now(){
     load_config
@@ -218,6 +218,9 @@ backup_now(){
     TMP=$(mktemp -d -p "$TMP_BASE")
     echo -e "${GREEN}临时目录: $TMP${RESET}"
 
+    # ---------------------
+    # 生成备份文件
+    # ---------------------
     for dir in "${BACKUP_LIST[@]}"; do
         [ ! -d "$dir" ] && echo -e "${YELLOW}⚠️ 目录不存在，跳过: $dir${RESET}" && continue
         safe=$(echo -n "$dir" | md5sum | awk '{print $1}')
@@ -233,11 +236,15 @@ backup_now(){
         fi
     done
 
-    # 删除过期备份
+    # ---------------------
+    # 删除本地过期备份
+    # ---------------------
     find "$BACKUP_DIR" -type f -mtime +$KEEP_DAYS -exec rm -f {} \;
-    echo -e "${YELLOW}🗑️ 已删除 $KEEP_DAYS 天前的备份${RESET}"
+    echo -e "${YELLOW}🗑️ 已删除 $KEEP_DAYS 天前的本地备份${RESET}"
 
-    # Git 上传压缩文件
+    # ---------------------
+    # Git 上传并清理 GitHub 历史备份
+    # ---------------------
     TMP_REPO="$TMP/repo"
     git clone -b "$BRANCH" "$REPO_URL" "$TMP_REPO" >>"$LOG_FILE" 2>&1 || {
         echo -e "${RED}❌ Git clone 失败${RESET}"
@@ -245,13 +252,20 @@ backup_now(){
         rm -rf "$TMP"
         return
     }
-    cp "$BACKUP_DIR"/* "$TMP_REPO/" 2>/dev/null || true
 
     cd "$TMP_REPO" || return
+
+    # 删除 Git 仓库中超过 KEEP_DAYS 天的备份文件
+    find . -maxdepth 1 -type f \( -name "*.tar.gz" -o -name "*.zip" \) -mtime +$KEEP_DAYS -exec git rm -f {} \;
+
+    # 复制最新本地备份到仓库
+    cp "$BACKUP_DIR"/* . 2>/dev/null || true
+
     git add -A
     git commit -m "Backup $(date '+%F %T')" >/dev/null 2>&1 || echo -e "${YELLOW}⚠️ 没有文件变化${RESET}"
+
     if git push origin "$BRANCH" >>"$LOG_FILE" 2>&1; then
-        echo -e "${GREEN}✅ 备份成功${RESET}"
+        echo -e "${GREEN}✅ 备份成功并清理 GitHub 历史备份${RESET}"
         send_tg "✅ VPS<->GitHub 备份成功"
     else
         echo -e "${RED}❌ Git push 失败${RESET}"
@@ -399,12 +413,12 @@ manage_backup_dirs(){
         for i in "${!BACKUP_LIST[@]}"; do
             echo "$i) ${BACKUP_LIST[$i]}"
         done
-        echo -e "${GREEN}a) 添加目录${RESET}"
-        echo -e "${GREEN}d) 删除目录${RESET}"
-        echo -e "${GREEN}q) 返回主菜单${RESET}"
+        echo -e "${GREEN}1) 添加目录${RESET}"
+        echo -e "${GREEN}2) 删除目录${RESET}"
+        echo -e "${GREEN}0) 返回主菜单${RESET}"
         read -p "选择操作: " choice
         case "$choice" in
-            a)
+            1)
                 read -p "请输入要添加的目录(可空格分隔): " dirs
                 for d in $dirs; do
                     if [ -d "$d" ]; then
@@ -416,7 +430,7 @@ manage_backup_dirs(){
                 done
                 save_config
                 ;;
-            d)
+            2)
                 read -p "请输入要删除的目录编号(多个用空格): " idxs
                 for idx in $idxs; do
                     unset BACKUP_LIST[$idx]
@@ -424,7 +438,7 @@ manage_backup_dirs(){
                 BACKUP_LIST=("${BACKUP_LIST[@]}")  # 重建索引
                 save_config
                 ;;
-            q) break ;;
+            0) break ;;
             *) echo -e "${RED}无效选项${RESET}" ;;
         esac
     done
