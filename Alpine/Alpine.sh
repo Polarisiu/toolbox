@@ -44,7 +44,7 @@ menu() {
     echo -e "${YELLOW}[04] Fail2Ban${RESET}"
     echo -e "${YELLOW}[05] 换源${RESET}"
     echo -e "${YELLOW}[06] 系统清理${RESET}"
-    echo -e "${YELLOW}[07] 设置中文${RESET}"
+    echo -e "${YELLOW}[07] 切换字体${RESET}"
     echo -e "${YELLOW}[08] 修改主机名${RESET}"
     echo -e "${YELLOW}[09] Docker管理${RESET}"
     echo -e "${YELLOW}[10] Hysteria2${RESET}"
