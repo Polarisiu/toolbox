@@ -246,16 +246,16 @@ main_menu() {
 
         echo -e "${GREEN}====== Alpine Docker 管理 ======${RESET}"
         echo -e "${YELLOW}Docker: $docker_status | 容器: $running_containers/$total_containers | IPv6: $ipv6_display${RESET}"
-        echo -e "${GREEN} 1) 安装/更新 Docker${RESET}"
-        echo -e "${GREEN} 2) 安装/更新 Docker Compose${RESET}"
-        echo -e "${GREEN} 3) 卸载 Docker & Compose${RESET}"
+        echo -e "${GREEN} 1) 安装/更新Docker${RESET}"
+        echo -e "${GREEN} 2) 安装/更新DockerCompose${RESET}"
+        echo -e "${GREEN} 3) 卸载Docker&Compose${RESET}"
         echo -e "${GREEN} 4) 容器管理${RESET}"
         echo -e "${GREEN} 5) 镜像管理${RESET}"
         echo -e "${GREEN} 6) 卷管理${RESET}"
-        echo -e "${GREEN} 7) IPv6 开关${RESET}"
+        echo -e "${GREEN} 7) IPv6开关${RESET}"
         echo -e "${GREEN} 8) 开放所有端口${RESET}"
-        echo -e "${GREEN} 9) 一键清理 Docker${RESET}"
-        echo -e "${GREEN}10) 重启 Docker${RESET}"
+        echo -e "${GREEN} 9) 一键清理Docker${RESET}"
+        echo -e "${GREEN}10) 重启Docker${RESET}"
         echo -e "${GREEN} 0) 退出${RESET}"
         read -p "$(echo -e ${GREEN}请选择:${RESET})" choice
         case $choice in
