@@ -2,15 +2,14 @@
 ---
 ##  🚀 使用方法
 
-### github备份脚本
+### Rsync同步脚本(安装完成后，只需在终端输入 `s` 或 `S` 即可快速启动主菜单。)
 ```bash
-bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/toy/githubbackup.sh)
+bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/toy/Rrsync.sh)
 ```
 
-
-### github同步脚本(安装完成后，只需在终端输入 `s` 或 `S` 即可快速启动主菜单。)
+### 文件目录备份脚本
 ```bash
-bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/toy/Github.sh)
+bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/toy/Filebackup.sh)
 ```
 
 ### PVE开小鸡脚本
