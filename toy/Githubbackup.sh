@@ -300,7 +300,7 @@ restore_now(){
 
     rm -rf "$TMP"
     echo -e "${GREEN}✅ 恢复完成${RESET}"
-    send_tg "♻️ VPS<->GitHub 最新备份恢复完成"
+    send_tg "♻️ VPS<->GitHub 恢复完成"
 }
 
 # =====================
