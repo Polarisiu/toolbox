@@ -80,11 +80,11 @@ while true; do
     echo -e "${GREEN}===================================${RESET}"
     echo -e "${GREEN}       Windows 10 DD 安装脚本       ${RESET}"
     echo -e "${GREEN}===================================${RESET}"
-    echo -e "${YELLOW}1) 安装必要工具${RESET}"
-    echo -e "${YELLOW}2) V4DD 安装 Windows 10${RESET}"
-    echo -e "${YELLOW}3) V6DD 安装 Windows 10${RESET}"
-    echo -e "${YELLOW}4) 重启系统${RESET}"
-    echo -e "${YELLOW}0) 退出${RESET}"
+    echo -e "${GREEN}1) 安装必要工具${RESET}"
+    echo -e "${GREEN}2) V4DD 安装 Windows 10${RESET}"
+    echo -e "${GREEN}3) V6DD 安装 Windows 10${RESET}"
+    echo -e "${GREEN}4) 重启系统${RESET}"
+    echo -e "${GREEN}0) 退出${RESET}"
     echo -ne "${GREEN}请输入编号: ${RESET}"
     read choice
     case $choice in
