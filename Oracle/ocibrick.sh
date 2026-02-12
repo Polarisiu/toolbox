@@ -35,9 +35,9 @@ menu() {
     clear
     echo -e "${GREEN}=== 甲骨文救砖管理菜单 ===${RESET}"
     echo -e "${GREEN}1) 查看附加卷${RESET}"
-    echo -e "${GREEN}2) 安装后台工具 (tmux)${RESET}"
-    echo -e "${GREEN}3) 创建新的 tmux 工作区${RESET}"
-    echo -e "${GREEN}4) 返回已有 tmux 工作区${RESET}"
+    echo -e "${GREEN}2) 安装后台工具(tmux)${RESET}"
+    echo -e "${GREEN}3) 创建新的tmux工作区${RESET}"
+    echo -e "${GREEN}4) 返回已有tmux工作区${RESET}"
     echo -e "${GREEN}0) 退出${RESET}"
     read -p $'\033[32m请选择操作: \033[0m' choice
     case $choice in
