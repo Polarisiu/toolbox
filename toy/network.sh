@@ -136,12 +136,12 @@ send_to_telegram(){
 setup_cron_job(){
     enable_cron_service
     echo -e "${GREEN}===== 定时任务管理 =====${RESET}"
-    echo -e "${GREEN}1) 每天 0点${RESET}"
-    echo -e "${GREEN}2) 每周一 0点${RESET}"
-    echo -e "${GREEN}3) 每月 1号 0点${RESET}"
+    echo -e "${GREEN}1) 每天0点${RESET}"
+    echo -e "${GREEN}2) 每周一0点${RESET}"
+    echo -e "${GREEN}3) 每月1号0点${RESET}"
     echo -e "${GREEN}4) 每5分钟一次${RESET}"
     echo -e "${GREEN}5) 每10分钟一次${RESET}"
-    echo -e "${GREEN}6) 自定义时间 (Cron表达式)${RESET}"
+    echo -e "${GREEN}6) 自定义时间(Cron表达式)${RESET}"
     echo -e "${GREEN}7) 删除任务${RESET}"
     echo -e "${GREEN}8) 查看当前任务${RESET}"
     echo -e "${GREEN}0) 返回菜单${RESET}"
