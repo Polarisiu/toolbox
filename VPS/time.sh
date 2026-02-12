@@ -88,7 +88,6 @@ show_menu() {
     echo -e "${GREEN} 4) 设置为 Europe/London(英国)${RESET}"
     echo -e "${GREEN} 5) 自定义时区${RESET}"
     echo -e "${GREEN} 0) 退出${RESET}"
-    echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"
 }
 
 # 主循环
