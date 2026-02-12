@@ -145,8 +145,7 @@ monitor_log() {
 # -------------------------
 while true; do
     clear
-    echo -e "${GREEN}Alpine Linux SSH 防暴力破解管理菜单${RESET}"
-    echo -e "${GREEN}---------------------------------${RESET}"
+    echo -e "${GREEN}===SSH 防暴力破解管理菜单===${RESET}"
     echo -e "${GREEN}1. 安装并开启 SSH 防暴力破解${RESET}"
     echo -e "${GREEN}2. 配置 SSH 防护参数${RESET}"
     echo -e "${GREEN}3. 查看被封禁 IP${RESET}"
