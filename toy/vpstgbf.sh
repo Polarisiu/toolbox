@@ -108,7 +108,7 @@ send_tg_file(){
         # 上传合并脚本
         curl -s -F chat_id="$CHAT_ID" -F document=@"$MERGE_SCRIPT" \
              "https://api.telegram.org/bot$BOT_TOKEN/sendDocument" > /dev/null
-        echo -e "${GREEN}已上传合并脚本: merge.sh${RESET}"
+        echo -e "${GREEN}已上传${RESET}"
     fi
 }
 
