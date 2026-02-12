@@ -229,10 +229,10 @@ uninstall_script(){
 menu(){
   while true; do
     clear
-    echo -e "${green}====== Docker 信息管理菜单 ======${re}"
-    echo -e "${green}1) 查看 Docker 信息${re}"
-    echo -e "${green}2) 发送 Docker 信息到 Telegram${re}"
-    echo -e "${green}3) 修改 Telegram 配置${re}"
+    echo -e "${green}====== Docker信息管理菜单 ======${re}"
+    echo -e "${green}1) 查看Docker信息${re}"
+    echo -e "${green}2) 发送Docker信息到Telegram${re}"
+    echo -e "${green}3) 修改Telegram 配置${re}"
     echo -e "${green}4) 设置定时任务${re}"
     echo -e "${green}5) 卸载${re}"
     echo -e "${green}0) 退出${re}"
