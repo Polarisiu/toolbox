@@ -33,6 +33,7 @@ export LANG=zh_CN.UTF-8
 export LANGUAGE=zh_CN:zh
 export LC_ALL=zh_CN.UTF-8
 EOF
+    echo -e "${GREEN}[完成] 已切换到中文环境${RESET}"   # ✅ 完成提示
     exec sh -l
 }
 
@@ -46,6 +47,7 @@ export LANG=en_US.UTF-8
 export LANGUAGE=en_US:en
 export LC_ALL=en_US.UTF-8
 EOF
+    echo -e "${GREEN}[完成] 已切换到英文环境${RESET}"   # ✅ 完成提示
     exec sh -l
 }
 
@@ -57,7 +59,7 @@ show_status() {
 }
 
 while true; do
-    echo -e "${GREEN}===Alpine-切换字体菜单===${RESET}"
+    echo -e "${GREEN}===切换字体菜单===${RESET}"
     echo -e "${GREEN}1) 中文字体${RESET}"
     echo -e "${GREEN}2) 英文字体${RESET}"
     echo -e "${GREEN}3) 查看当前语言${RESET}"
