@@ -93,12 +93,12 @@ check_deps
 
 # 主循环
 while true; do
-    echo -e "${GREEN}======IPv4/IPv6 管理=========${RESET}"
+    echo -e "${GREEN}========IPv4/IPv6 管理========${RESET}"
     echo -e "${GREEN} 1) IPv4优先(禁用 IPv6)${RESET}"
     echo -e "${GREEN} 2) IPv6优先(启用 IPv6 并刷新网络)${RESET}"
     echo -e "${GREEN} 3) 查看IP v4 v6 状态 & 公网IP${RESET}"
     echo -e "${GREEN} 0) 退出${RESET}"
-    read -p "$(echo -e ${GREEN}请选择:${RESET}) " choice
+    read -p "$(echo -e ${GREEN} 请选择:${RESET}) " choice
 
     iface=$(detect_iface)
 
