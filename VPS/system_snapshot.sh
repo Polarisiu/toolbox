@@ -78,20 +78,20 @@ collect_config() {
         read -p "请输入远程服务器IP地址: " TARGET_IP
     done
     
-    read -p "请输入远程服务器用户名: " TARGET_USER
+    read -p "请输入远程服务器用户名(root): " TARGET_USER
     while [ -z "$TARGET_USER" ]; do
         log "${RED}用户名不能为空${NC}"
-        read -p "请输入远程服务器用户名: " TARGET_USER
+        read -p "请输入远程服务器用户名(root): " TARGET_USER
     done
     
-    read -p "请输入SSH端口 [默认: 8000]: " SSH_PORT
-    SSH_PORT=${SSH_PORT:-8000}
+    read -p "请输入SSH端口 [默认:22]: " SSH_PORT
+    SSH_PORT=${SSH_PORT:-22}
     echo
     
     # 远程目录配置
     log "${YELLOW}📁 远程存储配置:${NC}"
-    read -p "请输入远程基础备份目录 [默认: /Volumes/SamsungHD/remote_backup]: " TARGET_BASE_DIR
-    TARGET_BASE_DIR=${TARGET_BASE_DIR:-/Volumes/SamsungHD/remote_backup}
+    read -p "请输入远程基础备份目录 [默认: /root/remote_backup]: " TARGET_BASE_DIR
+    TARGET_BASE_DIR=${TARGET_BASE_DIR:-/root/remote_backup}
     
     # 本机目录名配置
     HOSTNAME=$(hostname)
