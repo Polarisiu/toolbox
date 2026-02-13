@@ -13,12 +13,27 @@ echo -e "${BLUE}           本地系统快照恢复工具                  ${NC}
 echo -e "${BLUE}=================================================${NC}"
 echo ""
 
-# 检查本地备份目录
-BACKUP_DIR="/backups"
+# ==============================
+# 自定义备份目录（新增功能）
+# ==============================
+
+DEFAULT_BACKUP="/backups"
+
+if [ -n "$1" ]; then
+  BACKUP_DIR="$1"
+else
+  read -p "请输入备份目录(默认: $DEFAULT_BACKUP): " INPUT_DIR
+  BACKUP_DIR="${INPUT_DIR:-$DEFAULT_BACKUP}"
+fi
+
+echo -e "${GREEN}使用备份目录: $BACKUP_DIR${NC}"
+
+# ⭐ 注意：这里必须完整 if + fi
 if [ ! -d "$BACKUP_DIR" ]; then
   echo -e "${RED}错误: 备份目录 $BACKUP_DIR 不存在!${NC}"
   exit 1
 fi
+
 
 # 查找本地快照文件
 echo -e "${BLUE}正在查找本地系统快照...${NC}"
@@ -61,7 +76,7 @@ if [[ ! "$CONFIRM" =~ ^[Yy]$ ]]; then
 fi
 
 echo -e "\n${YELLOW}请选择恢复模式:${NC}"
-echo -e "1) ${GREEN}标准恢复${NC} - 恢复所有系统文件，但保留网络配置"
+echo -e "1) ${GREEN}标准恢复(推荐)${NC} - 恢复所有系统文件，但保留网络配置"
 echo -e "2) ${GREEN}完全恢复${NC} - 完全恢复所有文件，包括网络配置（可能导致网络中断）"
 read -p "请选择恢复模式 [1-2]: " RESTORE_MODE
 
