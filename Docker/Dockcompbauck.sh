@@ -347,22 +347,22 @@ while true; do
     load_config
     clear
     echo -e "${CYAN}=== Docker compose 备份恢复管理 ===${RESET}"
-    echo -e "${GREEN}1. 设置SSH密钥自动登录${RESET}"
-    echo -e "${GREEN}2. 本地备份${RESET}"
-    echo -e "${GREEN}3. 远程上传备份${RESET}"
-    echo -e "${GREEN}4. 恢复项目${RESET}"
-    echo -e "${GREEN}5. 配置设置（Telegram/服务器名/保留天数/目录/远程信息）${RESET}"
+    echo -e "${GREEN}1. 本地备份${RESET}"
+    echo -e "${GREEN}2. 恢复项目${RESET}"
+    echo -e "${GREEN}3. 设置SSH密钥自动登录${RESET}"
+    echo -e "${GREEN}4. 配置设置（Telegram/服务器名/保留天数/目录/远程信息）${RESET}"
+    echo -e "${GREEN}5. 远程备份${RESET}"
     echo -e "${GREEN}6. 定时任务管理${RESET}"
     echo -e "${GREEN}7. 卸载${RESET}"
     echo -e "${GREEN}0. 退出${RESET}"
 
     read -p "$(echo -e ${GREEN}请选择操作: ${RESET})" CHOICE
     case $CHOICE in
-        1) setup_ssh_key ;;
-        2) backup_local ;;
-        3) backup_remote_all ;;
-        4) restore ;;
-        5) configure_settings_menu ;;
+        1) backup_local ;;
+        2) restore ;;
+        3) setup_ssh_key ;;
+        4) configure_settings_menu ;;
+        5) backup_remote_all ;;
         6) schedule_menu ;;
         7) uninstall ;;
         0) exit 0 ;;
