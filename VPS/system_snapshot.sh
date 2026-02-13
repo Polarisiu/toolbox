@@ -78,10 +78,10 @@ collect_config() {
         read -p "请输入远程服务器IP地址: " TARGET_IP
     done
     
-    read -p "请输入远程服务器用户名(root): " TARGET_USER
+    read -p "请输入远程服务器用户名: " TARGET_USER
     while [ -z "$TARGET_USER" ]; do
         log "${RED}用户名不能为空${NC}"
-        read -p "请输入远程服务器用户名(root): " TARGET_USER
+        read -p "请输入远程服务器用户名: " TARGET_USER
     done
     
     read -p "请输入SSH端口 [默认:22]: " SSH_PORT
