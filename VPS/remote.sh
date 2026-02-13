@@ -27,7 +27,7 @@ read -p "请输入远程服务器IP: " REMOTE_IP
 read -p "请输入远程服务器用户名: " REMOTE_USER
 read -p "请输入SSH端口 [默认: 22]: " SSH_PORT
 SSH_PORT=${SSH_PORT:-22}
-read -p "请输入远程备份目录: " REMOTE_BACKUP_DIR
+read -p "请输入远程备份目录(压缩包文件所在目录例如/root/remote_backup/localhost/system_snapshots): " REMOTE_BACKUP_DIR
 
 # 系统类型检测
 OS_TYPE=$(awk -F= '/^ID=/{print $2}' /etc/os-release | tr -d '"')
