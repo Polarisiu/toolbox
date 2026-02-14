@@ -9,7 +9,7 @@ CONFIG_FILE="$BASE_DIR/.config"
 LOG_FILE="$BASE_DIR/run.log"
 TMP_BASE="$BASE_DIR/tmp"
 SCRIPT_PATH="$BASE_DIR/gh_tool.sh"
-SCRIPT_URL="https://raw.githubusercontent.com/sistarry/toolbox/main/toy/githubbackup.sh" # 可替换为最新脚本地址
+SCRIPT_URL="https://raw.githubusercontent.com/sistarry/toolbox/main/toy/githubuubackup.sh" # 可替换为最新脚本地址
 BIN_DIR="/usr/local/bin"
 
 mkdir -p "$BASE_DIR" "$TMP_BASE"
