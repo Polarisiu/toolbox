@@ -95,7 +95,7 @@ setup_ssh_key() {
 
 # ================== 本地备份 ==================
 backup_local() {
-    read -rp "请输入要备份的 Docker Compose 项目目录（空格分隔）: " -a PROJECT_DIRS
+    read -rp "请输入要备份的 Docker Compose 项目目录（例如 /opt 多目录空格分隔）: " -a PROJECT_DIRS
     [[ ${#PROJECT_DIRS[@]} -eq 0 ]] && { echo -e "${RED}❌ 没有输入目录${RESET}"; return; }
 
     mkdir -p "$BACKUP_DIR"
