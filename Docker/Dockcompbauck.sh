@@ -20,6 +20,7 @@ REMOTE_SCRIPT_PATH="$SCRIPT_DIR/remote_script.sh"
 SSH_KEY="$HOME/.ssh/id_rsa_vpsbackup"
 INSTALL_PATH="$(realpath "$0")"
 CRON_TAG="#docker_backup_cron"
+EXCLUDE_DIR_NAME="$(basename "$BASE_DIR")"
 
 # 默认配置
 RETAIN_DAYS_DEFAULT=7
@@ -111,7 +112,9 @@ backup_local() {
         TIMESTAMP=$(date +%F_%H-%M-%S)
         BACKUP_FILE="$BACKUP_DIR/$(basename "$PROJECT_DIR")_backup_$TIMESTAMP.tar.gz"
         echo -e "${CYAN}📦 正在备份 $PROJECT_DIR → $BACKUP_FILE${RESET}"
-        tar czf "$BACKUP_FILE" -C "$PROJECT_DIR" .
+        tar czf "$BACKUP_FILE" \
+            --exclude="$EXCLUDE_DIR_NAME" \
+            -C "$PROJECT_DIR" .
 
         if [[ -f "$PROJECT_DIR/docker-compose.yml" ]]; then
             echo -e "${CYAN}🚀 启动容器: $PROJECT_DIR${RESET}"
@@ -328,7 +331,9 @@ if [[ "$1" == "auto" ]]; then
         [[ ! -d "$PROJECT_DIR" ]] && continue
         TIMESTAMP=$(date +%F_%H-%M-%S)
         BACKUP_FILE="$BACKUP_DIR/$(basename "$PROJECT_DIR")_backup_$TIMESTAMP.tar.gz"
-        tar czf "$BACKUP_FILE" -C "$PROJECT_DIR" . >> "$LOG_FILE" 2>&1
+        tar czf "$BACKUP_FILE" \
+            --exclude="$EXCLUDE_DIR_NAME" \
+            -C "$PROJECT_DIR" . >> "$LOG_FILE" 2>&1
         tg_send "自动备份完成: $(basename "$PROJECT_DIR") → $BACKUP_FILE"
     done
 
