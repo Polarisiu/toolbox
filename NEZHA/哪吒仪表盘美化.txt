@@ -54,7 +54,7 @@
 
   /* 替换默认头像图（avatar） */
   img[src*="https://api.dicebear.com/7.x/notionists/svg"] {
-    content: url("https://cdn.nodeimage.com/i/ohcG05Hqlge38FWjyOGQ9KXZBSe4v3ix.webp") !important;
+    content: url("https://cdn.nodeimage.com/i/yhTHlPkmAJYEIbcpw8I4TgHwd43A1imp.webp") !important;
     width: 100px !important;
     height: auto !important;
     margin-top: -0px;
@@ -62,7 +62,7 @@
 
   /* 替换左上角 logo 图标 */
   img[src*="/dashboard/logo.svg"] {
-    content: url("https://cdn.nodeimage.com/i/ohcG05Hqlge38FWjyOGQ9KXZBSe4v3ix.webp") !important;
+    content: url("https://cdn.nodeimage.com/i/yhTHlPkmAJYEIbcpw8I4TgHwd43A1imp.webp") !important;
   }
 
   /* 去掉页脚 */
@@ -93,3 +93,5 @@
   }
 </style>
  
+
+
