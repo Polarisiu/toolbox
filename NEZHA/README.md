@@ -49,7 +49,7 @@
 
 ### ip胶囊
 ```bash
-<script src="https://cdn.jsdelivr.net/gh/sistarry/toolbox/NEZHA/ip.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/sistarry/toolbox/NEZHA/ipx.js"></script>
 ```
 
 ### 自定义代码
