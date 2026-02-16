@@ -125,9 +125,9 @@ backup() {
 
     echo -e "${CYAN}开始备份...${RESET}"
 
+    # 只备份 /etc/nginx 和 /etc/letsencrypt，不备份网站目录
     tar czf "$FILE" \
         /etc/nginx \
-        /var/www \
         /etc/letsencrypt >> "$LOG_FILE" 2>&1
 
     if [[ $? -eq 0 ]]; then
