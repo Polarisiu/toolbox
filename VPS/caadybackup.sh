@@ -167,15 +167,22 @@ restore() {
     send_tg "🔄 Caddy 已恢复: $(basename "$FILE")"
 
     # 自动重启 Caddy
-    if [[ -f "/usr/bin/caddy" ]]; then
-        echo -e "${CYAN}正在启动 Caddy ...${RESET}"
-        nohup /usr/bin/caddy run --config /etc/caddy/Caddyfile > /dev/null 2>&1 &
-        sleep 3
-        echo -e "${GREEN}Caddy 启动完成${RESET}"
-        send_tg "⚡ Caddy 已重启"
+        echo -e "${CYAN}正在重启 Caddy (systemd)...${RESET}"
+
+    if systemctl list-unit-files | grep -q '^caddy.service'; then
+        systemctl daemon-reload
+        systemctl restart caddy
+
+        if systemctl is-active --quiet caddy; then
+            echo -e "${GREEN}Caddy 重启成功${RESET}"
+            send_tg "⚡ Caddy 已通过 systemd 重启"
+        else
+            echo -e "${RED}Caddy 启动失败，请检查日志${RESET}"
+            send_tg "❌ Caddy 重启失败"
+        fi
     else
-        echo -e "${RED}未找到 Caddy 可执行文件，无法启动${RESET}"
-        send_tg "❌ Caddy 重启失败"
+        echo -e "${RED}未检测到 caddy.service，无法使用 systemd 启动${RESET}"
+        send_tg "❌ 未找到 systemd 版本 Caddy"
     fi
 }
 
