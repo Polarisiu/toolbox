@@ -94,7 +94,6 @@ show_dns() {
 # 菜单
 ########################################
 menu() {
-    disable_resolved  # 每次进入菜单确保 systemd-resolved 被停用
 
     clear
     echo -e "${GREEN}=== DNS 管理工具 ===${RESET}"
