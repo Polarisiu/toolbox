@@ -146,9 +146,9 @@ show_info() {
     # 修正 IPv6 格式端口提取
     port=$(jq -r '.server' "$CONFIG" | sed -E 's/.*:([0-9]+)$/\1/')
     isp=$(curl -s https://speed.cloudflare.com/meta | awk -F\" '{print $26"-"$18}' | sed -e 's/ /_/g')
-
+    HOSTNAME=$(hostname -s | sed 's/ /_/g')
     echo -e "\n${green}V2rayN / NekoBox 链接:${reset}"
-    echo -e "${green}tuic://$uuid:$password@$public_ip:$port?congestion_control=bbr&alpn=h3&sni=www.bing.com&udp_relay_mode=native&allow_insecure=1#$isp${reset}"
+    echo -e "${green}tuic://$uuid:$password@$public_ip:$port?congestion_control=bbr&alpn=h3&sni=www.bing.com&udp_relay_mode=native&allow_insecure=1#$HOSTNAME${reset}"
     echo -e "${yellow}提示：如果节点无法连接，请确保客户端允许跳过证书验证设为 true${reset}"
     echo ""
 }
