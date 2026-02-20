@@ -47,9 +47,9 @@ menu() {
     echo -e "${YELLOW}[07] 切换字体${RESET}"
     echo -e "${YELLOW}[08] 修改主机名${RESET}"
     echo -e "${YELLOW}[09] Docker管理${RESET}"
-    echo -e "${YELLOW}[10] Hysteria2${RESET}"
+    echo -e "${YELLOW}[10] 代理协议${RESET}"
     echo -e "${YELLOW}[11] 3XUI面板${RESET}"
-    echo -e "${YELLOW}[12] 代理工具${RESET}"
+    echo -e "${YELLOW}[12] Realm转发${RESET}"
     echo -e "${YELLOW}[13] 应用商店${RESET}"
     echo -e "${GREEN}[88] 更新脚本${RESET}"
     echo -e "${GREEN}[99] 卸载脚本${RESET}"
@@ -68,9 +68,9 @@ menu() {
         7) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/Alpine/apcn.sh) ;;
         8) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/Alpine/aphome.sh) ;;
         9) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/Alpine/apdocker.sh) ;;
-        10) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/Alpine/aphy2.sh) ;;
+        10) wget -O vless-server.sh https://raw.githubusercontent.com/Chil30/vless-all-in-one/main/vless-server.sh && chmod +x vless-server.sh && bash vless-server.sh ;;
         11) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Alpine/3xuiAlpine.sh) ;;
-        12) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/proxy.sh) ;;
+        12) wget -qO- https://raw.githubusercontent.com/zywe03/realm-xwPF/main/xwPF.sh | sudo bash -s install ;;
         13) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/Docker/Store.sh) ;;
         88) 
             curl -sL "$SCRIPT_URL" -o "$SCRIPT_PATH"
