@@ -117,20 +117,17 @@ EOF
     systemctl restart $SERVICE_NAME
 
     SERVER_IP=$(get_ip)
-
+    HOSTNAME=$(hostname -s | sed 's/ /_/g')
     echo -e "\n${GREEN}√ 安装完成！${RESET}"
     echo -e "${GREEN}√ 端口: $PORT${RESET}"
     echo -e "${GREEN}√ 密码: $PASSWORD${RESET}"
-    echo -e "${GREEN}anytls://$PASSWORD@$SERVER_IP:$PORT/?insecure=1${GREEN}"
+    echo -e "${GREEN}anytls://$PASSWORD@$SERVER_IP:$PORT/?insecure=1#$HOSTNAME${GREEN}"
 
     pause_return
 }
 
 # 卸载
 uninstall_anytls() {
-    read -p "确定要卸载 anytls 吗？(y/N): " confirm
-    [[ $confirm != [yY] ]] && echo "取消卸载" && pause_return && return
-
     echo "正在卸载 anytls..."
     systemctl stop $SERVICE_NAME 2>/dev/null
     systemctl disable $SERVICE_NAME 2>/dev/null
