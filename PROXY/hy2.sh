@@ -102,11 +102,12 @@ echo -e "\e[1;32m本机IP: $HOST_IP\033[0m"
 # get ipinfo
 ISP=$(curl -s https://speed.cloudflare.com/meta | awk -F\" '{print $26"-"$18}' | sed -e 's/ /_/g')
 
+HOSTNAME=$(hostname -s | sed 's/ /_/g')
 # get hy2 node
 echo -e "\e[1;32mHysteria2安装成功\033[0m"
 echo ""
 echo -e "\e[1;33mV2rayN 或 Nekobox\033[0m"
-echo -e "\e[1;32mhysteria2://$PASSWORD@$HOST_IP:$SERVER_PORT/?sni=www.bing.com&alpn=h3&insecure=1#$ISP\033[0m"
+echo -e "\e[1;32mhysteria2://$PASSWORD@$HOST_IP:$SERVER_PORT/?sni=www.bing.com&alpn=h3&insecure=1#$HOSTNAME\033[0m"
 echo ""
 echo -e "\e[1;33mSurge\033[0m"
 echo -e "\e[1;32m$ISP = hysteria2, $HOST_IP, $SERVER_PORT, password = $PASSWORD, skip-cert-verify=true, sni=www.bing.com\033[0m"
