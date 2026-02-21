@@ -95,9 +95,10 @@ menu() {
         *) echo -e "${RED}无效选择，请重新输入!${RESET}" ;;
     esac
     read -p "$(echo -e ${GREEN}按回车返回菜单...${RESET})"
-    menu
 }
 
 
 # ================== 主循环 ==================
-menu
+while true; do
+    menu
+done
