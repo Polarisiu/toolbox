@@ -1,6 +1,7 @@
 #!/bin/bash
 # ========================================
-# 代理协议一键菜单（f/F 快捷键，独立版）
+# 代理协议一键菜单（一级+二级分类版）
+# 二级菜单 0 返回 | x 退出 | 自动补零 | 循环菜单
 # ========================================
 
 GREEN="\033[32m"
@@ -15,128 +16,324 @@ SCRIPT_PATH="/root/proxy.sh"
 SCRIPT_URL="https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/proxy.sh"
 BIN_LINK_DIR="/usr/local/bin"
 
+if [[ $EUID -ne 0 ]]; then
+    echo -e "${RED}请使用 root 权限运行！${RESET}"
+    exit 1
+fi
+
 # =============================
 # 首次运行自动安装
 # =============================
 if [ ! -f "$SCRIPT_PATH" ]; then
     curl -fsSL -o "$SCRIPT_PATH" "$SCRIPT_URL"
-    if [ $? -ne 0 ]; then
-        echo -e "${RED}❌ 安装失败，请检查网络或 URL${RESET}"
-        exit 1
-    fi
     chmod +x "$SCRIPT_PATH"
     ln -sf "$SCRIPT_PATH" "$BIN_LINK_DIR/f"
     ln -sf "$SCRIPT_PATH" "$BIN_LINK_DIR/F"
-    echo -e "${GREEN}✅ 安装完成${RESET}"
-    echo -e "${GREEN}✅ 快捷键已添加：f 或 F 可快速启动${RESET}"
+    echo -e "${GREEN}✅ 安装完成，输入 f 或 F 启动${RESET}"
 fi
 
 # =============================
-# 菜单函数
+# 自动补零
 # =============================
-show_menu() {
-    clear
-    echo -e "${ORANGE}======= 代理协议安装菜单 ========${RESET}"
-    echo -e "${YELLOW}[01] 老王Sing-box四合一${RESET}"
-    echo -e "${YELLOW}[02] 老王Xray-2go一键脚本${RESET}"
-    echo -e "${YELLOW}[03] mack-a八合一脚本${RESET}"
-    echo -e "${YELLOW}[04] Sing-box-yg${RESET}"
-    echo -e "${YELLOW}[05] fscarmen-ArgoX${RESET}"
-    echo -e "${YELLOW}[06] Anytls${RESET}"
-    echo -e "${YELLOW}[07] Hysteria2${RESET}"
-    echo -e "${YELLOW}[08] Tuic${RESET}"
-    echo -e "${YELLOW}[09] Reality${RESET}"
-    echo -e "${YELLOW}[10] Snell${RESET}"
-    echo -e "${YELLOW}[11] MTProto${RESET}"
-    echo -e "${YELLOW}[12] MTProxy(Docker)${RESET}"
-    echo -e "${YELLOW}[13] Shadowsocks${RESET}"
-    echo -e "${YELLOW}[14] Socks5${RESET}"
-    echo -e "${YELLOW}[15] SS+SNELL${RESET}"
-    echo -e "${YELLOW}[16] 3XUI管理${RESET}"
-    echo -e "${YELLOW}[17] S-UI面板${RESET}"
-    echo -e "${YELLOW}[18] H-UI面板${RESET}"
-    echo -e "${YELLOW}[19] GOST管理${RESET}"
-    echo -e "${YELLOW}[20] Realm管理${RESET}"
-    echo -e "${YELLOW}[21] FRP管理${RESET}"
-    echo -e "${YELLOW}[22] 哆啦A梦转发面板${RESET}"
-    echo -e "${YELLOW}[23] 极光面板${RESET}"
-    echo -e "${YELLOW}[24] Xboard${RESET}"
-    echo -e "${YELLOW}[25] WireGuard${RESET}"
-    echo -e "${YELLOW}[26] WG-Easy${RESET}"
-    echo -e "${YELLOW}[27] WARP${RESET}"
-    echo -e "${YELLOW}[28] BBR+TCP智能调参${RESET}"
-    echo -e "${YELLOW}[29] 自建DNS解锁服务${RESET}"
-    echo -e "${YELLOW}[30] 自定义DNS解锁${RESET}"
-    echo -e "${YELLOW}[31] 233boy-sing-box${RESET}"
-    echo -e "${YELLOW}[32] 多协议代理部署${RESET}"
-    echo -e "${GREEN}[88] 更新脚本${RESET}"
-    echo -e "${GREEN}[99] 卸载脚本${RESET}"
-    echo -e "${YELLOW}[00] 退出脚本${RESET}"
-    echo -ne "${RED}请输入选项: ${RESET}"
-    read choice
-    install_protocol "$choice"
+format_choice() {
+    if [[ "$1" =~ ^[0-9]+$ ]]; then
+        printf "%02d" "$1"
+    else
+        echo "$1"
+    fi
 }
 # =============================
-# 协议安装函数
+# 通用菜单读取（一级用）
 # =============================
-install_protocol() {
-    case "$1" in
-        01|1) bash <(curl -Ls https://raw.githubusercontent.com/eooce/sing-box/main/sing-box.sh) ;;
-        02|2) bash <(curl -Ls https://github.com/eooce/xray-2go/raw/main/xray_2go.sh) ;;
-        03|3) wget -P /root -N --no-check-certificate "https://raw.githubusercontent.com/mack-a/v2ray-agent/master/install.sh" && chmod 700 /root/install.sh && /root/install.sh ;;
-        04|4) bash <(curl -Ls https://raw.githubusercontent.com/yonggekkk/sing-box-yg/main/sb.sh) ;;
-        05|5) bash <(wget -qO- https://raw.githubusercontent.com/fscarmen/argox/main/argox.sh) ;;
-        06|6) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/anytls.sh) ;;
-        07|7) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/Hysteria2.sh) ;;
-        08|8) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/tuicv5.sh) ;;
-        09|9) bash <(curl -L https://raw.githubusercontent.com/yahuisme/xray-vless-reality/main/install.sh) ;;
-        10) wget -O snell.sh --no-check-certificate https://git.io/Snell.sh && chmod +x snell.sh && ./snell.sh ;;
-        11) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/MTProto.sh) ;;
-        12) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/dkmop.sh) ;;
-        13) wget -O ss-rust.sh --no-check-certificate https://raw.githubusercontent.com/xOS/Shadowsocks-Rust/master/ss-rust.sh && chmod +x ss-rust.sh && ./ss-rust.sh ;;
-        14) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/socks5.sh) ;;
-        15) bash <(curl -L -s menu.jinqians.com) ;;
-        16) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/3xui.sh) ;;
-        17) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/s-ui.sh) ;;
-        18) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/H-UI.sh) ;;
-        19) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/gost.sh) ;;
-        20) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/realmdog.sh) ;;
-        21) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/FRP.sh) ;;
-        22) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/dlam.sh) ;;
-        23) bash <(curl -fsSL https://raw.githubusercontent.com/Aurora-Admin-Panel/deploy/main/install.sh) ;;
-        24) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/Xboard.sh) ;;
-        25) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/wireguard.sh) ;;
-        26) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/WGEasy.sh) ;;
-        27) wget -N https://gitlab.com/fscarmen/warp/-/raw/main/menu.sh && bash menu.sh [option] [lisence/url/token] ;;
-        28) bash <(curl -sL https://raw.githubusercontent.com/yahuisme/network-optimization/main/script.sh) ;;
-        29) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/DNSsnp.sh) ;;
-        30) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/VPS/unlockdns.sh) ;;
-        31) bash <(wget -qO- -o- https://github.com/233boy/sing-box/raw/main/install.sh) ;;
-        32) wget -O vless-server.sh https://raw.githubusercontent.com/Chil30/vless-all-in-one/main/vless-server.sh && bash vless-server.sh ;;
-        88|088)
-            echo -e "${GREEN}🔄 更新脚本...${RESET}"
-            curl -fsSL -o "$SCRIPT_PATH" "$SCRIPT_URL"
-            chmod +x "$SCRIPT_PATH"
-            ln -sf "$SCRIPT_PATH" "$BIN_LINK_DIR/F"
-            ln -sf "$SCRIPT_PATH" "$BIN_LINK_DIR/f"
-            echo -e "${GREEN}✅ 更新完成! 可直接使用 F/f 启动脚本${RESET}"
-            exec "$SCRIPT_PATH"
-            ;;
-        99|099)
-            echo -e "${YELLOW}正在卸载脚本...${RESET}"
-            rm -f "$SCRIPT_PATH"
-            rm -f "$BIN_LINK_DIR/F" "$BIN_LINK_DIR/f"
-            echo -e "${GREEN}✅ 脚本已卸载${RESET}"
-            exit 0
-            ;;
-        00|0) exit 0 ;;
-        *) echo -e "${RED}无效选择，请重试${RESET}" ;;
+read_mainmenu() {
+    echo -ne "${RED}请选择: ${RESET}"
+    read choice
+
+    choice=$(echo "$choice" | xargs)
+
+    [[ "$choice" =~ ^[xX]$ ]] && exit 0
+    [[ "$choice" == "0" || "$choice" == "00" ]] && exit 0
+
+    choice=$(format_choice "$choice")
+}
+
+# =============================
+# 通用二级菜单读取逻辑
+# =============================
+read_submenu() {
+    echo -ne "${RED}选择: ${RESET}"
+    read sub
+
+    sub=$(echo "$sub" | xargs)
+
+    [[ "$sub" =~ ^[xX]$ ]] && exit 0
+    [[ "$sub" == "0" || "$sub" == "00" ]] && return 1
+
+    sub=$(format_choice "$sub")
+    return 0
+}
+
+# =============================
+# 一级菜单
+# =============================
+main_menu() {
+    clear
+    echo -e "${ORANGE}====== 代理管理中心 ======${RESET}"
+    echo -e "${YELLOW}[01] 单协议安装类${RESET}"
+    echo -e "${YELLOW}[02] 多协议安装类${RESET}"
+    echo -e "${YELLOW}[03] 面板管理类${RESET}"
+    echo -e "${YELLOW}[04] 转发管理类${RESET}"
+    echo -e "${YELLOW}[05] 组网管理类${RESET}"
+    echo -e "${YELLOW}[06] 网络优化类${RESET}"
+    echo -e "${YELLOW}[07] DNS 解锁类${RESET}"
+    echo -e "${GREEN}[88] 更新脚本${RESET}"
+    echo -e "${GREEN}[99] 卸载脚本${RESET}"
+    echo -e "${YELLOW}[00] 退出${RESET}"
+
+    read_mainmenu
+
+    case "$choice" in
+        01) protocol_menu ;;
+        02) protocols_menu ;;
+        03) panel_menu ;;
+        04) zfpanel_menu ;;
+        05) zwpanel_menu ;;
+        06) network_menu ;;
+        07) dns_menu ;;
+        88) update_script ;;
+        99) uninstall_script ;;
+        00) exit 0 ;;
+        *) echo -e "${RED}无效选项${RESET}"; sleep 1 ;;
     esac
+}
+
+# =============================
+# 单协议类
+# =============================
+protocol_menu() {
+while true; do
+    clear
+    echo -e "${ORANGE}====== 单协议安装类 ======${RESET}"
+    echo -e "${YELLOW}[01] Shadowsocks${RESET}"
+    echo -e "${YELLOW}[02] Reality${RESET}"
+    echo -e "${YELLOW}[03] Snell${RESET}"
+    echo -e "${YELLOW}[04] Anytls${RESET}"
+    echo -e "${YELLOW}[05] Hysteria2${RESET}"
+    echo -e "${YELLOW}[06] Tuicv5${RESET}"
+    echo -e "${YELLOW}[07] MTProto${RESET}"
+    echo -e "${YELLOW}[08] MTProxy(Docker)${RESET}"
+    echo -e "${YELLOW}[09] Socks5${RESET}"
+    echo -e "${GREEN}[0]  返回${RESET}"
+    echo -e "${GREEN}[x]  退出${RESET}"
+
+    read_submenu || return
+
+    case "$sub" in
+        01) wget -O ss-rust.sh https://raw.githubusercontent.com/xOS/Shadowsocks-Rust/master/ss-rust.sh && bash ss-rust.sh ;;
+        02) bash <(curl -L https://raw.githubusercontent.com/yahuisme/xray-vless-reality/main/install.sh) ;;
+        03) wget -O snell.sh --no-check-certificate https://git.io/Snell.sh && chmod +x snell.sh && ./snell.sh ;;
+        04) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/anytls.sh) ;;
+        05) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/Hysteria2.sh) ;;
+        06) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/tuicv5.sh) ;;
+        07) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/MTProto.sh) ;;
+        08) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/dkmop.sh) ;;
+        09) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/socks5.sh) ;;
+        *) echo -e "${RED}无效选项${RESET}"; sleep 1 ;;
+    esac
+done
+}
+
+# =============================
+# 多协议类
+# =============================
+protocols_menu() {
+while true; do
+    clear
+    echo -e "${ORANGE}====== 多协议安装类 ======${RESET}"
+    echo -e "${YELLOW}[01] 老王Sing-box${RESET}"
+    echo -e "${YELLOW}[02] 老王Xray-Argo${RESET}"
+    echo -e "${YELLOW}[03] mack-a八合一${RESET}"
+    echo -e "${YELLOW}[04] ygSing-box${RESET}"
+    echo -e "${YELLOW}[05] fscarmen-ArgoX${RESET}"
+    echo -e "${YELLOW}[06] 233boySing-box${RESET}"
+    echo -e "${YELLOW}[07] SS+SNELL${RESET}"
+    echo -e "${YELLOW}[08] VlessallInOne多协议代理${RESET}"
+    echo -e "${GREEN}[0]  返回${RESET}"
+    echo -e "${GREEN}[x]  退出${RESET}"
+
+    read_submenu || return
+
+    case "$sub" in
+        01) bash <(curl -Ls https://raw.githubusercontent.com/eooce/sing-box/main/sing-box.sh) ;;
+        02) bash <(curl -Ls https://github.com/eooce/xray-2go/raw/main/xray_2go.sh) ;;
+        03) wget -O install.sh https://raw.githubusercontent.com/mack-a/v2ray-agent/master/install.sh && bash install.sh ;;
+        04) bash <(curl -Ls https://raw.githubusercontent.com/yonggekkk/sing-box-yg/main/sb.sh) ;;
+        05) bash <(wget -qO- https://raw.githubusercontent.com/fscarmen/argox/main/argox.sh) ;;
+        06) bash <(wget -qO- -o- https://github.com/233boy/sing-box/raw/main/install.sh) ;;
+        07) bash <(curl -L -s menu.jinqians.com) ;;
+        08) wget -O vless-server.sh https://raw.githubusercontent.com/Chil30/vless-all-in-one/main/vless-server.sh && bash vless-server.sh ;;
+        *) echo -e "${RED}无效选项${RESET}"; sleep 1 ;;
+    esac
+done
+}
+
+# =============================
+# 二级菜单：面板类
+# =============================
+panel_menu() {
+while true; do
+    clear
+    echo -e "${ORANGE}====== 面板管理类 ======${RESET}"
+    echo -e "${YELLOW}[01] 3XUI${RESET}"
+    echo -e "${YELLOW}[02] S-UI${RESET}"
+    echo -e "${YELLOW}[03] H-UI${RESET}"
+    echo -e "${YELLOW}[04] Xboard${RESET}"
+    echo -e "${GREEN}[0]  返回${RESET}"
+    echo -e "${GREEN}[x]  退出${RESET}"
+    
+    read_submenu || return
+
+    case "$sub" in
+        01) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/3xui.sh) ;;
+        02) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/s-ui.sh) ;;
+        03) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/H-UI.sh) ;;
+        04) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/Xboard.sh) ;;
+        0) return ;;
+        *) echo -e "${RED}无效选项${RESET}"; sleep 1 ;;
+    esac
+done
+}
+
+# =============================
+# 二级菜单：转发类
+# =============================
+zfpanel_menu() {
+while true; do
+    clear
+    echo -e "${ORANGE}====== 转发管理类 ======${RESET}"
+    echo -e "${YELLOW}[01] Realm管理${RESET}"
+    echo -e "${YELLOW}[02] GOST管理${RESET}"
+    echo -e "${YELLOW}[03] 极光面板${RESET}"
+    echo -e "${YELLOW}[04] 哆啦A梦转发面板${RESET}"
+    echo -e "${GREEN}[0]  返回${RESET}"
+    echo -e "${GREEN}[x]  退出${RESET}"
+    
+    read_submenu || return
+
+    case "$sub" in
+        01) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/realmdog.sh) ;;
+        02) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/gost.sh) ;;
+        03) bash <(curl -fsSL https://raw.githubusercontent.com/Aurora-Admin-Panel/deploy/main/install.sh) ;;
+        04) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/dlam.sh) ;;
+        0) return ;;
+        *) echo -e "${RED}无效选项${RESET}"; sleep 1 ;;
+    esac
+done
+}
+
+# =============================
+# 二级菜单：组网类
+# =============================
+zwpanel_menu() {
+while true; do
+    clear
+    echo -e "${ORANGE}====== 组网管理类 ======${RESET}"
+    echo -e "${YELLOW}[01] FRP管理${RESET}"
+    echo -e "${YELLOW}[02] WireGuard${RESET}"
+    echo -e "${YELLOW}[03] WG-Easy${RESET}"
+    echo -e "${YELLOW}[04] easytier组网${RESET}"
+    echo -e "${GREEN}[0]  返回${RESET}"
+    echo -e "${GREEN}[x]  退出${RESET}"
+    
+    read_submenu || return
+  
+
+    case "$sub" in
+        01) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/FRP.sh) ;;
+        02) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/wireguard.sh) ;;
+        03) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/WGEasy.sh) ;;
+        04) bash <(curl -sL https://raw.githubusercontent.com/ceocok/c.cococ/refs/heads/main/easytier.sh) ;;
+        0) return ;;
+        *) echo -e "${RED}无效选项${RESET}"; sleep 1 ;;
+    esac
+done
+}
+# =============================
+# 网络优化
+# =============================
+network_menu() {
+while true; do
+    clear
+    echo -e "${ORANGE}====== 网络优化类 ======${RESET}"
+    echo -e "${YELLOW}[01] BBR管理${RESET}"
+    echo -e "${YELLOW}[02] TCP窗口调优${RESET}"
+    echo -e "${YELLOW}[03] WARP管理${RESET}"
+    echo -e "${YELLOW}[04] BBRv3优化脚本${RESET}"
+    echo -e "${YELLOW}[05] BBR+TCP调优${RESET}"
+    echo -e "${GREEN}[0]  返回${RESET}"
+    echo -e "${GREEN}[x]  退出${RESET}"
+    
+    read_submenu || return
+
+    case "$sub" in
+        01) wget --no-check-certificate -O tcpx.sh https://raw.githubusercontent.com/ylx2016/Linux-NetSpeed/master/tcpx.sh && chmod +x tcpx.sh && ./tcpx.sh ;;
+        02) wget http://sh.nekoneko.cloud/tools.sh -O tools.sh && bash tools.sh ;;
+        03) wget -N https://gitlab.com/fscarmen/warp/-/raw/main/menu.sh && bash menu.sh ;;
+        04)  bash <(curl -fsSL "https://raw.githubusercontent.com/Eric86777/vps-tcp-tune/main/install-alias.sh?$(date +%s)") ;;
+        05) bash <(curl -sL https://raw.githubusercontent.com/yahuisme/network-optimization/main/script.sh) ;;
+        0) return ;;
+        *) echo -e "${RED}无效选项${RESET}"; sleep 1 ;;
+    esac
+done
+}
+
+# =============================
+# DNS 类
+# =============================
+dns_menu() {
+while true; do
+    clear
+    echo -e "${ORANGE}====== DNS 解锁类 ======${RESET}"
+    echo -e "${YELLOW}[01] DDNS${RESET}"
+    echo -e "${YELLOW}[02] 自建DNS解锁${RESET}"
+    echo -e "${YELLOW}[03] 自定义DNS解锁${RESET}"
+    echo -e "${GREEN}[0]  返回${RESET}"
+    echo -e "${GREEN}[x]  退出${RESET}"
+    
+    read_submenu || return
+   
+
+    case "$sub" in
+        01) bash <(wget -qO- https://raw.githubusercontent.com/mocchen/cssmeihua/mochen/shell/ddns.sh) ;;
+        02) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/DNSsnp.sh) ;;
+        03) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/VPS/unlockdns.sh) ;;
+        0) return ;;
+        *) echo -e "${RED}无效选项${RESET}"; sleep 1 ;;
+    esac
+done
+}
+
+# =============================
+# 更新 & 卸载
+# =============================
+update_script() {
+    echo -e "${GREEN}更新中...${RESET}"
+    curl -fsSL -o "$SCRIPT_PATH" "$SCRIPT_URL"
+    chmod +x "$SCRIPT_PATH"
+    echo -e "${GREEN}✅ 更新完成!${RESET}"
+    exec "$SCRIPT_PATH"
+}
+
+uninstall_script() {
+    rm -f "$SCRIPT_PATH"
+    rm -f "$BIN_LINK_DIR/F" "$BIN_LINK_DIR/f"
+    echo -e "${RED}✅ 脚本已卸载${RESET}"
+    exit 0
 }
 
 # =============================
 # 主循环
 # =============================
 while true; do
-    show_menu
+    main_menu
 done
