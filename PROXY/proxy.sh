@@ -85,7 +85,7 @@ main_menu() {
     echo -e "${YELLOW}[04] 转发管理类${RESET}"
     echo -e "${YELLOW}[05] 组网管理类${RESET}"
     echo -e "${YELLOW}[06] 网络优化类${RESET}"
-    echo -e "${YELLOW}[07] DNS 解锁类${RESET}"
+    echo -e "${YELLOW}[07] DNS解锁类${RESET}"
     echo -e "${GREEN}[88] 更新脚本${RESET}"
     echo -e "${GREEN}[99] 卸载脚本${RESET}"
     echo -e "${YELLOW}[00] 退出${RESET}"
