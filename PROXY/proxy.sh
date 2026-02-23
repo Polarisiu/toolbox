@@ -62,12 +62,13 @@ show_menu() {
     echo -e "${YELLOW}[23] 极光面板${RESET}"
     echo -e "${YELLOW}[24] Xboard${RESET}"
     echo -e "${YELLOW}[25] WireGuard${RESET}"
-    echo -e "${YELLOW}[26] WARP${RESET}"
-    echo -e "${YELLOW}[27] BBR+TCP智能调参${RESET}"
-    echo -e "${YELLOW}[28] 自建DNS解锁服务${RESET}"
-    echo -e "${YELLOW}[29] 自定义DNS解锁${RESET}"
-    echo -e "${YELLOW}[30] 233boy-sing-box${RESET}"
-    echo -e "${YELLOW}[31] 多协议代理部署${RESET}"
+    echo -e "${YELLOW}[26] WG-Easy${RESET}"
+    echo -e "${YELLOW}[27] WARP${RESET}"
+    echo -e "${YELLOW}[28] BBR+TCP智能调参${RESET}"
+    echo -e "${YELLOW}[29] 自建DNS解锁服务${RESET}"
+    echo -e "${YELLOW}[30] 自定义DNS解锁${RESET}"
+    echo -e "${YELLOW}[31] 233boy-sing-box${RESET}"
+    echo -e "${YELLOW}[32] 多协议代理部署${RESET}"
     echo -e "${GREEN}[88] 更新脚本${RESET}"
     echo -e "${GREEN}[99] 卸载脚本${RESET}"
     echo -e "${YELLOW}[00] 退出脚本${RESET}"
@@ -105,12 +106,13 @@ install_protocol() {
         23) bash <(curl -fsSL https://raw.githubusercontent.com/Aurora-Admin-Panel/deploy/main/install.sh) ;;
         24) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/Xboard.sh) ;;
         25) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/wireguard.sh) ;;
-        26) wget -N https://gitlab.com/fscarmen/warp/-/raw/main/menu.sh && bash menu.sh [option] [lisence/url/token] ;;
-        27) bash <(curl -sL https://raw.githubusercontent.com/yahuisme/network-optimization/main/script.sh) ;;
-        28) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/DNSsnp.sh) ;;
-        29) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/VPS/unlockdns.sh) ;;
-        30) bash <(wget -qO- -o- https://github.com/233boy/sing-box/raw/main/install.sh) ;;
-        31) wget -O vless-server.sh https://raw.githubusercontent.com/Chil30/vless-all-in-one/main/vless-server.sh && bash vless-server.sh ;;
+        26) bash <(curl -fsSL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/WGEasy.sh) ;;
+        27) wget -N https://gitlab.com/fscarmen/warp/-/raw/main/menu.sh && bash menu.sh [option] [lisence/url/token] ;;
+        28) bash <(curl -sL https://raw.githubusercontent.com/yahuisme/network-optimization/main/script.sh) ;;
+        29) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/DNSsnp.sh) ;;
+        30) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/VPS/unlockdns.sh) ;;
+        31) bash <(wget -qO- -o- https://github.com/233boy/sing-box/raw/main/install.sh) ;;
+        32) wget -O vless-server.sh https://raw.githubusercontent.com/Chil30/vless-all-in-one/main/vless-server.sh && bash vless-server.sh ;;
         88|088)
             echo -e "${GREEN}🔄 更新脚本...${RESET}"
             curl -fsSL -o "$SCRIPT_PATH" "$SCRIPT_URL"
