@@ -8,7 +8,7 @@ menu() {
     clear
     echo -e "${GREEN}=== 网络工具菜单 ===${RESET}"
     echo -e "${GREEN}1) 路由追踪 nexttrace${RESET}"
-    echo -e "${GREEN}2) 测速 speedtest${RESET}"
+    echo -e "${GREEN}2) 网络测速 speedtest${RESET}"
     echo -e "${GREEN}0) 退出${RESET}"
     read -p $'\033[32m请选择操作: \033[0m' choice
     case $choice in
@@ -18,7 +18,7 @@ menu() {
             pause
             ;;
         2)
-            echo -e "${GREEN}正在运行 speedtest 测速...${RESET}"
+            echo -e "${GREEN}正在运行 speedtest 网络测速...${RESET}"
             bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/VPS/Speedtest.sh)
             pause
             ;;
