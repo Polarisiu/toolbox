@@ -82,7 +82,7 @@ pause_return() {
 main_menu() {
     clear
     echo -e "${ORANGE}╔══════════════════════╗${RESET}"
-    echo -e "${ORANGE}      代理管理中心        ${RESET}"
+    echo -e "${ORANGE}      代理工具箱        ${RESET}"
     echo -e "${ORANGE}╚══════════════════════╝${RESET}"
     echo -e "${YELLOW}[01] 单协议安装类${RESET}"
     echo -e "${YELLOW}[02] 多协议安装类${RESET}"
