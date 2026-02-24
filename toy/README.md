@@ -36,3 +36,13 @@ bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/toy/dl.s
 ```bash
 bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/toy/CFSSL.sh)
 ```
+
+### systemd-resolved 一键修复脚本
+```bash
+bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/toy/systemdresolved.sh)
+```
+
+### 国内机哪吒探针 Agent 一键安装脚本
+```bash
+bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/toy/CNnezha.sh)
+```
