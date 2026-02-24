@@ -7,6 +7,7 @@ SKYBLUE='\033[0;36m'
 PLAIN='\033[0m'
 ORANGE='\033[38;5;208m'
 
+
 # 检查 root
 [[ $EUID -ne 0 ]] && echo -e "${RED}错误：${PLAIN} 必须使用 root 用户运行！\n" && exit 1
 
@@ -213,23 +214,20 @@ restart_caddy() {
 # 7. 菜单循环
 show_menu() {
     clear
-    echo -e "#################################################"
-    echo -e "#    Caddy + Emby 多站点管理脚本 (V5 Pro)       #"
-    echo -e "#################################################"
-    echo -e " ${GREEN}1.${PLAIN} 安装环境 & Caddy"
-    echo -e " ${GREEN}2.${PLAIN} 添加/覆盖 反代配置 (支持多站)"
-    echo -e " ${GREEN}3.${PLAIN} 删除指定站点配置 ${YELLOW}(NEW!)${PLAIN}"
-    echo -e " ${GREEN}4.${PLAIN} 查看 Caddy 配置文件"
-    echo -e "-------------------------------------------------"
-    echo -e " ${GREEN}5.${PLAIN} 停止 Caddy"
-    echo -e " ${GREEN}6.${PLAIN} 重启 Caddy"
-    echo -e " ${GREEN}7.${PLAIN} 查询 443/80 端口占用"
-    echo -e " ${RED}8.${PLAIN} 暴力处理端口占用 (修复启动失败)"
-    echo -e " ${RED}9.${PLAIN} 卸载 Caddy"
-    echo -e "-------------------------------------------------"
-    echo -e " ${GREEN}0.${PLAIN} 退出脚本"
-    echo -e ""
-    read -p " 请输入数字 [0-9]: " num < /dev/tty
+    echo -e "${ORANGE}╔══════════════════════════╗${PLAIN}"
+    echo -e "${ORANGE}        Emby反代工具箱        ${PLAIN}"
+    echo -e "${ORANGE}╚══════════════════════════╝${PLAIN}"
+    echo -e " ${GREEN}1. 安装环境 & Caddy${PLAIN}"
+    echo -e " ${GREEN}2. 添加/覆盖 反代配置 (支持多站)${PLAIN}"
+    echo -e " ${GREEN}3. 删除指定站点配置${PLAIN}${PLAIN}"
+    echo -e " ${GREEN}4. 查看 Caddy 配置文件${PLAIN}"
+    echo -e " ${GREEN}5. 停止 Caddy${PLAIN}"
+    echo -e " ${GREEN}6. 重启 Caddy${PLAIN}"
+    echo -e " ${GREEN}7. 查询 443/80 端口占用${PLAIN}"
+    echo -e " ${GREEN}8. 处理端口占用 (修复启动失败)${PLAIN}"
+    echo -e " ${GREEN}9. 卸载 Caddy${PLAIN}"
+    echo -e " ${GREEN}0. 退出${PLAIN}"
+    read -p " ${GREEN}请输入数字 [0-9]: ${PLAIN}" num < /dev/tty
 
     case "$num" in
         1) install_base; install_caddy ;;
@@ -249,6 +247,6 @@ show_menu() {
 # 主循环
 while true; do
     show_menu
-    echo -e "\n${GREEN}按回车键返回主菜单...${PLAIN}"
+    echo -e "\n${GREEN}按回车返回主菜单...${PLAIN}"
     read temp < /dev/tty
 done
