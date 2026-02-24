@@ -1,16 +1,11 @@
 #!/bin/bash
-
-# ====================================================
-#  Caddy Reverse Proxy for Emby - V5 (Multi-Site Manager)
-#  Author: AiLi1337
-# ====================================================
-
 # 颜色定义
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 SKYBLUE='\033[0;36m'
 PLAIN='\033[0m'
+ORANGE='\033[38;5;208m'
 
 # 检查 root
 [[ $EUID -ne 0 ]] && echo -e "${RED}错误：${PLAIN} 必须使用 root 用户运行！\n" && exit 1
