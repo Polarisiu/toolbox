@@ -429,11 +429,22 @@ app_menu_handler() {
 # ================== 脚本更新与卸载 ==================
 update_script() {
     echo -e "${YELLOW}正在更新脚本...${RESET}"
-    curl -fsSL -o "$SCRIPT_PATH" "$SCRIPT_URL"
-    chmod +x "$SCRIPT_PATH"
-    ln -sf "$SCRIPT_PATH" "$BIN_LINK_DIR/d"
-    ln -sf "$SCRIPT_PATH" "$BIN_LINK_DIR/D"
-    echo -e "${GREEN}更新完成! 可直接使用 D/d 启动脚本${RESET}"
+
+    if curl -fsSL -o "$SCRIPT_PATH.new" "$SCRIPT_URL"; then
+        chmod +x "$SCRIPT_PATH.new"
+        mv -f "$SCRIPT_PATH.new" "$SCRIPT_PATH"
+
+        ln -sf "$SCRIPT_PATH" "$BIN_LINK_DIR/d"
+        ln -sf "$SCRIPT_PATH" "$BIN_LINK_DIR/D"
+
+        echo -e "${GREEN}更新完成！${RESET}"
+        sleep 1
+
+        exec "$SCRIPT_PATH"
+        exit 0
+    else
+        echo -e "${RED}更新失败，请检查网络！${RESET}"
+    fi
 }
 
 uninstall_script() {
