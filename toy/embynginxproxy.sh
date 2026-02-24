@@ -627,7 +627,6 @@ single_menu() {
     echo "4) 删除单站反代"
     echo "5) Nginx 测试与状态"
     echo "0) 返回上级"
-    echo "=============================="
     read -r -p "请选择: " c
     case "$c" in
       1) single_action_add_or_edit ;;
@@ -990,7 +989,6 @@ gw_menu() {
     echo "3) 修改 BasicAuth 账号/密码"
     echo "4) 卸载"
     echo "0) 返回上级"
-    echo "=============================="
     read -r -p "请选择: " c
     case "$c" in
       1) gw_action_install_update ;;
@@ -1013,7 +1011,6 @@ main_menu() {
     echo "1) 单站反代管理器（逐个域名配置）"
     echo "2) 通用反代网关（一个入口反代多个上游）"
     echo "0) 退出"
-    echo "============================"
     read -r -p "请选择: " c
     case "$c" in
       1) single_menu ;;
