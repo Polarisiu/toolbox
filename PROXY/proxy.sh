@@ -74,7 +74,6 @@ read_submenu() {
 }
 
 pause_return() {
-    echo
     read -p "$(echo -e ${GREEN}按回车返回菜单...${RESET})"
 }
 # =============================
