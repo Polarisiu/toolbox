@@ -6,7 +6,7 @@ After=network.target
 Type=simple
 User=root
 Group=root
-ExecStart=/opt/nezha/nezha-agent -c /opt/nezha/config.yml
+ExecStart=/opt/nezha/agent/nezha-agent -c /opt/nezha/agent/config.yml
 Restart=always
 RestartSec=5
 
