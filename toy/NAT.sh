@@ -45,7 +45,15 @@ menu() {
     echo -ne "${RED}请输入操作编号: ${RESET}"
 
     read choice
-    choice=$(printf "%02d" "$choice" 2>/dev/null)
+
+    # 只允许数字
+    if ! [[ "$choice" =~ ^[0-9]+$ ]]; then
+        echo -e "${RED}请输入数字编号！${RESET}"
+        sleep 1
+        return
+    fi
+
+    choice=$(printf "%02d" "$choice")
 
     case "$choice" in
         01)
@@ -87,6 +95,7 @@ menu() {
         *)
             echo -e "${RED}无效选择，请重新输入${RESET}"
             sleep 1
+            continue
             ;;
     esac
 
