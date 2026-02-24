@@ -24,8 +24,9 @@ pause() {
 # =============================
 menu() {
     clear
-
-    echo -e "${GREEN}====== 面板管理菜单 ======${RESET}"
+    echo -e "${ORANGE}╔══════════════════════╗${RESET}"
+    echo -e "${ORANGE}      面板管理菜单      ${RESET}"
+    echo -e "${ORANGE}╚══════════════════════╝${RESET}"
     echo -e "${GREEN}[01] 宝塔面板${RESET}"
     echo -e "${GREEN}[02] 国际版宝塔${RESET}"
     echo -e "${GREEN}[03] 开心版宝塔${RESET}"
@@ -103,7 +104,7 @@ menu() {
         99)
             echo -e "${YELLOW}正在卸载脚本...${RESET}"
             rm -f "$BIN_LINK_DIR/p" "$BIN_LINK_DIR/P" "$SCRIPT_PATH"
-            echo -e "${GREEN}✅ 卸载完成${RESET}"
+            echo -e "${RED}✅ 卸载完成${RESET}"
             exit 0
             ;;
 
@@ -121,7 +122,7 @@ menu() {
 }
 
 # =============================
-# 首次运行自动安装（同 oracle.sh）
+# 首次运行自动安装
 # =============================
 if [ ! -f "$SCRIPT_PATH" ]; then
     curl -fsSL -o "$SCRIPT_PATH" "$SCRIPT_URL"
