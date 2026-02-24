@@ -283,20 +283,20 @@ while true; do
     echo -e "${ORANGE}╔══════════════════════╗${RESET}"
     echo -e "${ORANGE}      网络优化类        ${RESET}"
     echo -e "${ORANGE}╚══════════════════════╝${RESET}"
-    echo -e "${YELLOW}[01] BBR管理${RESET}"
+    echo -e "${YELLOW}[01] WARP管理${RESET}"
     echo -e "${YELLOW}[02] TCP窗口调优${RESET}"
-    echo -e "${YELLOW}[03] WARP管理${RESET}"
+    echo -e "${YELLOW}[03] BBR管理${RESET}"
     echo -e "${YELLOW}[04] BBRv3优化脚本${RESET}"
-    echo -e "${YELLOW}[05] BBR+TCP调优${RESET}"
+    echo -e "${YELLOW}[05] BBR+TCP智能调参${RESET}"
     echo -e "${GREEN}[0]  返回${RESET}"
     echo -e "${GREEN}[x]  退出${RESET}"
     
     read_submenu || return
 
     case "$sub" in
-        01) wget --no-check-certificate -O tcpx.sh https://raw.githubusercontent.com/ylx2016/Linux-NetSpeed/master/tcpx.sh && chmod +x tcpx.sh && ./tcpx.sh ; pause_return ;;
+        01) wget -N https://gitlab.com/fscarmen/warp/-/raw/main/menu.sh && bash menu.sh ; pause_return ;;
         02) wget http://sh.nekoneko.cloud/tools.sh -O tools.sh && bash tools.sh ; pause_return ;;
-        03) wget -N https://gitlab.com/fscarmen/warp/-/raw/main/menu.sh && bash menu.sh ; pause_return ;;
+        03) wget --no-check-certificate -O tcpx.sh https://raw.githubusercontent.com/ylx2016/Linux-NetSpeed/master/tcpx.sh && chmod +x tcpx.sh && ./tcpx.sh ; pause_return ;;
         04)  bash <(curl -fsSL "https://raw.githubusercontent.com/Eric86777/vps-tcp-tune/main/install-alias.sh?$(date +%s)") ; pause_return ;;
         05) bash <(curl -sL https://raw.githubusercontent.com/yahuisme/network-optimization/main/script.sh) ; pause_return ;;
         0) return ;;
