@@ -37,7 +37,9 @@ fi
 # ================== 菜单函数 ==================
 menu() {
     clear
-    echo -e "${ORANGE}===Alpine系统管理菜单===${RESET}"
+    echo -e "${ORANGE}╔══════════════════════╗${RESET}"
+    echo -e "${ORANGE}      Alpine工具箱     ${RESET}"
+    echo -e "${ORANGE}╚══════════════════════╝${RESET}"
     echo -e "${YELLOW}[01] 系统更新${RESET}"
     echo -e "${YELLOW}[02] 修改SSH端口${RESET}"
     echo -e "${YELLOW}[03] 防火墙管理${RESET}"
@@ -48,7 +50,7 @@ menu() {
     echo -e "${YELLOW}[08] 修改主机名${RESET}"
     echo -e "${YELLOW}[09] Docker管理${RESET}"
     echo -e "${YELLOW}[10] 代理协议${RESET}"
-    echo -e "${YELLOW}[11] 3XUI面板${RESET}"
+    echo -e "${YELLOW}[11] 3X-UI面板${RESET}"
     echo -e "${YELLOW}[12] Realm转发${RESET}"
     echo -e "${YELLOW}[13] 应用商店${RESET}"
     echo -e "${GREEN}[88] 更新脚本${RESET}"
