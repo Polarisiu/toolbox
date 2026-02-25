@@ -35,6 +35,7 @@ bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/tool/ins
   * **备份/恢复**
   * **更新/卸载**
     
+### 操作流程
 
 1.  运行安装命令后，脚本会自动安装并配置快捷命令。
 2.  输入 `m` 或 `M` 打开工具箱主菜单。
