@@ -70,15 +70,22 @@ services:
 EOF
 
     if [[ "$protect" =~ ^[Yy]$ ]]; then
-        read -rp "AUTH_SECRET (推荐随机40+字符): " AUTH_SECRET
-        read -rp "用户名: " CREDENTIAL_USERNAME
-        read -rp "密码: " CREDENTIAL_PASSWORD
-        cat > "$ENV_FILE" <<EOF
+    read -rp "AUTH_SECRET (回车自动生成随机40字符): " AUTH_SECRET
+    if [[ -z "$AUTH_SECRET" ]]; then
+        # 自动生成 40 字符随机字符串
+        AUTH_SECRET=$(head -c 30 /dev/urandom | base64 | tr -dc 'a-zA-Z0-9' | head -c 40)
+        echo "已生成 AUTH_SECRET: $AUTH_SECRET"
+    fi
+
+    read -rp "用户名: " CREDENTIAL_USERNAME
+    read -rp "密码: " CREDENTIAL_PASSWORD
+
+    cat > "$ENV_FILE" <<EOF
 AUTH_SECRET=$AUTH_SECRET
 CREDENTIAL_USERNAME=$CREDENTIAL_USERNAME
 CREDENTIAL_PASSWORD=$CREDENTIAL_PASSWORD
 EOF
-    fi
+fi
 
     cd "$APP_DIR" || exit
     docker compose up -d
