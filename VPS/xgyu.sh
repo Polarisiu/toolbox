@@ -10,7 +10,7 @@ if [ "$EUID" -ne 0 ]; then
     echo -e "${RED}请使用 root 权限运行此脚本${RESET}"
     exit 1
 fi
-
+clear
 echo -e "${GREEN}=== VPS 字体切换工具 ===${RESET}"
 echo -e "${GREEN}1) 切换到中文字体${RESET}"
 echo -e "${GREEN}2) 切换到英文字体${RESET}"
