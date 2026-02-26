@@ -182,6 +182,7 @@ declare -A apps=(
     [12,5]="Antigravity Tools "
     [12,6]="CLI Proxy API"
     [12,7]="ClawBot"
+    [12,8]="gcli2api"
 
 )
 
@@ -324,6 +325,7 @@ declare -A commands=(
     [12,5]='bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Docker/AntigravityManager.sh)'
     [12,6]='bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Docker/CLIProxyAPI.sh)'
     [12,7]='bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Docker/Clawbot.sh)'
+    [12,8]='bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Docker/gcli2api.sh)'
 )
 
 # ================== 菜单显示函数 ==================
