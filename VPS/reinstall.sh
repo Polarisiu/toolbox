@@ -66,14 +66,16 @@ while true; do
         fi
         echo -e "${YELLOW}${id}. ${name}${RESET}"
     done
-    echo -e "${RED}00. 退出${RESET}"
+    echo -e "${RED} 0. 退出${RESET}"
 
     # 用户选择编号
     read -p "$(echo -e ${GREEN}请输入选项: ${RESET})" num_choice
 
-    if [[ "$num_choice" == "00" ]]; then
+    # 支持 0 或 00 退出
+    if [[ "$num_choice" == "0" || "$num_choice" == "00" ]]; then
         exit 0
     fi
+
 
     found=0
     for sys in "${systems[@]}"; do
