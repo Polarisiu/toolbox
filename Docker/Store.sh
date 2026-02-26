@@ -137,6 +137,7 @@ declare -A apps=(
     [7,8]="初春图床"
     [7,9]="nodeimage图床"
     [7,10]="Telegram云图床Pro"
+    [7,11]="xg-icons-hub 图标"
     [8,1]="2FAuth自托管二步验证器"
     [8,2]="gh-proxyGithub文件加速"
     [8,3]="HubP轻量级Docker镜像加速"
@@ -183,6 +184,7 @@ declare -A apps=(
     [12,6]="CLI Proxy API"
     [12,7]="ClawBot"
     [12,8]="gcli2api"
+    [12,9]="Sub2API"
 
 )
 
@@ -280,6 +282,7 @@ declare -A commands=(
     [7,8]='bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Docker/OneImg.sh)'
     [7,9]='bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Docker/NodeImage.sh)'
     [7,10]='bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Docker/TelegramImageBed.sh)'
+    [7,11]='bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Docker/XGIconsHub.sh)'
     [8,1]='bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Docker/2fauth.sh)'
     [8,2]='bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Docker/fdgit.sh)'
     [8,3]='bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Docker/dockhub.sh)'
@@ -326,6 +329,7 @@ declare -A commands=(
     [12,6]='bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Docker/CLIProxyAPI.sh)'
     [12,7]='bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Docker/Clawbot.sh)'
     [12,8]='bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Docker/gcli2api.sh)'
+    [12,9]='bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Docker/sub2api.sh)'
 )
 
 # ================== 菜单显示函数 ==================
