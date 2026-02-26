@@ -1,13 +1,12 @@
 #!/bin/bash
 # =========================================
-# 企业级系统清理脚本（兼容容器 + Docker）
+# 企业级系统清理脚本（兼容容器 + Docker + 自动处理 GRUB）
 # =========================================
 
 GREEN="\033[32m"
 YELLOW="\033[33m"
 RED="\033[31m"
 RESET="\033[0m"
-
 
 # 必须 root
 if [ "$EUID" -ne 0 ]; then
@@ -25,22 +24,15 @@ wait_for_lock() {
     done
 }
 
-
 # 检查容器环境
 IS_CONTAINER=0
 if systemd-detect-virt --quiet; then
     IS_CONTAINER=1
 fi
 
-
 # 显示磁盘空间
-
-# 获取根目录磁盘信息
 df -h / | tail -n +2 | while read fs size used avail usep mount; do
-    # 去掉 % 符号
     use_percent=${usep%\%}
-
-    # 根据使用率选择颜色
     if [ "$use_percent" -lt 60 ]; then
         color=$GREEN
     elif [ "$use_percent" -lt 80 ]; then
@@ -48,16 +40,16 @@ df -h / | tail -n +2 | while read fs size used avail usep mount; do
     else
         color=$RED
     fi
-
-    # 输出彩色提示
     echo -e "${YELLOW}磁盘空间:${RESET} ${color}$usep${RESET} ${YELLOW}已使用 (挂载点: $mount, 总大小: $size, 可用: $avail)${RESET}"
 done
-
 
 # ===============================
 # 系统清理
 # ===============================
 clean_system() {
+    # 避免 grub-pc 弹出交互界面
+    export DEBIAN_FRONTEND=noninteractive
+
     if command -v apt &>/dev/null; then
         echo -e "${GREEN}检测到 APT 系统${RESET}"
         wait_for_lock "APT" /var/lib/dpkg/lock-frontend
@@ -66,6 +58,7 @@ clean_system() {
         apt autoremove --purge -y
         apt clean
         apt autoclean
+        # 删除残留配置文件
         dpkg -l | awk '/^rc/ {print $2}' | xargs -r apt purge -y
         if [ "$IS_CONTAINER" -eq 0 ]; then
             # 安全删除旧内核
