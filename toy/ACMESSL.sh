@@ -76,10 +76,6 @@ install_cert(){
     green "证书安装完成"
     green "路径: $SSL_DIR/$domain/"
     
-    # 自动重载 nginx（存在就重载，没安装就跳过）
-    if command -v nginx >/dev/null 2>&1; then
-        systemctl is-active nginx >/dev/null 2>&1 && systemctl reload nginx && green "Nginx 已自动重载"
-    fi
 }
 
 # ===============================
@@ -127,17 +123,11 @@ dns_issue(){
 
 
 # ===============================
-# 续期所有证书并自动重载 Nginx（如果存在）
+# 续期所有证书
 # ===============================
 renew_all(){
     $ACME_HOME/acme.sh --cron -f
     green "全部证书已尝试续期"
-
-    # 自动重载 nginx
-    if command -v nginx >/dev/null 2>&1; then
-        systemctl is-active nginx >/dev/null 2>&1 && systemctl reload nginx && green "Nginx 已自动重载"
-    fi
-}
 
 # ===============================
 # 删除证书
@@ -171,11 +161,17 @@ remove_cert(){
 # 卸载 acme.sh
 # ===============================
 uninstall_acme(){
-    [ -f "$ACME_HOME/acme.sh" ] && $ACME_HOME/acme.sh --uninstall >/dev/null 2>&1
-    rm -rf $ACME_HOME
-    rm -rf etc/acme
-    [ -f ~/.bashrc ] && sed -i '/acme.sh.env/d' ~/.bashrc
-    [ -f ~/.profile ] && sed -i '/acme.sh.env/d' ~/.profile
+    # 卸载 acme.sh 本身
+    [ -f "$ACME_HOME/acme.sh" ] && "$ACME_HOME/acme.sh" --uninstall >/dev/null 2>&1
+    
+    # 删除安装目录
+    [ -d "$ACME_HOME" ] && rm -rf "$ACME_HOME"
+    [ -d "/etc/acme" ] && rm -rf "/etc/acme"
+    
+    # 清理 shell 环境变量
+    [ -f "$HOME/.bashrc" ] && sed -i '/acme.sh.env/d' "$HOME/.bashrc"
+    [ -f "$HOME/.profile" ] && sed -i '/acme.sh.env/d' "$HOME/.profile"
+    
     green "acme.sh 已彻底卸载"
 }
 
