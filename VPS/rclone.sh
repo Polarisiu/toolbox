@@ -25,7 +25,6 @@ CRON_PREFIX="# rclone_sync_task:"
 
 # ================== 首次运行下载远程脚本 ==================
 if [[ ! -f "$REMOTE_SCRIPT_PATH" ]]; then
-    echo -e "${CYAN}📥 首次运行，下载远程脚本...${RESET}"
     curl -fsSL "https://raw.githubusercontent.com/sistarry/toolbox/main/VPS/rclone.sh" -o "$REMOTE_SCRIPT_PATH"
     chmod +x "$REMOTE_SCRIPT_PATH"
     exec "$REMOTE_SCRIPT_PATH"
