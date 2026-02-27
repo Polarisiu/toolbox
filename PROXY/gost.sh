@@ -7,7 +7,7 @@ RESET="\033[0m"
 menu() {
     clear
     echo -e "${GREEN}=== GOST 安装菜单 ===${RESET}"
-    echo -e "${GREEN}1) EZGost安装${RESET}"
+    echo -e "${GREEN}1) EZGost${RESET}"
     echo -e "${GREEN}2) GOSTPanel${RESET}"
     echo -e "${GREEN}0) 退出${RESET}"
     read -p $'\033[32m请选择操作: \033[0m' choice
