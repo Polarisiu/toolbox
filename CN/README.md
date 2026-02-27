@@ -26,3 +26,8 @@ bash <(curl -sL https://v6.gh-proxy.org/https://raw.githubusercontent.com/sistar
 ```bash
 bash <(curl -sL https://v6.gh-proxy.org/https://raw.githubusercontent.com/sistarry/toolbox/main/Docker/Docker.sh)
 ```
+
+### 国内VPS 一键DD Debian12脚本
+```bash
+bash <(curl -sL https://v6.gh-proxy.org/https://raw.githubusercontent.com/sistarry/toolbox/main/CN/CNdddebian.sh)
+```
