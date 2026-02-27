@@ -54,7 +54,6 @@ read_choice() {
             pause
             ;;
         0)
-            echo -e "${GREEN}退出...${RESET}"
             exit 0
             ;;
         *)
