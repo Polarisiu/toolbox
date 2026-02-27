@@ -237,7 +237,7 @@ while true; do
     echo -e "${YELLOW}[03] EZGost安装${RESET}"
     echo -e "${YELLOW}[04] GOSTPanel${RESET}"
     echo -e "${YELLOW}[05] EZRealm安装${RESET}"
-    echo -e "${YELLOW}[06] realm-xwPF${RESET}"
+    echo -e "${YELLOW}[06] Realm-xwPF${RESET}"
     echo -e "${YELLOW}[07] ZelayRealm转发面板${RESET}"
     echo -e "${YELLOW}[08] Realm转发(Web面板)${RESET}"
     echo -e "${GREEN}[0]  返回${RESET}"
