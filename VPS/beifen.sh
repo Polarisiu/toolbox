@@ -15,7 +15,6 @@ SCRIPT_URL="https://raw.githubusercontent.com/sistarry/toolbox/main/VPS/beifen.s
 SCRIPT_PATH="/opt/vpsbackup/vpsbackup.sh"
 
 if [ ! -f "$SCRIPT_PATH" ]; then
-    echo -e "${GREEN}首次运行，下载脚本到本地...${RESET}"
 
     mkdir -p /opt/vpsbackup
 
@@ -26,7 +25,6 @@ if [ ! -f "$SCRIPT_PATH" ]; then
 
     chmod +x "$SCRIPT_PATH"
 
-    echo -e "${GREEN}安装完成: $SCRIPT_PATH${RESET}"
 
     exec bash "$SCRIPT_PATH" "$@"
 fi
