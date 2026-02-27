@@ -193,7 +193,7 @@ MAIN_MENU=(
 
 # 二级菜单（编号去掉前导零，显示时格式化为两位数）
 SUB_MENU[1]="1 更新系统|2 系统信息|3 修改root密码|4 root密码登录管理|5 root公钥登录管理|6 修改SSH端口|7 修改时区|8 时间同步|9 切换v4V6|10 开放所有端口|11 更换系统源|12 DDdebian12|13 DDwindows10|14 DD飞牛|15 修改语言|16 修改主机名|17 美化命令|18 VPS重启"
-SUB_MENU[2]="19 BBR+TCP智能调参|20 realm-xwPF|21 EZrealm|22 EZgost|23 流量狗|24 FRP工具|25 frpc-manager(客户端管理)|26 easytier组网"
+SUB_MENU[2]="19 BBR+TCP智能调参|20 Realm-xwPF|21 EZRealm|22 EZGost|23 流量狗|24 FRP工具|25 frpc-manager(客户端管理)|26 easytier组网"
 SUB_MENU[3]="27 网络测速 speedtest|28 路由追踪 nexttrace|29 网络性能测试 iperf3|30 网络诊断工具 MTR"
 SUB_MENU[4]="31 Docker管理"
 SUB_MENU[5]="32 系统清理|33 系统组件|34 开发环境|35 添加SWAP|36 DNS管理|37 工作区管理|38 系统监控|39 防火墙管理|40 Fail2ban|41 定时任务"
