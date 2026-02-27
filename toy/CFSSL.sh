@@ -327,7 +327,7 @@ view_sites() {
 # ---------------------------
 while true; do
     clear
-    echo -e "${GREEN}=== Nginx证书反代管理 ===${RESET}"
+    echo -e "${GREEN}=== Cloudflare证书管理 ===${RESET}"
     echo -e "${GREEN}1) 安装Nginx${RESET}"
     echo -e "${GREEN}2) 添加站点配置${RESET}"
     echo -e "${GREEN}3) 修改站点配置${RESET}"
