@@ -6,20 +6,31 @@ RESET="\033[0m"
 
 menu() {
     clear
-    echo -e "${GREEN}=== EZRealm 安装菜单 ===${RESET}"
-    echo -e "${GREEN}1) 国外机 EZRealm 安装${RESET}"
-    echo -e "${GREEN}2) 国内机 EZRealm 安装${RESET}"
+    echo -e "${GREEN}=== Realm 转发管理 ===${RESET}"
+    echo -e "${GREEN}1) realm-xwPF${RESET}"
+    echo -e "${GREEN}2) ZelayRealm转发面板${RESET}"
+    echo -e "${GREEN}3) Realm转发(Web面板)${RESET}"
+    echo -e "${GREEN}4) EZRealm转发${RESET}"
     echo -e "${GREEN}0) 退出${RESET}"
     read -p $'\033[32m请选择操作: \033[0m' choice
     case $choice in
         1)
-            echo -e "${GREEN}正在安装国外机 EZRealm...${RESET}"
-            wget -N https://raw.githubusercontent.com/qqrrooty/EZrealm/main/realm.sh && chmod +x realm.sh && ./realm.sh
+            echo -e "${GREEN}正在国外环境安装 Realm 转发...${RESET}"
+            wget -qO- https://raw.githubusercontent.com/zywe03/realm-xwPF/main/xwPF.sh | sudo bash -s install
             pause
             ;;
         2)
-            echo -e "${GREEN}正在安装国内机 EZRealm...${RESET}"
-            wget -N https://raw.githubusercontent.com/qqrrooty/EZrealm/main/CN/realm.sh && chmod +x realm.sh && ./realm.sh
+            echo -e "${GREEN}正在Zelay Realm转发面板...${RESET}"
+            bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/ZelayRealm.sh)
+            ;;
+        3)
+            echo -e "${GREEN}正在Realm转发(Web面板)...${RESET}"
+            bash <(curl -fsSL https://raw.githubusercontent.com/hiapb/hia-realm/main/install.sh)
+            pause
+            ;;
+        4)
+            echo -e "${GREEN}正在EZRealm转发...${RESET}"
+            wget -N https://raw.githubusercontent.com/qqrrooty/EZrealm/main/realm.sh && chmod +x realm.sh && ./realm.sh
             pause
             ;;
         0)
