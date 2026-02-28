@@ -22,7 +22,7 @@ PLAIN="\033[0m"
 
 # 显示菜单
 show_menu() {
-    echo -e "${GREEN}==== 1panel apps项目管理 ====${PLAIN}"
+    echo -e "${GREEN}==== 1panelapps 项目管理 ====${PLAIN}"
     local i=1
     for key in "${!PROJECTS[@]}"; do
         echo -e "${GREEN}$i) $key${PLAIN}"
