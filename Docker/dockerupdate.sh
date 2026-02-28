@@ -30,14 +30,12 @@ LOG_FILE="/var/log/docker-update.log"
 # 自动下载安装管理器
 # ========================================
 if [ ! -f "$SCRIPT_PATH" ]; then
-    echo -e "${GREEN}🚀 管理器不存在，正在下载到 $SCRIPT_PATH ...${RESET}"
     curl -sL "$SCRIPT_URL" -o "$SCRIPT_PATH"
     if [ $? -ne 0 ]; then
         echo -e "${RED}❌ 下载失败，请检查网络或 URL${RESET}"
         exit 1
     fi
     chmod +x "$SCRIPT_PATH"
-    echo -e "${GREEN}✅ 下载完成，脚本已赋权限${RESET}"
 fi
 
 # ========================================
