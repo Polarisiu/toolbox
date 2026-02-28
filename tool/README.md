@@ -28,7 +28,7 @@ bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/tool/ins
   * **网络检测**
   * **Docker管理**
   * **应用商店**
-  * **证书安全**
+  * **证书管理**
   * **系统管理**
   * **工具箱合集**
   * **玩具熊ʕ•ᴥ•ʔ**
