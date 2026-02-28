@@ -52,7 +52,7 @@ done
 read -p "$(echo -e "\n${GREEN}请输入要杀掉的序号（多个用空格分开，输入 0 退出）: ${RESET}")" SELECTION
 
 if [[ "$SELECTION" == "0" || -z "$SELECTION" ]]; then
-    echo -e "${GREEN}未操作，退出脚本${RESET}"
+    echo -e "${GREEN}未操作，退出${RESET}"
     exit 0
 fi
 
