@@ -13,7 +13,7 @@ BOLD="\033[1m"
 # ================== 用户输入端口 ==================
 read -p "$(echo -e "${GREEN}请输入要释放的端口号: ${RESET}")" PORT
 if [[ -z "$PORT" ]]; then
-    echo -e "${RED}端口号不能为空，退出脚本${RESET}"
+    echo -e "${RED}端口号不能为空，退出${RESET}"
     exit 1
 fi
 
