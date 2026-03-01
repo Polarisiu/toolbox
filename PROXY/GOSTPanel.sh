@@ -6,21 +6,20 @@ RESET="\033[0m"
 
 menu() {
     clear
-    echo -e "${GREEN}=== GOST Panel ===${RESET}"
-    echo -e "${GREEN}1) 安装${RESET}"
-    echo -e "${GREEN}2) 卸载${RESET}"
+    echo -e "${GREEN}=== GOSTPanel ===${RESET}"
+    echo -e "${GREEN}1) 安装面板${RESET}"
+    echo -e "${GREEN}2) 卸载节点${RESET}"
     echo -e "${GREEN}0) 退出${RESET}"
     read -p $'\033[32m请选择操作: \033[0m' choice
     case $choice in
         1)
             echo -e "${GREEN}正在安装...${RESET}"
-            curl -fsSL https://raw.githubusercontent.com/AliceNetworks/gost-panel/main/scripts/install.sh | bash
+            bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/GostPanel.sh)
             pause
             ;;
         2)
             echo -e "${GREEN}正在卸载...${RESET}"
-            curl -fsSL -o uninstall.sh https://raw.githubusercontent.com/AliceNetworks/gost-panel/main/scripts/uninstall.sh
-            bash uninstall.sh
+            bash <(curl -sSL https://raw.githubusercontent.com/code-gopher/gostPanel/master/scripts/install_node.sh) uninstall
             pause
             ;;
         0)
