@@ -80,8 +80,13 @@ show_menu() {
 
 # 安装 anytls
 install_anytls() {
-    read -p "请输入监听端口 [默认8443]: " PORT
-    PORT=${PORT:-8443}
+
+    DEFAULT_PORT=$((RANDOM%50000+10000))
+
+    read -p "请输入监听端口 [默认随机:${DEFAULT_PORT}]: " PORT
+    PORT=${PORT:-$DEFAULT_PORT}
+
+    echo "使用端口: $PORT"
 
     echo "[1/5] 下载 anytls..."
     wget "$DOWNLOAD_URL" -O "$ZIP_FILE" || { echo "下载失败！"; pause_return; return; }
@@ -121,8 +126,8 @@ EOF
     echo -e "\n${GREEN}√ 安装完成！${RESET}"
     echo -e "${GREEN}√ 端口: $PORT${RESET}"
     echo -e "${GREEN}√ 密码: $PASSWORD${RESET}"
-    echo -e "${GREEN}V2rayN:anytls://$PASSWORD@$SERVER_IP:$PORT/?insecure=1#$HOSTNAME${GREEN}"
-    echo -e "${GREEN}Surge :$HOSTNAME = anytls, $SERVER_IP, $PORT, password=$PASSWORD, tfo=true, skip-cert-verify=true, reuse=false${GREEN}"
+    echo -e "${GREEN}V2rayN: anytls://$PASSWORD@$SERVER_IP:$PORT/?insecure=1#$HOSTNAME${GREEN}"
+    echo -e "${GREEN}Surge : $HOSTNAME = anytls, $SERVER_IP, $PORT, password=$PASSWORD, tfo=true, skip-cert-verify=true, reuse=false${GREEN}"
 
     pause_return
 }
