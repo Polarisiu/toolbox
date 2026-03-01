@@ -4,7 +4,7 @@ GREEN="\033[32m"
 RED="\033[31m"
 RESET="\033[0m"
 
-BASE_DIR="/opt/flux-panel"
+BASE_DIR="/root/flux-panel"
 
 # ==============================
 # 初始化目录
@@ -58,7 +58,6 @@ install_node() {
 menu() {
     clear
     echo -e "${GREEN}=== 哆啦A梦面板管理菜单 ===${RESET}"
-    echo -e "${GREEN}安装目录: $BASE_DIR${RESET}"
     echo -e "${GREEN}1) 面板管理${RESET}"
     echo -e "${GREEN}2) 节点管理${RESET}"
     echo -e "${GREEN}0) 退出${RESET}"
