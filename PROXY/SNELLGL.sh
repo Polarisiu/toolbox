@@ -206,14 +206,17 @@ show_all_status() {
     for node in "$APP_DIR"/*; do
         [ -d "$node" ] || continue
         NODE_NAME=$(basename "$node")
-        PORT=$(grep -oP '^\s+- "\K[0-9]+(?=:)' "$node/docker-compose.yml")
+
+        # 从 environment 读取 PORT
+        PORT=$(grep 'PORT:' "$node/docker-compose.yml" | awk -F\" '{print $2}')
+
         STATUS=$(docker ps --filter "name=$NODE_NAME" --format "{{.Status}}")
         [ -z "$STATUS" ] && STATUS="未启动"
-        echo -e "${GREEN}$NODE_NAME${RESET} | ${YELLOW}端口: ${RESET}${YELLOW}$PORT${RESET} | ${YELLOW}状态: ${STATUS}${RESET}"
+
+        echo -e "${GREEN}$NODE_NAME${RESET} | ${YELLOW}端口: ${PORT}${RESET} | ${YELLOW}状态: ${STATUS}${RESET}"
     done
     read -r -p $'\033[32m按回车返回菜单...\033[0m'
 }
-
 menu() {
     while true; do
         clear
