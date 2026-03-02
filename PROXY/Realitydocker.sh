@@ -1,6 +1,6 @@
 #!/bin/bash
 # ========================================
-# Xray Reality 一键管理脚本
+# Xray Reality 一键管理脚本 (Host 模式 + Xray-Reality 容器名, 去掉 DNS)
 # ========================================
 
 GREEN="\033[32m"
@@ -12,6 +12,7 @@ APP_NAME="xray-reality"
 APP_DIR="/root/$APP_NAME"
 COMPOSE_FILE="$APP_DIR/compose.yml"
 CONFIG_FILE="$APP_DIR/config.json"
+CONTAINER_NAME="Xray-Reality"
 
 check_docker() {
     if ! command -v docker &>/dev/null; then
@@ -22,21 +23,6 @@ check_docker() {
         echo -e "${RED}未检测到 Docker Compose v2，请升级 Docker${RESET}"
         exit 1
     fi
-}
-
-generate_keys() {
-    UUID=$(docker run --rm ghcr.io/xtls/xray-core:latest uuid)
-    read -p "是否自动生成 Reality 密钥对？[Y/n]: " keygen
-    keygen=${keygen:-Y}
-    if [[ "$keygen" =~ ^[Yy]$ ]]; then
-        X25519=$(docker run --rm ghcr.io/xtls/xray-core:latest x25519)
-        PRIVATE_KEY=$(echo "$X25519" | awk 'NR==1{print $1}')
-        PUBLIC_KEY=$(echo "$X25519" | awk 'NR==2{print $1}')
-    else
-        read -p "请输入 PrivateKey: " PRIVATE_KEY
-        read -p "请输入 PublicKey: " PUBLIC_KEY
-    fi
-    SHORT_ID=$(openssl rand -hex 8)
 }
 
 menu() {
@@ -78,7 +64,6 @@ install_app() {
     }
 
     read -p "请输入监听端口 [默认随机]: " PORT
-
     if [[ -z "$PORT" ]]; then
         PORT=$(random_port)
         echo -e "已自动生成未占用端口: ${PORT}"
@@ -88,9 +73,7 @@ install_app() {
     DOMAIN=${DOMAIN:-itunes.apple.com}
 
     UUID=$(docker run --rm ghcr.io/xtls/xray-core:latest uuid)
-
     X25519=$(docker run --rm ghcr.io/xtls/xray-core:latest x25519)
-
     PRIVATE_KEY=$(echo "$X25519" | grep "PrivateKey" | awk -F': ' '{print $2}')
     PUBLIC_KEY=$(echo "$X25519"  | grep "Password"   | awk -F': ' '{print $2}')
 
@@ -101,27 +84,13 @@ install_app() {
 
     SHORT_ID=$(openssl rand -hex 8)
 
-    read -p "请输入 DNS（逗号分隔，默认 8.8.8.8,1.1.1.1）: " DNS_INPUT
-    DNS_INPUT=${DNS_INPUT:-8.8.8.8,1.1.1.1}
-
-    # 转换为 JSON 数组格式
-    IFS=',' read -ra DNS_ARRAY <<< "$DNS_INPUT"
-
-    DNS_SERVERS="["
-    for dns in "${DNS_ARRAY[@]}"; do
-        DNS_SERVERS+="\"${dns}\","
-    done
-    DNS_SERVERS="${DNS_SERVERS%,}]"
-
+    # 生成配置文件（去掉 DNS）
     cat > "$CONFIG_FILE" <<EOF
 {
   "log": {
     "access": "/var/log/xray/access.log",
     "error": "/var/log/xray/error.log",
     "loglevel": "warning"
-  },
-  "dns": {
-    "servers": $DNS_SERVERS
   },
   "inbounds": [
     {
@@ -158,17 +127,17 @@ install_app() {
 }
 EOF
 
+    # 生成 compose 文件 (host 模式)
     cat > "$COMPOSE_FILE" <<EOF
 services:
   xray:
     image: ghcr.io/xtls/xray-core:latest
-    container_name: xray
+    container_name: Xray-Reality
     restart: unless-stopped
+    network_mode: host
     command: ["run","-c","/etc/xray/config.json"]
     volumes:
       - ./config.json:/etc/xray/config.json:ro
-    ports:
-      - "$PORT:$PORT/tcp"
 EOF
 
     cd "$APP_DIR" || exit
@@ -184,6 +153,7 @@ EOF
     echo -e "${YELLOW}${VLESS_LINK}${RESET}"
     read -p "按回车返回菜单..."
 }
+
 update_app() {
     cd "$APP_DIR" || return
     docker compose pull
@@ -193,24 +163,24 @@ update_app() {
 }
 
 restart_app() {
-    docker restart xray
+    docker restart Xray-Reality
     echo -e "${GREEN}✅ Xray Reality 已重启${RESET}"
     read -p "按回车返回菜单..."
 }
 
 view_logs() {
     echo -e "${YELLOW}按 Ctrl+C 退出日志${RESET}"
-    docker logs -f xray
+    docker logs -f Xray-Reality
 }
 
 check_status() {
-    docker ps | grep xray
+    docker ps | grep Xray-Reality
     read -p "按回车返回菜单..."
 }
 
 uninstall_app() {
-    cd "$APP_DIR" || return
-    docker compose down
+    docker stop Xray-Reality
+    docker rm Xray-Reality
     rm -rf "$APP_DIR"
     echo -e "${RED}✅ Xray Reality 已卸载${RESET}"
     read -p "按回车返回菜单..."
