@@ -144,6 +144,7 @@ EOF
 
     echo
     echo -e "${GREEN}📂 安装目录: $APP_DIR${RESET}"
+    echo -e "${GREEN}📄 V6VPS替换IP地址为V6⭐${RESET}"
     echo -e "${GREEN}✅ Socks5 安装完成${RESET}"
     echo
     echo -e "${YELLOW}Socks 地址:${RESET}"
