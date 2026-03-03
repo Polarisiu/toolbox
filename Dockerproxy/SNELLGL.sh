@@ -109,11 +109,12 @@ EOF
 
     IP=$(hostname -I | awk '{print $1}')
     echo -e "${GREEN}📂 安装目录: $NODE_DIR${RESET}"
+    echo -e "${GREEN}📄 V6VPS替换IP地址为V6⭐${RESET}"
     echo -e "${GREEN}✅ 节点 ${NODE_NAME} 已启动${RESET}"
     echo -e "${YELLOW}🌐 端口: ${PORT}${RESET}"
     echo -e "${YELLOW}🔑 PSK: ${PSK}${RESET}"
     echo -e "${YELLOW}📄 客户端配置:${RESET}"
-    echo -e "${YELLOW}$NODE_NAME = snell, ${IP}, ${PORT}, psk=${PSK}, version=5, reuse=true, tfo=${TFO}, ecn=${ECN}${RESET}"
+    echo -e "${YELLOW}${NODE_NAME} = snell, ${IP}, ${PORT}, psk=${PSK}, version=5, reuse=true, tfo=${TFO}, ecn=${ECN}${RESET}"
     read -r -p $'\033[32m按回车返回菜单...\033[0m'
 }
 node_action_menu() {
