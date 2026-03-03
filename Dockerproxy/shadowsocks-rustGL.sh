@@ -113,7 +113,7 @@ install_node() {
     # 生成配置
     cat > "$CONFIG_FILE" <<EOF
 {
-    "server": "0.0.0.0",
+    "server": "::",
     "server_port": $PORT,
     "password": "$PASSWORD",
     "method": "$METHOD",
@@ -157,10 +157,11 @@ EOF
     SS_LINK_V6="ss://${BASE64_V6}"
     echo "————————————————————————————————————————"
     echo "链接 [IPv4]："
-    echo -e "${YELLOW}$SS_LINK_V4${RESET}"
+    echo -e "${YELLOW}$SS_LINK_V4#$HOSTNAME${RESET}"
     echo "链接 [IPv6]："
-    echo -e "${YELLOW}$SS_LINK_V6${RESET}"
+    echo -e "${YELLOW}$SS_LINK_V6#$HOSTNAME${RESET}"
     echo "—————————————————————————"
+     echo -e "${YELLOW}📄 V6VPS替换IP地址为V6⭐${RESET}"
     echo "[信息] Surge 配置："
     echo -e "${YELLOW}$NODE_NAME = ss, $IP4,$PORT, encrypt-method=$METHOD, password=$PASSWORD, tfo=true, udp-relay=true, ecn=true${RESET}"
     echo
@@ -208,19 +209,42 @@ batch_action() {
     echo -e "${GREEN}0) 返回${RESET}"
 
     read -r -p $'\033[32m请选择操作:\033[0m ' choice
-    [[ "$choice" == "0" ]] && return
+
+    # ===== 合法性判断 =====
+    case "$choice" in
+        1|2|3|4) ;;
+        0) return ;;
+        *)
+            echo -e "${RED}无效选择${RESET}"
+            sleep 1
+            return
+            ;;
+    esac
 
     declare -A NODE_MAP
     local count=0
+
     for node in "$APP_DIR"/*; do
         [ -d "$node" ] || continue
         count=$((count+1))
         NODE_MAP[$count]=$(basename "$node")
         echo -e "${GREEN}[$count] ${NODE_MAP[$count]}${RESET}"
     done
-    [ $count -eq 0 ] && { echo -e "${YELLOW}无节点${RESET}"; read -p "按回车返回菜单..."; return; }
+
+    if [ $count -eq 0 ]; then
+        echo -e "${YELLOW}无节点${RESET}"
+        read -p "按回车返回菜单..."
+        return
+    fi
 
     read -r -p $'\033[32m输入序号(空格)或 all:\033[0m ' input
+
+    if [ -z "$input" ]; then
+        echo -e "${YELLOW}未选择节点${RESET}"
+        sleep 1
+        return
+    fi
+
     if [[ "$input" == "all" ]]; then
         SELECTED=("${NODE_MAP[@]}")
     else
@@ -230,15 +254,26 @@ batch_action() {
         done
     fi
 
+    [ ${#SELECTED[@]} -eq 0 ] && {
+        echo -e "${YELLOW}没有有效节点${RESET}"
+        sleep 1
+        return
+    }
+
+    # ===== 执行操作 =====
     for NODE_NAME in "${SELECTED[@]}"; do
         NODE_DIR="$APP_DIR/$NODE_NAME"
+
+        [ -d "$NODE_DIR" ] || continue
         cd "$NODE_DIR" || continue
+
         case $choice in
-            1) docker stop "$NODE_NAME" ;;
-            2) docker restart "$NODE_NAME" ;;
+            1) docker stop "$NODE_NAME" 2>/dev/null ;;
+            2) docker restart "$NODE_NAME" 2>/dev/null ;;
             3) docker compose pull && docker compose up -d ;;
             4) docker compose down && rm -rf "$NODE_DIR" ;;
         esac
+
         echo -e "${GREEN}已操作 $NODE_NAME${RESET}"
     done
 
