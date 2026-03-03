@@ -115,6 +115,7 @@ EOF
     echo -e "${YELLOW}🌐 端口: ${PORT}${RESET}"
     echo -e "${YELLOW}🔐 Secret: ${SECRET}${RESET}"
     echo -e "${GREEN}📂 安装目录: $APP_DIR${RESET}"
+    echo -e "${GREEN}📄 V6VPS替换IP地址为V6⭐${RESET}"
     echo
     echo -e "${GREEN}📎 Telegram 代理链接:${RESET}"
     echo -e "${YELLOW}tg://proxy?server=${SERVER_IP}&port=${PORT}&secret=${SECRET}${RESET}"
