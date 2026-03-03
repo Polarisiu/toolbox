@@ -67,37 +67,63 @@ install_app() {
         [[ "$confirm" != "y" ]] && return
     fi
 
-    # 端口自定义 / 随机
+    # 监听端口
     read -p "请输入监听端口 [1025-65535, 默认随机]: " input_port
-    if [[ -z "$input_port" ]]; then
-        PORT=$(shuf -i 1025-65535 -n1)
-    else
-        PORT=$input_port
-    fi
+    PORT=${input_port:-$(shuf -i 1025-65535 -n1)}
     check_port "$PORT" || return
 
-    # 随机 32 位 PSK
+    # 随机 PSK
     PSK=$(tr -dc A-Za-z0-9 </dev/urandom | head -c32)
 
-    # 可选配置
+    # IPv6 开关
     read -p "是否启用 IPv6 [true/false, 默认 false]: " ipv6
     IPv6=${ipv6:-false}
 
+    # 混淆
     read -p "混淆模式 [off/http, 默认 off]: " obfs
     OBFS=${obfs:-off}
     if [ "$OBFS" = "http" ]; then
-        read -p "请输入混淆 Host [默认 example.com]: " obfs_host
-        OBFS_HOST=${obfs_host:-example.com}
+        read -p "请输入混淆 Host [默认 itunes.apple.com]: " obfs_host
+        OBFS_HOST=${obfs_host:-itunes.apple.com}
     else
         OBFS_HOST=""
     fi
 
+    # TCP Fast Open
     read -p "是否启用 TCP Fast Open [true/false, 默认 true]: " tfo
     TFO=${tfo:-true}
 
-    ECN=true   # 固定开启
+    # ECN
+    ECN=true
 
-    # 生成 Docker Compose 文件 (host 模式, 去掉 DNS)
+    # ========================
+    # 生成 snell-server.conf
+    # ========================
+    CONF_FILE="$APP_DIR/snell-server.conf"
+    cat > "$CONF_FILE" <<EOF
+[snell-server]
+listen = 0.0.0.0:$PORT
+psk = $PSK
+tfo = $TFO
+ecn = $ECN
+EOF
+
+    # 条件写入 IPv6
+    if [[ "$IPv6" == "true" ]]; then
+        echo "listen = [::]:$PORT" >> "$CONF_FILE"
+    fi
+
+    # 条件写入 OBFS
+    if [[ "$OBFS" != "off" ]]; then
+        echo "obfs = $OBFS" >> "$CONF_FILE"
+        if [[ "$OBFS" == "http" && -n "$OBFS_HOST" ]]; then
+            echo "obfs-host = $OBFS_HOST" >> "$CONF_FILE"
+        fi
+    fi
+
+    # ========================
+    # 生成 docker-compose.yml
+    # ========================
     cat > "$COMPOSE_FILE" <<EOF
 services:
   snell-server:
@@ -105,17 +131,12 @@ services:
     container_name: ${CONTAINER_NAME}
     restart: always
     network_mode: host
-    environment:
-      PORT: "${PORT}"
-      PSK: "${PSK}"
-      IPv6: "${IPv6}"
-      OBFS: "${OBFS}"
-      OBFS_HOST: "${OBFS_HOST}"
-      TFO: "${TFO}"
-      ECN: "${ECN}"
+    volumes:
+      - ./snell-server.conf:/app/snell-server.conf:ro
 EOF
 
-    cd "$APP_DIR" || exit
+    # 启动节点
+    cd "$APP_DIR" || return
     docker compose up -d
 
     # 输出客户端配置模板
