@@ -229,7 +229,7 @@ EOF
     echo -e "${YELLOW}📄 V6VPS替换IP地址为V6 ★${RESET}"
     echo -e "${YELLOW}SS + ShadowTLS 小火箭订阅链接：${RESET}"
     echo -e "${YELLOW}----------------------------------${RESET}"
-    echo -e "${YELLOW}${YELLOW}${SS_LINK}${RESET}"
+    echo -e "${YELLOW}${SS_LINK}${RESET}"
     echo -e "${YELLOW}----------------------------------${RESET}"
     echo -e "${YELLOW}Surge配置:${RESET}"
     echo -e "${YELLOW}$NODE_NAME = ss, $IP, $TLS_PORT, encrypt-method=$METHOD, password=$SS_PASSWORD, shadow-tls-password=$TLS_PASSWORD, shadow-tls-sni=$TLS_HOST, shadow-tls-version=3, tfo=true, udp-relay=true, ecn=true ${RESET}"
