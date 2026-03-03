@@ -57,13 +57,8 @@ install_app() {
     check_docker
     mkdir -p "$APP_DIR"
 
-    random_port() {
-        while :; do
-            PORT=$(shuf -i 2000-65000 -n 1)
-            ss -lnt | awk '{print $4}' | grep -q ":$PORT$" || break
-        done
-        echo "$PORT"
-    }
+    read -p "是否启用 IPv6 [true/false 默认 false]: " ipv6
+    IPv6=${ipv6:-false}
 
     read -p "ShadowTLS 对外端口 [默认 8443]: " TLS_PORT
     TLS_PORT=${TLS_PORT:-8443}
@@ -88,10 +83,21 @@ install_app() {
 
     METHOD="2022-blake3-aes-256-gcm"
 
+    # ===== IPv6 / IPv4 地址逻辑 =====
+    if [[ "$IPv6" == "true" ]]; then
+        SS_BIND="::1"
+        LISTEN_ADDR="[::]:${TLS_PORT}"
+        SERVER_ADDR="[::1]:${SS_PORT}"
+    else
+        SS_BIND="127.0.0.1"
+        LISTEN_ADDR="0.0.0.0:${TLS_PORT}"
+        SERVER_ADDR="127.0.0.1:${SS_PORT}"
+    fi
+
     # ================= SS 配置 =================
     cat > "$CONFIG_FILE" <<EOF
 {
-    "server": "127.0.0.1",
+    "server": "$SS_BIND",
     "server_port": $SS_PORT,
     "password": "$SS_PASSWORD",
     "method": "$METHOD",
@@ -120,30 +126,32 @@ services:
     environment:
       - MODE=server
       - V3=1
-      - LISTEN=0.0.0.0:${TLS_PORT}
-      - SERVER=127.0.0.1:${SS_PORT}
+      - LISTEN=${LISTEN_ADDR}
+      - SERVER=${SERVER_ADDR}
       - TLS=${TLS_HOST}:443
       - PASSWORD=${TLS_PASSWORD}
 EOF
 
     cd "$APP_DIR" || exit
-    docker compose -p "$PROJECT_NAME" down 2>/dev/null
+    docker compose down 2>/dev/null
     docker compose up -d
 
     IP4=$(hostname -I | awk '{print $1}')
     HOSTNAME=$(hostname -s | sed 's/ /_/g')
+
     echo
-    echo -e "${GREEN}📂 安装目录: $APP_DIR${RESET}"
+    echo -e "${GREEN}Shadowsocks + ShadowTLS部署完成${RESET}"
     echo "=============================="
-    echo "Shadowsocks + ShadowTLS 已部署"
     echo "服务器IP: $IP4"
-    echo "端口: $TLS_PORT"
+    echo "对外端口: $TLS_PORT"
     echo "加密方式: $METHOD"
     echo "SS密码: $SS_PASSWORD"
     echo "ShadowTLS密码: $TLS_PASSWORD"
     echo "SNI: $TLS_HOST"
+    echo "IPv6模式: $IPv6"
     echo "=============================="
-
+    echo -e "${GREEN}📂 安装目录: $APP_DIR${RESET}"
+    echo -e "${YELLOW}📄 V6VPS替换IP地址为V6⭐${RESET}"
     # 生成 ss 链接
     BASE=$(echo -n "${METHOD}:${SS_PASSWORD}@${IP4}:${TLS_PORT}" | base64 -w 0)
 
@@ -170,18 +178,22 @@ update_app() {
 }
 
 restart_app() {
-    docker restart shadowsocks
-    echo -e "${GREEN}✅ ShadowsocksRust+shadow-tls 已重启${RESET}"
+    cd "$APP_DIR" || return
+    docker compose restart
+    echo -e "${GREEN}✅ ShadowsocksRust+shadow-tls 全部已重启${RESET}"
     read -p "按回车返回菜单..."
 }
 
 view_logs() {
+    cd "$APP_DIR" || return
     echo -e "${YELLOW}按 Ctrl+C 退出日志${RESET}"
-    docker logs -f shadowsocks
+    docker compose logs -f
 }
 
 check_status() {
-    docker ps | grep shadowsocks
+    cd "$APP_DIR" || return
+    echo -e "${GREEN}=== 容器状态 ===${RESET}"
+    docker compose ps
     read -p "按回车返回菜单..."
 }
 
