@@ -9,7 +9,7 @@ RED="\033[31m"
 RESET="\033[0m"
 
 APP_NAME="shadowsocks-rust"
-APP_DIR="/opt/$APP_NAME"
+APP_DIR="/root/$APP_NAME"
 METHOD="2022-blake3-aes-256-gcm"
 
 # =========================
