@@ -13,7 +13,7 @@ BOLD="\033[1m"
 ORANGE='\033[38;5;208m'
 
 SCRIPT_PATH="/root/proxy.sh"
-SCRIPT_URL="https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/proxy.sh"
+SCRIPT_URL=" https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/proxy.sh"
 BIN_LINK_DIR="/usr/local/bin"
 
 if [[ $EUID -ne 0 ]]; then
@@ -91,6 +91,8 @@ main_menu() {
     echo -e "${YELLOW}[05] 组网管理类${RESET}"
     echo -e "${YELLOW}[06] 网络优化类${RESET}"
     echo -e "${YELLOW}[07] DNS 解锁类${RESET}"
+    echo -e "${YELLOW}[08] Docker单协议类${RESET}"
+    echo -e "${YELLOW}[09] Docker多协议类${RESET}"
     echo -e "${GREEN}[88] 更新脚本${RESET}"
     echo -e "${GREEN}[99] 卸载脚本${RESET}"
     echo -e "${YELLOW}[00] 退出${RESET}"
@@ -105,6 +107,8 @@ main_menu() {
         05) zwpanel_menu ;;
         06) network_menu ;;
         07) dns_menu ;;
+        08) docker_menu ;;
+        09) dockers_menu ;;
         88) update_script ; pause_return ;;
         99) uninstall_script ;;
         00) exit 0 ;;
@@ -348,6 +352,92 @@ while true; do
         02) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/DNSjiesuo.sh) ; pause_return ;;
         03) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/Dnsmasqsniproxy.sh) ; pause_return ;;
         04) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/VPS/unlockdns.sh) ; pause_return ;;
+        0) return ;;
+        *) echo -e "${RED}无效选项${RESET}"; sleep 1 ;;
+    esac
+done
+}
+
+# =============================
+# 二级菜单：Docker单协议类
+# ===========================
+docker_menu() {
+while true; do
+    clear
+    echo -e "${ORANGE}╔══════════════════════╗${RESET}"
+    echo -e "${ORANGE}      Docker单协议类     ${RESET}"
+    echo -e "${ORANGE}╚══════════════════════╝${RESET}"
+    echo -e "${YELLOW}[01] SS2022${RESET}"
+    echo -e "${YELLOW}[02] SS2022+TLS${RESET}"
+    echo -e "${YELLOW}[03] Reality${RESET}"
+    echo -e "${YELLOW}[04] Snell${RESET}"
+    echo -e "${YELLOW}[05] Snell+TLS${RESET}"
+    echo -e "${YELLOW}[06] Vmess+WS+TLS${RESET}"
+    echo -e "${YELLOW}[07] Anytls${RESET}"
+    echo -e "${YELLOW}[08] Hysteria2${RESET}"
+    echo -e "${YELLOW}[09] Tuicv5${RESET}"
+    echo -e "${YELLOW}[10] MTProto${RESET}"
+    echo -e "${YELLOW}[11] Socks5${RESET}"
+    echo -e "${GREEN}[0]  返回${RESET}"
+    echo -e "${GREEN}[x]  退出${RESET}"
+    
+    read_submenu || return
+
+    case "$sub" in
+        01) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Dockerproxy/SSRust2022D.sh) ; pause_return ;;
+        02) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Dockerproxy/SSRust-tlsD.sh) ; pause_return ;;
+        03) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Dockerproxy/Xray-RealityD.sh) ; pause_return ;;
+        04) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Dockerproxy/snell-serverD.sh) ; pause_return ;;
+        05) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Dockerproxy/snelltls-serverD.sh) ; pause_return ;;
+        06) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Dockerproxy/Xray-VmesswstlsD.sh) ; pause_return ;;
+        07) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Dockerproxy/AnyTLSD.sh) ; pause_return ;;
+        08) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Dockerproxy/hysteria2D.sh) ; pause_return ;;
+        09) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Dockerproxy/Singbox-TUICv5D.sh) ; pause_return ;;
+        10) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Dockerproxy/MTProtoD.sh) ; pause_return ;;
+        11) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Dockerproxy/Xray-Socks5D.sh) ; pause_return ;;
+        0) return ;;
+        *) echo -e "${RED}无效选项${RESET}"; sleep 1 ;;
+    esac
+done
+}
+
+# =============================
+# 二级菜单：Docker多协议类
+# =============================
+dockers_menu() {
+while true; do
+    clear
+    echo -e "${ORANGE}╔══════════════════════╗${RESET}"
+    echo -e "${ORANGE}      Docker多协议类     ${RESET}"
+    echo -e "${ORANGE}╚══════════════════════╝${RESET}"
+    echo -e "${YELLOW}[01] SS2022${RESET}"
+    echo -e "${YELLOW}[02] SS2022+TLS${RESET}"
+    echo -e "${YELLOW}[03] Reality${RESET}"
+    echo -e "${YELLOW}[04] Snell${RESET}"
+    echo -e "${YELLOW}[05] Snell+TLS${RESET}"
+    echo -e "${YELLOW}[06] Vmess+WS+TLS${RESET}"
+    echo -e "${YELLOW}[07] Anytls${RESET}"
+    echo -e "${YELLOW}[08] Hysteria2${RESET}"
+    echo -e "${YELLOW}[09] Tuicv5${RESET}"
+    echo -e "${YELLOW}[10] MTProto${RESET}"
+    echo -e "${YELLOW}[11] Socks5${RESET}"
+    echo -e "${GREEN}[0]  返回${RESET}"
+    echo -e "${GREEN}[x]  退出${RESET}"
+    
+    read_submenu || return
+
+    case "$sub" in
+        01) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Dockerproxy/SSRust2022GLD.sh) ; pause_return ;;
+        02) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Dockerproxy/SSRust-tlsGLD.sh) ; pause_return ;;
+        03) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Dockerproxy/Xray-RealityGLD.sh) ; pause_return ;;
+        04) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Dockerproxy/snell-serverGLD.sh) ; pause_return ;;
+        05) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Dockerproxy/snelltls-serverGLD.sh) ; pause_return ;;
+        06) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Dockerproxy/Xray-VmesswstlsGLD.sh) ; pause_return ;;
+        07) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Dockerproxy/AnyTLSGLD.sh) ; pause_return ;;
+        08) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Dockerproxy/hysteria2GLD.sh) ; pause_return ;;
+        09) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Dockerproxy/Singbox-TUICv5GLD.sh) ; pause_return ;;
+        10) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Dockerproxy/MTProtoGLD.sh) ; pause_return ;;
+        11) bash <(curl -sL https://raw.githubusercontent.com/sistarry/toolbox/main/Dockerproxy/Xray-Socks5GLD.sh) ; pause_return ;;
         0) return ;;
         *) echo -e "${RED}无效选项${RESET}"; sleep 1 ;;
     esac
