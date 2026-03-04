@@ -30,20 +30,7 @@ menu_hui() {
             1)
                 echo -e "${yellow}正在安装 H-UI 面板...${reset}"
                 bash <(curl -fsSL https://raw.githubusercontent.com/jonssonyan/h-ui/main/install.sh)
-
-                # 生成随机用户名和密码
-                USERNAME=$(random_str)
-                PASSWORD=$(random_str)
-                CONNECT_PASS="${USERNAME}.${PASSWORD}"
-
-                echo -e "\n${green}✅ 安装完成${reset}"
-                echo -e "${yellow}======== H-UI 面板信息 ========${reset}"
-                echo -e "${green}面板端口: 8081${reset}"
-                echo -e "${green}SSH 本地转发端口: 8082${reset}"
-                echo -e "${green}登录用户名/密码: ${USERNAME} / ${PASSWORD}${reset}"
-                echo -e "${green}连接密码: ${CONNECT_PASS}${reset}"
-                echo -e "${yellow}================================${reset}"
-                pause_and_return
+                exit 0
                 ;;
             2)
                 echo -e "${yellow}正在卸载 H-UI 面板...${reset}"
