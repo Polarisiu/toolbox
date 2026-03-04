@@ -12,10 +12,24 @@ APP_DIR="/opt/$APP_NAME"
 COMPOSE_FILE="$APP_DIR/docker-compose.yml"
 CONFIG_FILE="$APP_DIR/config.env"
 
-# 获取公网 IP
-get_ip() {
-    curl -s ifconfig.me || curl -s ip.sb || hostname -I | awk '{print $1}' || echo "127.0.0.1"
+
+get_public_ip() {
+    local ip
+    for cmd in "curl -4s --max-time 5" "wget -4qO- --timeout=5"; do
+        for url in "https://api.ipify.org" "https://ip.sb" "https://checkip.amazonaws.com"; do
+            ip=$($cmd "$url" 2>/dev/null) && [[ -n "$ip" ]] && echo "$ip" && return
+        done
+    done
+    for cmd in "curl -6s --max-time 5" "wget -6qO- --timeout=5"; do
+        for url in "https://api64.ipify.org" "https://ip.sb"; do
+            ip=$($cmd "$url" 2>/dev/null) && [[ -n "$ip" ]] && echo "$ip" && return
+        done
+    done
+    echo "无法获取公网 IP 地址。"
 }
+
+# 获取公网 IP
+SERVER_IP=$(get_public_ip)
 
 function menu() {
     clear
@@ -69,7 +83,7 @@ EOF
     docker compose up -d
 
     echo -e "${GREEN}✅ Nginx Proxy Manager 已启动${RESET}"
-    echo -e "${YELLOW}🌐 访问地址: http://$(get_ip):$ADMIN_PORT${RESET}"
+    echo -e "${YELLOW}🌐 访问地址: http://${SERVER_IP}:$ADMIN_PORT${RESET}"
     echo -e "${GREEN}   初始用户名: admin@example.com${RESET}"
     echo -e "${GREEN}   初始密码: changeme${RESET}"
     echo -e "${GREEN}📂 数据目录: $APP_DIR/data${RESET}"
