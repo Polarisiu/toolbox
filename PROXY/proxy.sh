@@ -13,7 +13,7 @@ BOLD="\033[1m"
 ORANGE='\033[38;5;208m'
 
 SCRIPT_PATH="/root/proxy.sh"
-SCRIPT_URL=" https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/proxy.sh"
+SCRIPT_URL="https://raw.githubusercontent.com/sistarry/toolbox/main/PROXY/proxy.sh"
 BIN_LINK_DIR="/usr/local/bin"
 
 if [[ $EUID -ne 0 ]]; then
