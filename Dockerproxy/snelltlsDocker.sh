@@ -9,7 +9,7 @@ RED="\033[31m"
 RESET="\033[0m"
 
 APP_NAME="Snell + ShadowTLS"
-APP_DIR="/root/snelltls"
+APP_DIR="/opt/snelltls"
 CONF_DIR="$APP_DIR/snell-conf"
 COMPOSE_FILE="$APP_DIR/docker-compose.yml"
 
