@@ -30,7 +30,7 @@ function install_dependencies() {
         fi
     done
 }
-install_dependencies
+
 
 # 自动检测架构
 ARCH=$(uname -m)
@@ -80,6 +80,8 @@ show_menu() {
 
 # 安装 anytls
 install_anytls() {
+
+    install_dependencies
 
     DEFAULT_PORT=$((RANDOM%50000+10000))
 
