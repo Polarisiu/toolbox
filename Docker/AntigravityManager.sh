@@ -18,7 +18,8 @@ DATA_DIR="/opt/.antigravity_tools"
 
 check_docker() {
     if ! command -v docker &>/dev/null; then
-        echo -e "${YELLOW}未检测到 Docker${RESET}"
+        echo -e "${RED}未检测到 Docker，请先安装 Docker${RESET}"
+        exit 1
     fi
 }
 
