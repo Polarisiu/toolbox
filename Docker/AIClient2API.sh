@@ -63,12 +63,6 @@ install_app() {
     read -p "请输入主访问端口 [默认:3180]: " input_port
     MAIN_PORT=${input_port:-3180}
 
-    # 扩展端口固定
-    PORT_BLOCK='
-      - "8085-8087:8085-8087"
-      - "1455:1455"
-      - "19876-19880:19876-19880"'
-
     read -p "请输入 ARGS 参数 (可留空): " ARGS_VALUE
 
     cat > "$COMPOSE_FILE" <<EOF
@@ -78,7 +72,10 @@ services:
     container_name: aiclient2api
     restart: unless-stopped
     ports:
-      - "${MAIN_PORT}:3000"${PORT_BLOCK}
+      - "127.0.0.1:${MAIN_PORT}:3000"
+      - "8085-8087:8085-8087"
+      - "1455:1455"
+      - "19876-19880:19876-19880"
     volumes:
       - ./configs:/app/configs
     environment:
