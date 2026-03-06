@@ -18,7 +18,7 @@ yellow(){ echo -e "${YELLOW}$1${RESET}"; }
 [[ $EUID -ne 0 ]] && red "请使用 root 运行" && exit
 
 ACME_HOME="$HOME/.acme.sh"
-SSL_DIR="/etc/acme/ssl"
+SSL_DIR="/root/ssl"
 
 mkdir -p $SSL_DIR
 
@@ -182,7 +182,7 @@ remove_cert() {
 
     # 删除 acme.sh 证书
     $ACME_HOME/acme.sh --remove -d "$domain" --ecc >/dev/null 2>&1
-
+    
     # 删除本地证书目录
     if [ -d "$SSL_DIR/$domain" ]; then
         rm -rf "$SSL_DIR/$domain"
@@ -202,6 +202,9 @@ fi
 
 rm -rf $ACME_HOME
 rm -rf etc/acme
+
+# 删除 cron
+crontab -l 2>/dev/null | grep -v acme.sh | crontab -
 
 # 只有存在才处理
 [ -f ~/.bashrc ] && sed -i '/acme.sh.env/d' ~/.bashrc
