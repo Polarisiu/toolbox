@@ -54,8 +54,8 @@ function install_app() {
     read -p "请输入 APP_KEY [默认:随机生成]: " input_key
     APP_KEY=${input_key:-$(openssl rand -hex 16)}
 
-    read -p "请输入 APP_URL [例如:https://2fa.eu.org]: " input_url
-    APP_URL=${input_url:-https://2fa.gugu.ovh}
+    read -p "请输入访问地址APP_URL [例如:https://2fa.eu.org]: " input_url
+    APP_URL=${input_url:-https://2fa.eu.org}
 
     # 创建数据目录并设置权限，避免 permission denied
     mkdir -p "$DATA_DIR"
@@ -93,10 +93,10 @@ EOF
     docker compose up -d
 
     echo -e "${GREEN}✅ 2FAuth 已启动${RESET}"
-    echo -e "${GREEN}🌐 Web UI 地址: http://127.0.0.1:$PORT${RESET}"
+    echo -e "${GREEN}🌐 Web UI 本地地址: http://127.0.0.1:$PORT${RESET}"
+    echo -e "${GREEN}🌐 Web UI 访问地址: $APP_URL${RESET}"
     echo -e "${GREEN}📂 数据目录: $DATA_DIR${RESET}"
     echo -e "${GREEN}🔑 APP_KEY: $APP_KEY${RESET}"
-    echo -e "${GREEN}🔗 APP_URL: $APP_URL${RESET}"
     read -p "按回车返回菜单..."
     menu
 }
