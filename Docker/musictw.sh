@@ -11,7 +11,7 @@ RED="\033[31m"
 
 APP_NAME="music-tag-web"
 APP_DIR="/opt/music-tag"
-YML_FILE="$APP_DIR/music-tag-compose.yml"
+YML_FILE="$APP_DIR/docker-compose.yml"
 CONF_FILE="$APP_DIR/music_tag_dirs"
 
 show_menu() {
