@@ -28,7 +28,6 @@ get_public_ip() {
     echo "无法获取公网 IP 地址。"
 }
 
-SERVER_IP=$(get_public_ip)
 
 check_docker() {
     if ! command -v docker &>/dev/null; then
@@ -82,6 +81,8 @@ install_app() {
     git clone "$REPO_URL"
     cd "$COMPOSE_DIR" || exit
     docker compose up -d
+
+    SERVER_IP=$(get_public_ip)
 
     echo
     echo -e "${GREEN}✅ LangBot 已启动${RESET}"
