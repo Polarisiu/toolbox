@@ -35,6 +35,23 @@ check_port() {
     fi
 }
 
+get_public_ip() {
+    local ip
+    for cmd in "curl -4s --max-time 5" "wget -4qO- --timeout=5"; do
+        for url in "https://api.ipify.org" "https://ip.sb" "https://checkip.amazonaws.com"; do
+            ip=$($cmd "$url" 2>/dev/null) && [[ -n "$ip" ]] && echo "$ip" && return
+        done
+    done
+    for cmd in "curl -6s --max-time 5" "wget -6qO- --timeout=5"; do
+        for url in "https://api64.ipify.org" "https://ip.sb"; do
+            ip=$($cmd "$url" 2>/dev/null) && [[ -n "$ip" ]] && echo "$ip" && return
+        done
+    done
+    echo "无法获取公网 IP 地址。"
+}
+
+
+SERVER_IP=$(get_public_ip)
 # ==============================
 # 菜单
 # ==============================
@@ -121,7 +138,7 @@ EOF
 
     echo
     echo -e "${GREEN}✅ gcli2api 已启动${RESET}"
-    echo -e "${YELLOW}🌐 Web 地址: http://127.0.0.1:${PORT}${RESET}"
+    echo -e "${YELLOW}🌐 Web 地址: http://${SERVER_IP}:${PORT}${RESET}"
     echo -e "${GREEN}📂 数据目录: $APP_DIR/data${RESET}"
     echo -e "${YELLOW}🔑 API 密码: ${API_PASSWORD}${RESET}"
     echo -e "${YELLOW}🔑 面板密码: ${PANEL_PASSWORD}${RESET}"
