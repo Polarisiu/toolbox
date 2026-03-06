@@ -34,7 +34,22 @@ generate_key() {
     tr -dc A-Za-z0-9 </dev/urandom | head -c 32
 }
 
-SERVER_IP=$(hostname -I | awk '{print $1}')
+get_public_ip() {
+    local ip
+    for cmd in "curl -4s --max-time 5" "wget -4qO- --timeout=5"; do
+        for url in "https://api.ipify.org" "https://ip.sb" "https://checkip.amazonaws.com"; do
+            ip=$($cmd "$url" 2>/dev/null) && [[ -n "$ip" ]] && echo "$ip" && return
+        done
+    done
+    for cmd in "curl -6s --max-time 5" "wget -6qO- --timeout=5"; do
+        for url in "https://api64.ipify.org" "https://ip.sb"; do
+            ip=$($cmd "$url" 2>/dev/null) && [[ -n "$ip" ]] && echo "$ip" && return
+        done
+    done
+    echo "无法获取公网 IP 地址。"
+}
+
+SERVER_IP=$(get_public_ip)
 
 # ==============================
 # 菜单
@@ -105,7 +120,7 @@ install_app() {
 
     docker run -d \
       --name $APP_NAME \
-      -p 127.0.0.1:${PORT}:8045 \
+      -p ${PORT}:8045 \
       -e API_KEY=${API_KEY} \
       -e WEB_PASSWORD=${WEB_PASS} \
       -e ABV_MAX_BODY_SIZE=104857600 \
@@ -159,7 +174,7 @@ update_app() {
     echo -e "${BLUE}使用新镜像重新创建容器...${RESET}"
     docker run -d \
       --name $APP_NAME \
-      -p 127.0.0.1:${PORT}:8045 \
+      -p ${PORT}:8045 \
       -e API_KEY=${API_KEY} \
       -e WEB_PASSWORD=${WEB_PASS} \
       -e ABV_MAX_BODY_SIZE=104857600 \
@@ -187,7 +202,7 @@ show_info() {
         PORT=$(docker inspect -f '{{(index (index .NetworkSettings.Ports "8045/tcp") 0).HostPort}}' $APP_NAME)
         echo
         echo -e "${GREEN}📌 访问信息:${RESET}"
-        echo -e "${YELLOW}访问地址: http://127.0.0.1:${PORT}${RESET}"
+        echo -e "${YELLOW}访问地址: http://${SERVER_IP}:${PORT}${RESET}"
         echo -e "${YELLOW}API_KEY: ${API_KEY}${RESET}"
         echo -e "${YELLOW}Web登录密码: ${WEB_PASS}${RESET}"
         echo -e "${GREEN}数据目录: ${DATA_DIR}${RESET}"
