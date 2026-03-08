@@ -14,6 +14,7 @@ APP_DIR="/opt/$APP_NAME"
 COMPOSE_FILE="$APP_DIR/docker-compose.yml"
 CONFIG_FILE="$APP_DIR/hysteria.yaml"
 CONTAINER_NAME="hysteria"
+NODE_INFO_FILE="$APP_DIR/node.txt"
 
 JUMP_START=""
 JUMP_END=""
@@ -245,9 +246,16 @@ EOF
     echo -e "${GREEN}📄 端口跳跃只适配V4 ★${RESET}"
     echo -e "${GREEN}📄 客户端配置模板:${RESET}"
     echo -e "${YELLOW}V2rayN:${RESET}"
-    echo -e "${YELLOW} hysteria2://$PASSWORD@$IP:$PORT/?sni=bing.com&insecure=1#$HOSTNAME${RESET}"
+    echo -e "${YELLOW}hysteria2://$PASSWORD@$IP:$PORT/?sni=bing.com&insecure=1#$HOSTNAME${RESET}"
     echo -e "${YELLOW}Surge:${RESET}"
-    echo -e "${YELLOW}  $HOSTNAME = hysteria2, $IP, $PORT, password=$PASSWORD, skip-cert-verify=true, sni=www.bing.com${RESET}"
+    echo -e "${YELLOW}$HOSTNAME = hysteria2, $IP, $PORT, password=$PASSWORD, skip-cert-verify=true, sni=www.bing.com${RESET}"
+    cat > "$NODE_INFO_FILE" <<EOF
+跳跃端口: ${JUMP_START:-未启用}-${JUMP_END:-未启用}
+V2rayN
+hysteria2://$PASSWORD@$IP:$PORT/?sni=bing.com&insecure=1#$HOSTNAME
+Surge
+$HOSTNAME = hysteria2, $IP, $PORT, password=$PASSWORD, skip-cert-verify=true, sni=www.bing.com
+EOF
     read -p "按回车返回菜单..."
 }
 
@@ -274,6 +282,22 @@ check_status() {
     read -p "按回车返回菜单..."
 }
 
+view_node_info() {
+
+    if [ ! -f "$NODE_INFO_FILE" ]; then
+        echo -e "${RED}未找到节点信息${RESET}"
+        read -p "按回车返回菜单..."
+        return
+    fi
+
+    echo
+    echo -e "${GREEN}=== TUIC 节点信息 ===${RESET}"
+    echo
+    cat "$NODE_INFO_FILE"
+    echo
+    read -p "按回车返回菜单..."
+}
+
 uninstall_app() {
     remove_port_jump_rules
 
@@ -295,7 +319,8 @@ menu() {
         echo -e "${GREEN}3) 重启${RESET}"
         echo -e "${GREEN}4) 查看日志${RESET}"
         echo -e "${GREEN}5) 查看状态${RESET}"
-        echo -e "${GREEN}6) 卸载${RESET}"
+        echo -e "${GREEN}6) 查看节点信息${RESET}"
+        echo -e "${GREEN}7) 卸载${RESET}"
         echo -e "${GREEN}0) 退出${RESET}"
         read -p "$(echo -e ${GREEN}请选择:${RESET}) " choice
 
@@ -305,7 +330,8 @@ menu() {
             3) restart_app ;;
             4) view_logs ;;
             5) check_status ;;
-            6) uninstall_app ;;
+            6) view_node_info ;;
+            7) uninstall_app ;;
             0) exit 0 ;;
             *) echo -e "${RED}无效选择${RESET}"; sleep 1 ;;
         esac
