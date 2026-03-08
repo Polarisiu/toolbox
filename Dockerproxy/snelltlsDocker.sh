@@ -12,6 +12,7 @@ APP_NAME="Snell + ShadowTLS"
 APP_DIR="/opt/snelltls"
 CONF_DIR="$APP_DIR/snell-conf"
 COMPOSE_FILE="$APP_DIR/docker-compose.yml"
+NODE_INFO_FILE="$APP_DIR/node.txt"
 
 check_docker() {
     if ! command -v docker &>/dev/null; then
@@ -166,6 +167,10 @@ EOF
     echo -e "${YELLOW}📄 V6VPS替换IP地址为V6 ★${RESET}"
     echo -e "${YELLOW}Snell配置:${RESET}"
     echo -e "${YELLOW}$HOSTNAME = snell, ${IP}, ${TLS_PORT}, psk=${PSK}, version=5, tfo=${TFO}, ecn=${ECN}, shadow-tls-password=${TLS_PASSWORD}, shadow-tls-sni=${TLS_HOST}, shadow-tls-version=3${RESET}"
+    cat > "$NODE_INFO_FILE" <<EOF
+Snell配置
+$HOSTNAME = snell, ${IP}, ${TLS_PORT}, psk=${PSK}, version=5, tfo=${TFO}, ecn=${ECN}, shadow-tls-password=${TLS_PASSWORD}, shadow-tls-sni=${TLS_HOST}, shadow-tls-version=3
+EOF
 
     read -p "按回车返回菜单..."
 }
@@ -191,6 +196,22 @@ view_logs() {
     docker compose logs -f
 }
 
+view_node_info() {
+
+    if [ ! -f "$NODE_INFO_FILE" ]; then
+        echo -e "${RED}未找到节点信息${RESET}"
+        read -p "按回车返回菜单..."
+        return
+    fi
+
+    echo
+    echo -e "${GREEN}=== 节点信息 ===${RESET}"
+    echo
+    cat "$NODE_INFO_FILE"
+    echo
+    read -p "按回车返回菜单..."
+}
+
 check_status() {
     cd "$APP_DIR" || return
     docker compose ps
@@ -214,7 +235,8 @@ menu() {
         echo -e "${GREEN}3) 重启${RESET}"
         echo -e "${GREEN}4) 查看日志${RESET}"
         echo -e "${GREEN}5) 查看状态${RESET}"
-        echo -e "${GREEN}6) 卸载${RESET}"
+        echo -e "${GREEN}6) 查看节点信息${RESET}"
+        echo -e "${GREEN}7) 卸载${RESET}"
         echo -e "${GREEN}0) 退出${RESET}"
         echo -n -e "${GREEN}请选择: ${RESET}"
         read choice
@@ -225,7 +247,8 @@ menu() {
             3) restart_app ;;
             4) view_logs ;;
             5) check_status ;;
-            6) uninstall_app ;;
+            6) view_node_info ;;
+            7) uninstall_app ;;
             0)
                 exit 0
                 ;;
