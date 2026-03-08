@@ -219,6 +219,12 @@ EOF
     echo -e "${YELLOW}vmess://${VMESS_JSON}${RESET}"
     echo -e "${YELLOW}📄 Surge配置:${RESET}"
     echo -e "${YELLOW}$NODE_NAME = vmess, ${DOMAIN}, ${PORT}, username=${UUID}, ws=true, ws-path=$WS_PATH, ws-headers=Host:"${DOMAIN}", vmess-aead=true, tls=true, sni=${DOMAIN}${RESET}"
+    cat > "$NODE_DIR/node.txt" <<EOF
+V2rayN链接
+vmess://${VMESS_JSON}
+Surge配置
+$NODE_NAME = vmess, ${DOMAIN}, ${PORT}, username=${UUID}, ws=true, ws-path=$WS_PATH, ws-headers=Host:"${DOMAIN}", vmess-aead=true, tls=true, sni=${DOMAIN}
+EOF
     read -p "按回车返回菜单..."
 }
 
@@ -233,6 +239,7 @@ node_action_menu() {
         echo -e "${GREEN}3) 更新${RESET}"
         echo -e "${GREEN}4) 查看日志${RESET}"
         echo -e "${GREEN}5) 卸载${RESET}"
+        echo -e "${GREEN}6) 查看节点信息${RESET}"
         echo -e "${GREEN}0) 返回主菜单${RESET}"
         read -r -p $'\033[32m请选择操作: \033[0m' choice
         case $choice in
@@ -241,6 +248,7 @@ node_action_menu() {
             3) docker compose -f "$NODE_DIR/docker-compose.yml" pull && docker compose -f "$NODE_DIR/docker-compose.yml" up -d ;;
             4) docker logs -f "$NODE_NAME" ;;
             5) docker compose -f "$NODE_DIR/docker-compose.yml" down && rm -rf "$NODE_DIR" && return ;;
+            6) cat "$NODE_DIR/node.txt" ;;
             0) return ;;
             *) echo -e "${RED}无效选择${RESET}" ;;
         esac
