@@ -152,6 +152,20 @@ EOF
     echo -e "${YELLOW}📄 V6VPS替换IP地址为V6 ★${RESET}"
     echo -e "${YELLOW}✅ $NODE_NAME 订阅链接${RESET}"
     echo -e "${YELLOW}$VLESS_LINK${RESET}"
+    cat > "$NODE_DIR/node.txt" <<EOF
+Xray VLESS-Reality 订阅信息
+名称 ${TAG}
+地址 ${IP}
+端口 ${PORT}
+UUID ${UUID}
+流控 xtls-rprx-vision
+指纹 chrome
+SNI ${DOMAIN}
+公钥 ${PUBLIC_KEY}
+ShortId ${SHORT_ID}
+订阅链接
+${VLESS_LINK}
+EOF
     read -r -p $'\033[32m按回车返回菜单...\033[0m'
 }
 
@@ -164,6 +178,7 @@ node_action_menu() {
         echo -e "${GREEN}3) 更新${RESET}"
         echo -e "${GREEN}4) 查看日志${RESET}"
         echo -e "${GREEN}5) 卸载${RESET}"
+        echo -e "${GREEN}6) 查看节点信息${RESET}"
         echo -e "${GREEN}0) 返回主菜单${RESET}"
         read -r -p $'\033[32m请选择操作: \033[0m' choice
         case $choice in
@@ -172,6 +187,7 @@ node_action_menu() {
             3) docker compose -f "$NODE_DIR/compose.yml" pull && docker compose -f "$NODE_DIR/compose.yml" up -d ;;
             4) docker logs -f "$NODE_NAME" ;;
             5) docker compose -f "$NODE_DIR/compose.yml" down && rm -rf "$NODE_DIR" && return ;;
+            6) cat "$NODE_DIR/node.txt" ;;
             0) return ;;
             *) echo -e "${RED}无效选择${RESET}" ;;
         esac
